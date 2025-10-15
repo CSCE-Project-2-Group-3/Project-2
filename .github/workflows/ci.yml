@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  scan_ruby:
+    name: Security Scan (Ruby)
+    runs-on: ubuntu-latest
+    if: >
+      contains(join(github.event.commits.*.modified, ' '), '.rb') ||
+      contains(join(github.event.commits.*.added, ' '), '.rb') ||
+      contains(join(github.event.commits.*.removed, ' '), '.rb') ||
+      contains(join(github.event.commits.*.modified, ' '), 'Gemfile')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Scan for common Rails security vulnerabilities
+        run: |
+          if [ -x bin/brakeman ]; then
+            bin/brakeman --no-pager
+          else
+            echo "Brakeman not installed — skipping."
+          fi
+
+  scan_js:
+    name: Security Scan (JS)
+    runs-on: ubuntu-latest
+    if: >
+      contains(join(github.event.commits.*.modified, ' '), 'package.json') ||
+      contains(join(github.event.commits.*.added, ' '), 'package.json')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Scan JavaScript dependencies
+        run: |
+          if [ -x bin/importmap ]; then
+            bin/importmap audit
+          else
+            echo "Importmap not configured — skipping JS audit."
+          fi
+
+  lint:
+    name: Lint (Rubocop)
+    runs-on: ubuntu-latest
+    if: >
+      contains(join(github.event.commits.*.modified, ' '), '.rb') ||
+      contains(join(github.event.commits.*.added, ' '), '.rb') ||
+      contains(join(github.event.commits.*.removed, ' '), '.rb')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Run Rubocop
+        run: |
+          if [ -x bin/rubocop ]; then
+            bin/rubocop -f github
+          else
+            bundle exec rubocop -f github || exit 1
+          fi
+
+  test:
+    name: Run Tests (RSpec & Cucumber)
+    runs-on: ubuntu-latest
+    if: >
+      contains(join(github.event.commits.*.modified, ' '), '.rb') ||
+      contains(join(github.event.commits.*.added, ' '), '.rb') ||
+      contains(join(github.event.commits.*.removed, ' '), '.rb') ||
+      contains(join(github.event.commits.*.modified, ' '), 'Gemfile')
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable
+
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Prepare test database
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:test:prepare
+
+      - name: Run RSpec (if present)
+        run: |
+          if [ -d "spec" ]; then
+            bundle exec rspec || exit 1
+          else
+            echo "No spec directory found — skipping RSpec."
+          fi
+
+      - name: Run Cucumber (if present)
+        run: |
+          if [ -d "features" ]; then
+            bundle exec cucumber || exit 1
+          else
+            echo "No features directory found — skipping Cucumber."
+          fi
+
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
