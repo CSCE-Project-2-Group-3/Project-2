@@ -1,8 +1,11 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
+  # Configure 'rails notes' to inspect Cucumber files
+  config.annotations.register_directories("features")
+  config.annotations.register_extensions("feature") { |tag| /#\s*(#{tag}):?\s*(.*)$/ }
 
+  # Settings specified here will take precedence over those in config/application.rb.
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 
