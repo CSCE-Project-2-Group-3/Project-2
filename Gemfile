@@ -70,4 +70,11 @@ group :test do
   gem "selenium-webdriver"
   gem "cucumber-rails", require: false
   gem "database_cleaner-active_record"
+  gem "rails-controller-testing"
+  gem "factory_bot_rails"
+  # Print out test coverage reports
+  gem "simplecov", require: false
+  gem "simplecov-console", require: false
 end
+
+gem "shoulda-matchers", "~> 5.0", group: :test

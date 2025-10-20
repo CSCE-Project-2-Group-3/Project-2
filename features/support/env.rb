@@ -51,3 +51,14 @@ end
 # The :transaction strategy is faster, but might give you threading problems.
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
+
+# Add Devise test helpers for Cucumber
+World(Devise::Test::IntegrationHelpers)
+
+# Alternative login method for Cucumber
+def login_as(user)
+  visit new_user_session_path
+  fill_in "Email", with: user.email
+  fill_in "Password", with: user.password
+  click_button "Log in"
+end
