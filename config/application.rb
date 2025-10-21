@@ -2,6 +2,22 @@ require_relative "boot"
 
 require "rails/all"
 
+# Temporary patch for Rails 8 + Devise mailer issue
+module ActionMailerPreviewPathPatch
+  def self.apply!
+    return if ActionMailer::Base.respond_to?(:preview_path=)
+    class << ActionMailer::Base
+      attr_writer :preview_path
+    end
+  rescue NameError
+    # ActionMailer::Base might not yet be loaded
+    require "action_mailer/base"
+    retry
+  end
+end
+
+ActionMailerPreviewPathPatch.apply!
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
