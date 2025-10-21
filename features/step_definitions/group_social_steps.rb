@@ -30,13 +30,18 @@ end
 # Group Membership & Invites
 # =============================
 
-Given('I am a member of {string}') do |group_name|
+Given('I am already a member of {string}') do |group_name|
   @group = Group.find_or_create_by!(name: group_name)
-  @group.users << @current_user unless @group.users.include?(@current_user)
+  @group.users << @user unless @group.users.include?(@user)
 end
 
-When('I enter {string}') do |input|
-  fill_in 'Email', with: input
+When('I paste a valid invite code into the "Join Group" field') do
+  @invite_group = Group.find_or_create_by!(name: 'Roommates 2025')
+  fill_in 'Group Code:', with: @invite_group.join_code || @invite_group.generate_join_code!
+end
+
+When('I paste an invalid or expired invite code into the "Join Group" field') do
+  fill_in 'Group Code:', with: 'INVALIDCODE123'
 end
 
 # =============================

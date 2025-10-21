@@ -25,22 +25,30 @@ Feature: Group and Social Features
     Then I should see "Group name can't be blank"
 
   # ------------------------------
-  # Invite Users to a Group
+  # Invite Users to a Group (Copyable Invite Link)
   # ------------------------------
 
-  Scenario: Successfully invite a user to a group
-    Given I am a member of "Roommates 2025"
-    When I click "Invite Member"
-    And I enter "alex@example.com"
-    And I click "Send Invitation"
-    Then I should see "Invitation sent successfully"
+  Scenario: Join group manually with invite code
+    Given I am logged in
+    And I am on the "Groups" page
+    When I paste a valid invite code into the "Join Group" field
+    And I click "Join"
+    Then I should see "Joined Roommates 2025 successfully"
 
-  Scenario: Fail to invite a non-existent user
-    Given I am a member of "Roommates 2025"
-    When I click "Invite Member"
-    And I enter "nonexistent@example.com"
-    And I click "Send Invitation"
-    Then I should see "User not found"
+  Scenario: Fail to join with invalid invite code
+    Given I am logged in
+    And I am on the "Groups" page
+    When I paste an invalid or expired invite code into the "Join Group" field
+    And I click "Join"
+    Then I should see "Invalid join code"
+
+  Scenario: Fail to join if already a member
+    Given I am logged in
+    And I am already a member of "Roommates 2025"
+    And I am on the "Groups" page
+    When I paste a valid invite code into the "Join Group" field
+    And I click "Join"
+    Then I should see "You are already in this group."
 
   # ------------------------------
   # Split Expense Among Group Members

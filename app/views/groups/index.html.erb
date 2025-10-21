@@ -3,7 +3,7 @@
 <%= link_to 'Create Group', new_group_path, class: 'btn btn-primary' %>
 
 <%= form_with url: join_groups_path, method: :post, local: true do |form| %>
-  <%= form.label :join_code, 'Enter join code:' %>
+  <%= form.label :join_code, "Group Code:" %>
   <%= form.text_field :join_code %>
   <%= form.submit 'Join Group' %>
 <% end %>
