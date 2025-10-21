@@ -1,7 +1,6 @@
-# app/test_ocr.rb
 require_relative "../config/environment"
 
-image_path = "/mnt/c/Users/qacer/Downloads/payment.png"
+image_path = "/mnt/c/Users/qacer/Downloads/payment1.png"
 
 puts "Starting OCR test..."
 puts "Using image path: #{image_path}"
@@ -17,5 +16,5 @@ if result.is_a?(Hash)
   puts "Detected amounts: #{result[:detected_amounts]}"
   puts "Inferred total: #{result[:inferred_total]}"
 else
-  puts "⚠️  parse_receipt did not return a Hash! Got: #{result.class}"
+  puts "parse_receipt did not return a Hash! Got: #{result.class}"
 end

@@ -1,47 +1,83 @@
-# app/services/receipt_parser.rb
 class ReceiptParser
-  # Smarter price pattern that catches: $12.99, 12,99, 12.99, Total: 12.99, etc.
-  PRICE_REGEX = /
-    (?:total\s*[:\-]?\s*)?   # optional label
-    \$?\s*                   # optional dollar sign
-    (\d{1,6}(?:[.,]\d{2})?)  # main number with optional decimals
-  /ix.freeze
-
-  def self.extract_amounts(text)
-    return [] if text.blank?
-    text.scan(PRICE_REGEX)
-        .flatten
-        .map { |m| m.tr(",", ".").gsub(/[^\d.]/, "").to_f }
-        .reject(&:zero?)
-        .uniq
-  end
-
-  def self.infer_total(amounts)
-    return nil if amounts.empty?
-    # Heuristic: totals are often the largest value but < $10,000
-    amounts.reject { |a| a > 10000 }.max
-  end
-
+  # Entry point
   def self.parse_receipt(image_path)
-    # Run OCR (auto-picks Google Vision if available)
     ocr = OcrService.new(image_path)
-    result = ocr.perform
-    text = result[:text]
+    ocr_result = ocr.perform
+    text = ocr_result[:text].to_s
 
-    return { success: false, message: "OCR returned empty text" } if text.blank?
+    # Extract all numeric values, fixing decimal issues
+    detected_amounts = extract_amounts(text)
 
-    amounts = extract_amounts(text)
-    total = infer_total(amounts)
+    inferred_total = infer_total(text, detected_amounts)
 
     {
-      success: true,
+      success: text.present?,
       raw_text: text,
-      detected_amounts: amounts,
-      inferred_total: total,
-      meta: result[:meta]
+      detected_amounts: detected_amounts,
+      inferred_total: inferred_total,
+      meta: ocr_result[:meta]
     }
-  rescue => e
-    Rails.logger.error("[ReceiptParser] Error: #{e.message}")
-    { success: false, message: e.message }
+  end
+
+  # -------------------------------------------------------------------------
+  # Extract numbers in a robust way (handles OCR decimal errors)
+  # -------------------------------------------------------------------------
+  def self.extract_amounts(text)
+    numbers = []
+
+    text.scan(/\$?\s*(\d+(?:[.,]\d{1,2})?)/).flatten.each do |n|
+      num = n.gsub(/[^\d.,]/, "").tr(",", ".")
+      num = fix_merged_decimals(num)
+      numbers << num.to_f if num.to_f > 0
+    end
+
+    numbers.uniq.sort
+  end
+
+  def self.fix_merged_decimals(num)
+    return num if num.include?(".")
+    if num.length > 2
+      int_part = num[0..-3]
+      dec_part = num[-2..]
+      return "#{int_part}.#{dec_part}"
+    end
+    num
+  end
+
+  # -------------------------------------------------------------------------
+  # Try to infer the *actual total* from context keywords
+  # -------------------------------------------------------------------------
+  def self.infer_total(text, detected)
+    return nil if detected.empty?
+
+    normalized = text.downcase
+
+    # Split into lines for better context
+    lines = normalized.split("\n")
+
+    # Prefer a line that includes "total" but not "subtotal"
+    total_line = lines.find { |l| l.include?("total") && !l.include?("subtotal") }
+
+    if total_line
+      # Try to extract a number from that specific line
+      match = total_line.match(/(\d+[.,]?\d*)/)
+      if match
+        raw_val = match[1].gsub(",", ".")
+        val = fix_merged_decimals(raw_val)
+        return val.to_f
+      end
+    end
+
+    # Try global context match for "total"
+    context_match = normalized.match(/(?:total|amount\s*due|balance)[^\d]*(\d+[.,]?\d*)/)
+    if context_match
+      raw_val = context_match[1].gsub(",", ".")
+      val = fix_merged_decimals(raw_val)
+      return val.to_f
+    end
+
+    # Fallback: choose the highest plausible value
+    plausible = detected.select { |a| a > 0.1 && a < 10_000 }
+    plausible.max
   end
 end

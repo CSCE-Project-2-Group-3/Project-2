@@ -1,9 +1,8 @@
-# app/services/ocr_service.rb
 require "mini_magick"
 require "rtesseract"
+require "google/cloud/vision"
 
 class OcrService
-  # Automatically choose engine: Google if credentials are set, otherwise Tesseract.
   def initialize(image_path, engine: nil)
     @image_path = image_path
     @engine =
@@ -11,42 +10,55 @@ class OcrService
       (ENV["GOOGLE_APPLICATION_CREDENTIALS"].present? ? :google : :tesseract)
   end
 
-  # Run OCR and return normalized result
-  # => { text: "...", words_with_boxes: [...], meta: { engine: "google" } }
   def perform
-    case @engine.to_sym
-    when :google
-      perform_google
-    else
-      perform_tesseract
+    result =
+      case @engine.to_sym
+      when :google then perform_google
+      else perform_tesseract
+      end
+
+    # Fallback: if Tesseract result seems weak, retry with Google Vision
+    if result[:meta][:engine] == "tesseract" &&
+       (result[:text].strip.empty? || result[:text].length < 50)
+      Rails.logger.info("[OCR] Fallback to Google Vision due to weak Tesseract result")
+      google_result = perform_google rescue nil
+      result = google_result if google_result && google_result[:text].present?
     end
+
+    result
   end
 
   private
 
-  # 🔹 Preprocess image to improve OCR quality
+  # Step 1. Preprocess image to improve OCR quality
   def preprocess_image
-    src = @image_path
-    image = MiniMagick::Image.open(src)
+    image = MiniMagick::Image.open(@image_path)
+
     image.format "png"
+    image.auto_orient
     image.colorspace "Gray"
     image.auto_level
-    image.normalize
     image.contrast
+    image.normalize
     image.sharpen "0x1"
+    image.deskew "40%" rescue nil # straighten slight tilt
     image.resize "1600x1600>"
+    image.blur "1x1"
+    image.threshold("60%")
+
     out = Rails.root.join("tmp", "ocr_preprocessed_#{SecureRandom.hex(8)}.png").to_s
     image.write(out)
     out
   end
 
-  # 🔹 Local fallback using Tesseract
+  # Step 2. Local OCR (Tesseract)
   def perform_tesseract
     prepped = preprocess_image
+
     t = RTesseract.new(prepped, lang: "eng", options: { oem: 1, psm: 6 })
     text = t.to_s
-    File.delete(prepped) if File.exist?(prepped)
 
+    File.delete(prepped) if File.exist?(prepped)
     {
       text: text.to_s.strip,
       words_with_boxes: nil,
@@ -57,22 +69,18 @@ class OcrService
     { text: "", words_with_boxes: nil, meta: { engine: "tesseract", error: e.message } }
   end
 
-  # 🔹 Primary: Google Cloud Vision OCR
+  # Step 3. Cloud OCR (Google Vision)
   def perform_google
-    require "google/cloud/vision"
-
     prepped = preprocess_image
     client = Google::Cloud::Vision.image_annotator
     response = client.document_text_detection image: prepped
-    annotation = response.responses.first
     File.delete(prepped) if File.exist?(prepped)
 
-    # Extract full text
+    annotation = response.responses.first
     full_text =
       annotation&.full_text_annotation&.text.presence ||
       annotation&.text_annotations&.first&.description.to_s
 
-    # Extract per-word bounding boxes (optional)
     words = []
     if annotation.respond_to?(:to_h)
       h = annotation.to_h
