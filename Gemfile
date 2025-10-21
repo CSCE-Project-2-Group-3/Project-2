@@ -56,7 +56,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Use RSpec for tests instead of Minitest [https://rspec.info/]
-  gem "rspec-rails", "~> 6.0.0"
+  gem "rspec-rails", "~> 8.0.2"
 end
 
 group :development do
