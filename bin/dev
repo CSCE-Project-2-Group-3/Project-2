@@ -1,2 +1,6 @@
+<<<<<<< HEAD
+#!/usr/bin/env ruby.exe
+=======
 #!/usr/bin/env ruby
+>>>>>>> origin/main
 exec "./bin/rails", "server", *ARGV
