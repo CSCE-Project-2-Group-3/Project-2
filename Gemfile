@@ -77,4 +77,4 @@ group :test do
   gem "simplecov-console", require: false
 end
 
-gem "shoulda-matchers", "~> 5.0", group: :test
+gem "shoulda-matchers", "~> 6.5", group: :test
