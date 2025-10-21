@@ -1,0 +1,25 @@
+<h2><%= @group.name %></h2>
+<p><strong>Join Code:</strong> <%= @group.join_code %></p>
+
+<hr>
+
+<h3>Members:</h3>
+<ul>
+  <% @group.users.each do |user| %>
+    <li><%= user.email %></li>
+  <% end %>
+</ul>
+
+<hr>
+
+<!-- Future Expense Section -->
+<h3>Expenses (Coming Soon)</h3>
+<ul>
+  <% if defined?(@group.expenses) && @group.respond_to?(:expenses) %>
+    <% @group.expenses.each do |expense| %>
+      <li><%= expense.title %> - $<%= expense.amount %></li>
+    <% end %>
+  <% else %>
+    <li>No expenses to show yet.</li>
+  <% end %>
+</ul>

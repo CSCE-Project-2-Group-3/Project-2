@@ -1,0 +1,17 @@
+<h1>Your Groups</h1>
+
+<%= link_to 'Create Group', new_group_path, class: 'btn btn-primary' %>
+
+<%= form_with url: join_groups_path, method: :post, local: true do |form| %>
+  <%= form.label :join_code, 'Enter join code:' %>
+  <%= form.text_field :join_code %>
+  <%= form.submit 'Join Group' %>
+<% end %>
+
+<ul class="group-list">
+  <% @groups.each do |group| %>
+    <li>
+      <%= link_to group.name, group_path(group) %> 
+    </li>
+  <% end %>
+</ul>

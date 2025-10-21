@@ -15,4 +15,6 @@ class User < ApplicationRecord
       # user.skip_confirmation!
     end
   end
+  has_many :group_memberships, dependent: :destroy
+  has_many :groups, through: :group_memberships
 end
