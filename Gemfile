@@ -21,6 +21,12 @@ gem "devise"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection", "~> 1.0.0"
+# Image of bills/receipts uploading and processing
+gem "mini_magick"
+gem "image_processing"
+gem "rtesseract"
+# Google Cloud Vision (better OCR, optional)
+gem "google-cloud-vision", require: false
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

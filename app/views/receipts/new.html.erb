@@ -1,0 +1,10 @@
+<h1>Upload a receipt / bill</h1>
+
+<%= form_with url: receipts_path, local: true, html: { multipart: true } do |f| %>
+  <div>
+    <%= file_field_tag "receipt[file]" %>
+  </div>
+  <div>
+    <%= submit_tag "Upload" %>
+  </div>
+<% end %>

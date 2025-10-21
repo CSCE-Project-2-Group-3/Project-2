@@ -1,0 +1,25 @@
+<h1>Your expenses</h1>
+<p><%= link_to "Upload receipt", new_receipt_path %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Merchant</th>
+      <th>Amount</th>
+      <th>Category</th>
+      <th>Receipt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @expenses.each do |e| %>
+      <tr>
+        <td><%= e.happened_on %></td>
+        <td><%= e.merchant %></td>
+        <td><%= number_to_currency(e.amount, unit: e.currency == "USD" ? "$" : e.currency) %></td>
+        <td><%= e.category&.name %></td>
+        <td><%= link_to "View", receipt_path(e.receipt) if e.receipt %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

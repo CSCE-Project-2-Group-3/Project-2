@@ -4,6 +4,12 @@ Rails.application.routes.draw do
     registrations: "users/registrations",
     sessions: "users/sessions",
     omniauth_callbacks: "users/omniauth_callbacks" }
+  resources :receipts, only: [:new, :create, :show] do
+    post :confirm, on: :member
+  end
+
+  resources :expenses, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

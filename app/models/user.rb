@@ -3,7 +3,14 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [ :google_oauth2 ]
+         :omniauthable, omniauth_providers: [:google_oauth2]
+
+  # Add these associations for receipts and expenses functionality
+  has_many :receipts, dependent: :destroy
+  has_many :expenses, dependent: :destroy
+  # Note: Categories typically aren't user-specific, but if you want user-scoped categories:
+  # has_many :categories, dependent: :destroy
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
