@@ -6,7 +6,7 @@ class Group < ApplicationRecord
 
   before_create :generate_join_code
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: { message: "Group name can't be blank" }
   validates :join_code, uniqueness: true
 
   private
