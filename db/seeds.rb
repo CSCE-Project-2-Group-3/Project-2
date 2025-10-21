@@ -7,3 +7,8 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Default categories for Expense Tracker
+%w[Food Transport Utilities Rent Shopping Entertainment Misc].each do |n|
+  Category.find_or_create_by!(name: n)
+end
