@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 #!/usr/bin/env ruby.exe
-=======
-#!/usr/bin/env ruby
->>>>>>> origin/main
 require "fileutils"
 
 APP_ROOT = File.expand_path("..", __dir__)
