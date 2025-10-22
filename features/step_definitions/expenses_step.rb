@@ -1,5 +1,5 @@
 Given('I have a category called {string}') do |name|
-  Category.create!(name:)
+  Category.create!(name: "Food")
 end
 
 When('I go to the new expense page') do

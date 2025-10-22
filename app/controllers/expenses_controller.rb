@@ -1,5 +1,5 @@
 class ExpensesController < ApplicationController
-  before_action :set_expense, only: [:show, :edit, :update, :destroy]
+  before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @expenses = Expense.includes(:category).order(spent_on: :desc).page(params[:page]).per(20)
