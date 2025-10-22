@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 #!/usr/bin/env ruby.exe
-=======
-#!/usr/bin/env ruby
->>>>>>> origin/main
 require "rubygems"
 require "bundler/setup"
 

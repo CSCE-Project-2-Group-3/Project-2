@@ -1,5 +1,7 @@
+# features/step_definitions/expenses_step.rb
+
 Given('I have a category called {string}') do |name|
-  Category.create!(name:)
+  Category.find_or_create_by!(name: name)
 end
 
 When('I go to the new expense page') do
@@ -10,24 +12,24 @@ When('I go to the expenses index page') do
   visit expenses_path
 end
 
-When('I fill in {string} with {string}') do |field, value|
-    fill_in field, with: value, match: :first
+When('I fill in the expense field {string} with {string}') do |field, value|
+  fill_in field, with: value, match: :first
 rescue Capybara::ElementNotFound
-    fill_in "expense_#{field.downcase.gsub(' ', '_')}", with: value
+  fill_in "expense_#{field.downcase.gsub(' ', '_')}", with: value
 end
 
-When('I select {string} from {string}') do |option, field|
+When('I select {string} from the expense dropdown {string}') do |option, field|
   select option, from: field
 end
 
-When('I press {string}') do |button|
+When('I press the expense button {string}') do |button|
   click_button button
 end
 
-When('I attach the file {string} to {string}') do |file, field|
+When('I attach the expense file {string} to {string}') do |file, field|
   attach_file field, file
 end
 
-Then('I should see {string}') do |text|
+Then('I should see the expense message {string}') do |text|
   expect(page).to have_content(text)
 end

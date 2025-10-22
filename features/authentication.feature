@@ -6,10 +6,11 @@ Feature: User Authentication
   Scenario: View home page when not logged in
     Given I am not logged in
     When I am on the home page
-    Then I should see "Pages#home"
+    Then I should see "Expense Tracker Home"
     And I should see "Login"
     And I should see "Create Account"
     And I should not see "Welcome"
+
 
   Scenario: Sign up with email and password
     Given I am not logged in
@@ -36,9 +37,11 @@ Feature: User Authentication
     Given I am logged in
     When I am on the home page
     And I click the "Logout" button
-    Then I should see "Login"
-    And I should see "Create Account"
+    Then I should see "Log in"
+    And I should see "Sign up"
     And I should not see "Welcome"
+
+
 
   Scenario: View login form elements
     Given I am not logged in
