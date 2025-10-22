@@ -2,12 +2,14 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @expenses = Expense.includes(:category).order(spent_on: :desc).page(params[:page]).per(20)
+    @expenses = Expense.includes(:category)
+                       .order(spent_on: :desc)
+                       .page(params[:page]).per(20)
     @total = @expenses.sum(:amount)
   end
 
   def new
-    @expense = Expense.new(spent_on: Date.today)
+    @expense = Expense.new(spent_on: Date.current)
   end
 
   def create
@@ -36,9 +38,8 @@ class ExpensesController < ApplicationController
 
   # --- Bulk upload ---
   def bulk_upload
-    if params[:file].blank?
-      return redirect_to expenses_path, alert: "Please select a CSV or Excel file."
-    end
+    return redirect_to(expenses_path, alert: "Please select a CSV or Excel file.") if params[:file].blank?
+
     result = Imports::ExpensesImport.call(file: params[:file])
     redirect_to expenses_path, notice: "Imported #{result.created} rows. Skipped #{result.skipped}."
   rescue Imports::ExpensesImport::ImportError => e
@@ -46,11 +47,16 @@ class ExpensesController < ApplicationController
   end
 
   def download_template
-    send_data "title,amount,spent_on,category,notes\nLunch,12.5,2025-10-18,Food,Team lunch\n",
-              filename: "expenses_template.csv", type: "text/csv"
+    template = <<~CSV
+      title,amount,spent_on,category,notes
+      Lunch,12.5,2025-10-18,Food,Team lunch
+    CSV
+
+    send_data template, filename: "expenses_template.csv", type: "text/csv"
   end
 
   private
+
   def set_expense
     @expense = Expense.find(params[:id])
   end
