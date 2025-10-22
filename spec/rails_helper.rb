@@ -2,24 +2,20 @@
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
-# Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
 
-# Uncomment the line below in case you have `--require rails_helper` in the `.rspec` file
-# that will avoid rails generators crashing because migrations haven't been run yet
-# return unless Rails.env.test?
+# Prevent database truncation if running in production
+abort('The Rails environment is running in production mode!') if Rails.env.production?
+
 require 'rspec/rails'
-
-# Add additional requires below this line. Rails is not loaded until this point!
 require 'devise'
 require 'shoulda/matchers'
 require 'capybara/rails'
+require 'database_cleaner/active_record'
 
-# Requires supporting ruby files with custom matchers and macros, etc, in
-# spec/support/ and its subdirectories.
+# Load any files in spec/support
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
-# Checks for pending migrations and applies them before tests are run.
+# Apply pending migrations before tests
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
@@ -27,27 +23,33 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # ✅ Rails 8 compatibility – no transactional fixture settings
+  config.include ActiveRecord::TestFixtures if defined?(ActiveRecord::TestFixtures)
+  config.fixture_paths = [Rails.root.join('spec/fixtures')] if config.respond_to?(:fixture_paths=)
 
-  # Use transactional fixtures for test isolation
-  config.use_transactional_fixtures = true
-
-  # Include helpers for Devise and Capybara
+  # Devise + Capybara helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include Capybara::DSL, type: :feature
 
-  # Infer spec type from file location
-  config.infer_spec_type_from_file_location!
+  # DatabaseCleaner setup to isolate test data
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+  end
 
-  # Filter lines from Rails gems in backtraces.
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+
+  # Infer spec type & filter Rails noise
+  config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
-  # arbitrary gems may also be filtered via:
-  # config.filter_gems_from_backtrace("gem name")
 end
 
-# Configure Shoulda Matchers for RSpec and Rails
+# Shoulda-Matchers configuration
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec

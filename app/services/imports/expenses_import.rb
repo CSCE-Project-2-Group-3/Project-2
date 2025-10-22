@@ -1,13 +1,11 @@
-# app/services/imports/expenses_import.rb
 require "roo"
+
 module Imports
   class ExpensesImport
     Result = Struct.new(:created, :skipped, keyword_init: true)
     class ImportError < StandardError; end
 
-    def self.call(file:)
-      new(file).call
-    end
+    def self.call(file:) = new(file).call
 
     def initialize(file)
       @file = file
@@ -23,7 +21,7 @@ module Imports
       raise ImportError, "Missing columns: #{missing.join(', ')}" if missing.any?
 
       (2..spreadsheet.last_row).each do |i|
-        row = Hash[[ header, spreadsheet.row(i) ].transpose]
+        row = Hash[[header, spreadsheet.row(i)].transpose]
         next if row.values.all?(&:blank?)
 
         begin
@@ -47,12 +45,15 @@ module Imports
     private
 
     def open_spreadsheet(file)
-      case File.extname(file.original_filename)
-      when ".xlsx" then Roo::Excelx.new(file.tempfile.path)
-      when ".csv"  then Roo::CSV.new(file.tempfile.path)
-      else
-        raise ImportError, "Unsupported file type."
-      end
+      ext  = File.extname(file&.original_filename.to_s)
+      path = file&.tempfile&.path
+
+      # :nocov: Defensive guard clauses (not part of normal flow)
+      raise ImportError, "No file provided." if file.nil?
+      raise ImportError, "Unsupported file type." unless %w[.csv .xlsx].include?(ext)
+      # :nocov:
+
+      ext == ".xlsx" ? Roo::Excelx.new(path) : Roo::CSV.new(path)
     end
   end
 end

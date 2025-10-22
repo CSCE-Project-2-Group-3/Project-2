@@ -56,7 +56,7 @@ class ExpensesController < ApplicationController
   end
 
   private
-
+  
   def set_expense
     @expense = Expense.find(params[:id])
   end
