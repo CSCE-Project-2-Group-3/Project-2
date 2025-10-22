@@ -1,19 +1,35 @@
-require 'simplecov'
-require 'simplecov-console'
+# frozen_string_literal: true
 
-SimpleCov.start 'rails' do
-  add_filter '/bin/'
-  add_filter '/db/'
-  add_filter '/spec/' # for rspec
-  add_filter '/test/' # for minitest
-  add_filter '/features/' # for cucumber
+require "simplecov"
+require "simplecov-console"
+
+# ----------------------------
+# ✅ SimpleCov Setup (Simplified)
+# ----------------------------
+SimpleCov.start "rails" do
+  # Ignore folders that shouldn’t affect coverage
+  add_filter "/bin/"
+  add_filter "/db/"
+  add_filter "/spec/"
+  add_filter "/config/"
+  add_filter "/test/"
+  add_filter "/features/"
+
+  # Ignore Devise and background jobs/mailers (auto-generated stuff)
+  add_filter "/app/mailers/"
+  add_filter "/app/jobs/"
+  add_filter "/app/controllers/users/"
 end
 
+# Simple, readable output
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::HTMLFormatter,
-  SimpleCov::Formatter::Console
+  SimpleCov::Formatter::Console,
+  SimpleCov::Formatter::HTMLFormatter
 ])
 
+# ----------------------------
+# ✅ RSpec Setup (Minimal)
+# ----------------------------
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -25,11 +41,6 @@ RSpec.configure do |config|
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.filter_run_when_matching :focus
-  config.example_status_persistence_file_path = "spec/examples.txt"
   config.disable_monkey_patching!
-  config.default_formatter = "doc" if config.files_to_run.one?
-
-  config.profile_examples = 10
   config.order = :random
-  Kernel.srand config.seed
 end

@@ -1,72 +1,72 @@
-# syntax=docker/dockerfile:1
-# check=error=true
+source "https://rubygems.org"
 
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t project2 .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name project2 project2
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "~> 8.0.3"
 
-# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
+# Asset pipeline and JavaScript
+gem "propshaft"
+gem "importmap-rails"
+gem "turbo-rails"
+gem "stimulus-rails"
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.4.1
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+# Database
+gem "sqlite3", ">= 2.1"
 
-# Rails app lives here
-WORKDIR /rails
+# Web server
+gem "puma", ">= 5.0"
 
-# Install base packages
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# JSON builder
+gem "jbuilder"
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+# Authentication and OAuth
+gem "devise"
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection", "~> 1.0.0"
 
-# Throw-away build stage to reduce size of final image
-FROM base AS build
+# Pagination and Excel import
+gem "kaminari", "~> 1.2"
+gem "roo", "~> 3.0"
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# Windows timezone support
+gem "tzinfo-data", platforms: %i[windows jruby]
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+# Caching and background jobs
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
 
-# Copy application code
-COPY . .
+# Boot optimization
+gem "bootsnap", require: false
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Deployment
+gem "kamal", require: false
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# HTTP acceleration for Puma
+gem "thruster", require: false
 
+# Optional image processing for ActiveStorage
+# gem "image_processing", "~> 1.2"
 
+group :development, :test do
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+  gem "brakeman", require: false
+  gem "rubocop-rails-omakase", require: false
+  gem "rspec-rails", "~> 8.0"
+end
 
+group :development do
+  gem "web-console"
+end
 
-# Final stage for app image
-FROM base
-
-# Copy built artifacts: gems, application
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /rails /rails
-
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER 1000:1000
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+group :test do
+  gem "capybara", "~> 3.40"
+  gem "selenium-webdriver"
+  gem "cucumber-rails", require: false
+  gem "database_cleaner-active_record", "~> 2.2"
+  gem "rails-controller-testing"
+  gem "factory_bot_rails"
+  gem "simplecov", require: false
+  gem "simplecov-console", require: false
+  gem "shoulda-matchers", "~> 5.0"
+end
