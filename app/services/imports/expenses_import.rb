@@ -5,7 +5,9 @@ module Imports
     Result = Struct.new(:created, :skipped, keyword_init: true)
     class ImportError < StandardError; end
 
-    def self.call(file:) = new(file).call
+    def self.call(file:)
+      new(file).call
+    end
 
     def initialize(file)
       @file = file
@@ -21,7 +23,7 @@ module Imports
       raise ImportError, "Missing columns: #{missing.join(', ')}" if missing.any?
 
       (2..spreadsheet.last_row).each do |i|
-        row = Hash[[header, spreadsheet.row(i)].transpose]
+        row = Hash[[ header, spreadsheet.row(i) ].transpose]
         next if row.values.all?(&:blank?)
 
         begin

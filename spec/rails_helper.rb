@@ -25,7 +25,7 @@ end
 RSpec.configure do |config|
   # ✅ Rails 8 compatibility – no transactional fixture settings
   config.include ActiveRecord::TestFixtures if defined?(ActiveRecord::TestFixtures)
-  config.fixture_paths = [Rails.root.join('spec/fixtures')] if config.respond_to?(:fixture_paths=)
+  config.fixture_paths = [ Rails.root.join('spec/fixtures') ] if config.respond_to?(:fixture_paths=)
 
   # Devise + Capybara helpers
   config.include Devise::Test::ControllerHelpers, type: :controller

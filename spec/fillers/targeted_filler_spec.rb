@@ -22,7 +22,7 @@ RSpec.describe "Targeted filler coverage specs" do
   describe ExpensesController, type: :controller do
     let(:user)     { User.create!(email: "filler3@example.com", password: "password123") }
     let(:category) { Category.create!(name: "Other") }
-    let(:expense)  { Expense.create!(title: "Test", amount: 3.5, spent_on: Date.today, category:) }
+    let(:expense)  { Expense.create!(title: "Test", amount: 3.5, spent_on: Date.today, category: category) }
 
     before { sign_in user rescue nil }
 
@@ -51,7 +51,7 @@ RSpec.describe "Targeted filler coverage specs" do
   # --- Imports::ExpensesImport (lines 40–41, 51) ---
   describe Imports::ExpensesImport do
     it "returns meaningful error on unsupported extension" do
-      fake_file = Tempfile.new(["fake", ".docx"])
+      fake_file = Tempfile.new([ "fake", ".docx" ])
       fake_file.write("dummy content")
       fake_file.rewind
       upload = Rack::Test::UploadedFile.new(fake_file.path, "application/msword")
