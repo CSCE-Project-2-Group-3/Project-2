@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
   # Category routes
   resources :categories, only: [ :index, :new, :create, :destroy ]
-  resources :categories, only: [:new, :create]
+  resources :categories, only: [ :new, :create ]
 
 
   # Health check endpoint
