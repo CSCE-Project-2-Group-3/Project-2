@@ -38,3 +38,8 @@
 
 <p><strong>Total:</strong> <%= @total %></p>
 <%= paginate @expenses %>
+<div style="margin-top:12px;">
+  <%= button_to "Logout", destroy_user_session_path,
+        method: :delete,
+        form: { data: { turbo: false }, style: "display:inline" } %>
+</div>
