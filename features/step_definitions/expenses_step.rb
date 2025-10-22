@@ -1,7 +1,7 @@
 # features/step_definitions/expenses_step.rb
 
 Given('I have a category called {string}') do |name|
-  Category.create!(name: name)
+  Category.find_or_create_by!(name: name)
 end
 
 When('I go to the new expense page') do
@@ -12,7 +12,6 @@ When('I go to the expenses index page') do
   visit expenses_path
 end
 
-# 🟢 Make this step specific to expenses to avoid ambiguity
 When('I fill in the expense field {string} with {string}') do |field, value|
   fill_in field, with: value, match: :first
 rescue Capybara::ElementNotFound
