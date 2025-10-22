@@ -1,0 +1,14 @@
+<h1>Add New Category</h1>
+
+<%= form_with(model: @category, local: true) do |form| %>
+  <div>
+    <%= form.label :name, "Category Name" %><br>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div>
+    <%= form.submit "Save Category" %>
+  </div>
+<% end %>
+
+<p><%= link_to "Back to Add Expense", new_expense_path %></p>

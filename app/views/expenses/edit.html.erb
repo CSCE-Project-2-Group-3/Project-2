@@ -1,2 +1,16 @@
-<h1>Expenses#edit</h1>
-<p>Find me in app/views/expenses/edit.html.erb</p>
+<h1>Edit Expense</h1>
+
+<%= render "form", expense: @expense %>
+
+<hr>
+
+<div class="actions" style="display:flex; gap:.75rem; flex-wrap:wrap;">
+  <%= link_to "Back to Expenses", expenses_path %>
+  <%= link_to "Add a new category", new_category_path %>
+
+  <!-- Optional: quick delete from the edit screen -->
+  <%= button_to "Delete this expense",
+                expense_path(@expense),
+                method: :delete,
+                data: { confirm: "Are you sure you want to delete this expense?" } %>
+</div>
