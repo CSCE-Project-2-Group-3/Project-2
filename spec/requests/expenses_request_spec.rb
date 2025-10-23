@@ -2,11 +2,9 @@
 require 'rails_helper'
 
 RSpec.describe 'ExpensesController', type: :request do
-  include Devise::Test::IntegrationHelpers  # ✅ Required for sign_in
-
-  let(:user) { User.create!(email: 'req@example.com', password: 'password123') }
-  let!(:category) { Category.create!(name: 'Utilities') }
-  let!(:expense) { Expense.create!(title: 'Test Expense', amount: 15, spent_on: Date.current, category: category) }
+  let(:user) { create(:user) }
+  let!(:category) { create(:category) }
+  let!(:expense) { create(:expense, user: user, category: category) }
 
   before { sign_in user }
 

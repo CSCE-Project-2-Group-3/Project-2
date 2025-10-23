@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
-  let(:user)  { User.create!(email: 'user@example.com', password: 'password') }
-  let!(:group) { Group.create!(name: 'Roommates 2025') }
+  let(:user)  { create(:user) }
+  let!(:group) { create(:group) }
 
-  before { sign_in user }  # assumes Devise
+  before { sign_in user }
 
   describe 'GET #index' do
     it 'assigns the user groups' do
@@ -45,7 +45,7 @@ RSpec.describe GroupsController, type: :controller do
     it 'adds the user to the group with a valid join_code' do
       post :join, params: { join_code: group.join_code }
       expect(user.groups.reload).to include(group)
-      expect(flash[:notice]).to eq('Joined Roommates 2025 successfully.')
+      expect(flash[:notice]).to eq("Joined #{group.name} successfully.")
     end
 
     it 'shows error for invalid join_code' do
@@ -62,9 +62,9 @@ RSpec.describe GroupsController, type: :controller do
 
   describe 'GET #new' do
     it 'assigns a new Group to @group' do
-    get :new
-    expect(assigns(:group)).to be_a_new(Group)
-    expect(response).to render_template(:new)
+      get :new
+      expect(assigns(:group)).to be_a_new(Group)
+      expect(response).to render_template(:new)
     end
   end
 end

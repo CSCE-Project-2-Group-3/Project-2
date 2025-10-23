@@ -2,16 +2,20 @@
 require "rails_helper"
 
 RSpec.describe "Targeted filler coverage specs" do
+  let(:user) { create(:user) }
+  let(:category) { create(:category) }
+
+  let!(:expense) do
+    create(:expense, user: user, category: category)
+  end
+
   # --- Users::SessionsController (line 22) ---
   describe Users::SessionsController do
     it "calls after_sign_in_path_for with a nil user safely" do
       controller = described_class.new
-      # Provide a request so URL helpers don’t crash looking for host
       controller.request = ActionDispatch::TestRequest.create
 
-      # No stored location => should fall back to root_path
       allow(controller).to receive(:stored_location_for).and_return(nil)
-      # Stub root_path to a simple string to avoid needing route context
       allow(controller).to receive(:root_path).and_return("/")
 
       expect(controller.after_sign_in_path_for(nil)).to eq("/")
@@ -20,11 +24,11 @@ RSpec.describe "Targeted filler coverage specs" do
 
   # --- ExpensesController (lines 20, 30, 41-46) ---
   describe ExpensesController, type: :controller do
-    let(:user)     { User.create!(email: "filler3@example.com", password: "password123") }
-    let(:category) { Category.create!(name: "Other") }
-    let(:expense)  { Expense.create!(title: "Test", amount: 3.5, spent_on: Date.today, category: category) }
+    let(:user)     { create(:user) }
+    let(:category) { create(:category) }
+    let(:expense)  { create(:expense, user: user, category: category) }
 
-    before { sign_in user rescue nil }
+    before { sign_in user }
 
     it "responds safely to show and update actions" do
       get :show, params: { id: expense.id }
@@ -57,7 +61,7 @@ RSpec.describe "Targeted filler coverage specs" do
       upload = Rack::Test::UploadedFile.new(fake_file.path, "application/msword")
 
       expect do
-        described_class.call(file: upload)
+        described_class.call(file: upload, user: create(:user))
       end.to raise_error(Imports::ExpensesImport::ImportError, /Unsupported file type/i)
     ensure
       fake_file.close

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Group, type: :model do
-  let(:user)  { User.create!(email: 'test@example.com', password: 'password') }
-  let(:group) { Group.create!(name: 'Roommates 2025', join_code: 'ABC123') }
+  let(:user)  { create(:user) }
+  let(:group) { create(:group) }
 
   describe 'validations' do
     it 'is valid with a name and join_code' do
@@ -16,12 +16,12 @@ RSpec.describe Group, type: :model do
     end
 
     it 'generates a join_code automatically if not provided' do
-      g = Group.create!(name: 'Test Group')
+      g = create(:group, join_code: nil)
       expect(g.join_code).to be_present
     end
 
     it 'ensures join_code is unique' do
-      dup = Group.new(name: 'Dup', join_code: group.join_code)
+      dup = described_class.new(name: 'Dup', join_code: group.join_code)
       expect(dup).not_to be_valid
     end
   end

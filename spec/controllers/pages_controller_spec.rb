@@ -15,11 +15,9 @@ RSpec.describe PagesController, type: :controller do
     end
 
     context 'when user is signed in' do
-      let(:user) { User.create!(email: 'test@example.com', password: 'password123') }
+      let(:user) { create(:user) }
 
-      before do
-        sign_in user
-      end
+      before { sign_in user }
 
       it 'returns http success' do
         get :home

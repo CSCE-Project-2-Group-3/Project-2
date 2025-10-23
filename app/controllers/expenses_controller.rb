@@ -45,7 +45,7 @@ class ExpensesController < ApplicationController
   def bulk_upload
     return redirect_to(expenses_path, alert: "Please select a CSV or Excel file.") if params[:file].blank?
 
-    result = Imports::ExpensesImport.call(file: params[:file])
+    result = Imports::ExpensesImport.call(file: params[:file], user: current_user)
     redirect_to expenses_path, notice: "Imported #{result.created} rows. Skipped #{result.skipped}."
   rescue Imports::ExpensesImport::ImportError => e
     redirect_to expenses_path, alert: e.message

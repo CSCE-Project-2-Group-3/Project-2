@@ -1,17 +1,20 @@
 require 'rails_helper'
 
-RSpec.describe Expense, type: :model do
-  let!(:category) { Category.create!(name: 'Food') }
+RSpec.describe 'Expense requests', type: :request do
   let(:user) { create(:user) }
   let(:category) { create(:category) }
   let(:group) { create(:group) }
 
-  before { sign_in user }
-  describe "POST /expenses (personal)" do
-    it "creates a personal expense and redirects to /expenses" do
+  before do
+    create(:group_membership, user: user, group: group)
+    sign_in user
+  end
+
+  describe 'POST /expenses (personal)' do
+    it 'creates a personal expense and redirects to /expenses' do
       post expenses_path, params: {
         expense: {
-          title: "Personal Expense",
+          title: 'Personal Expense',
           amount: 50,
           spent_on: Date.today,
           category_id: category.id
@@ -25,11 +28,11 @@ RSpec.describe Expense, type: :model do
     end
   end
 
-  describe "POST /groups/:group_id/expenses (group expense)" do
-    it "creates a group expense and redirects to group page" do
+  describe 'POST /groups/:group_id/expenses (group expense)' do
+    it 'creates a group expense and redirects to group page' do
       post group_expenses_path(group), params: {
         expense: {
-          title: "Group Expense",
+          title: 'Group Expense',
           amount: 100,
           spent_on: Date.today,
           category_id: category.id
@@ -42,19 +45,18 @@ RSpec.describe Expense, type: :model do
       expect(response).to redirect_to(group_path(group))
     end
   end
-  
-  it 'is valid with title, amount, date, and category' do
-    e = Expense.new(title: 'Lunch', amount: 10.5, spent_on: Date.current, category: category)
-    expect(e).to be_valid
+end
+
+RSpec.describe Expense, type: :model do
+  it 'is valid with title, amount, date, category, and user' do
+    expect(build(:expense)).to be_valid
   end
 
   it 'is invalid without title' do
-    e = Expense.new(amount: 10, spent_on: Date.current, category: category)
-    expect(e).not_to be_valid
+    expect(build(:expense, title: nil)).not_to be_valid
   end
 
   it 'is invalid with negative amount' do
-    e = Expense.new(title: 'Invalid', amount: -5, spent_on: Date.current, category: category)
-    expect(e).not_to be_valid
+    expect(build(:expense, amount: -5)).not_to be_valid
   end
 end

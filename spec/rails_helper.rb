@@ -14,6 +14,8 @@ require 'database_cleaner/active_record'
 
 # Load any files in spec/support
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+
 
 # Apply pending migrations before tests
 begin
@@ -30,6 +32,7 @@ RSpec.configure do |config|
   # Devise + Capybara helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Capybara::DSL, type: :feature
 
   # DatabaseCleaner setup to isolate test data
