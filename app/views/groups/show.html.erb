@@ -20,7 +20,7 @@
   <% if @group.expenses.any? %>
     <% @group.expenses.each do |expense| %>
       <li>
-        <strong><%= expense.title %></strong> - $<%= expense.amount %>
+        <strong><%= link_to expense.title, expense_path(expense) %></strong> - <%= number_to_currency(expense.amount) %>
         <br>
         <small>Split with: <%= participant_summary(expense) %></small>
       </li>
