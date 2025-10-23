@@ -22,6 +22,21 @@
   <% end %>
 </dl>
 
+<%# Send Message button under the expense %>
+<% if user_signed_in? && current_user.id != @expense.user_id %>
+  <div class="expense-send-message">
+    <%= button_to "Send Message", conversations_path(recipient_id: @expense.user_id, expense_author_id: @expense.user_id), method: :post, class: "button" %>
+  </div>
+<% elsif user_signed_in? %>
+  <div class="expense-send-message">
+    <em>This is your expense.</em>
+  </div>
+<% else %>
+  <div>
+    <%= link_to "Log in to message the author", new_user_session_path %>
+  </div>
+<% end %>
+
 <hr>
 
 <div style="display:flex; gap:.75rem; flex-wrap:wrap;">

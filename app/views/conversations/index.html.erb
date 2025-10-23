@@ -1,0 +1,25 @@
+<h1>Your Conversations</h1>
+
+<% if @conversations.empty? %>
+  <p>You have no conversations yet. Click "Send Message" on an expense to start one.</p>
+<% else %>
+  <ul class="conversations-list">
+    <% @conversations.each do |conv| %>
+      <% other = conv.other_user(current_user) %>
+      <li>
+        <%= link_to conversation_path(conv) do %>
+          <strong><%= other&.full_name || other&.email || "User ##{other&.id}" %></strong>
+          <% last = conv.messages.last %>
+          <div class="snippet">
+            <% if last %>
+              <em><%= truncate("#{last.user.full_name || last.user.email}: #{last.body}", length: 80) %></em>
+              <span class="time"><%= time_ago_in_words(last.created_at) %> ago</span>
+            <% else %>
+              <em>No messages yet</em>
+            <% end %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

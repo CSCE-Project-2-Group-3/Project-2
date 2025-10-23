@@ -31,5 +31,14 @@
     <% end %>
 
     <%= yield %>
+    <% if user_signed_in? %>
+      <nav>
+        <%= link_to "Expenses", expenses_path %> |
+        <%= link_to "Conversations", conversations_path %> |
+        <%= link_to "Groups", groups_path %> |
+        <%= link_to "Account", edit_user_registration_path %>
+      </nav>
+    <% end %>
+
   </body>
 </html>
