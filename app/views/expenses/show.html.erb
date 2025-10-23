@@ -13,6 +13,9 @@
   <dt>Category</dt>
   <dd><%= @expense.category&.name || "—" %></dd>
 
+  <dt>Split with</dt>
+  <dd><%= participant_summary(@expense) %></dd>
+
   <% if @expense.notes.present? %>
     <dt>Notes</dt>
     <dd><%= simple_format(@expense.notes) %></dd>

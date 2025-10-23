@@ -18,7 +18,17 @@
 
 
 <table border="1" cellspacing="0" cellpadding="5">
-  <thead><tr><th>Date</th><th>Title</th><th>Category</th><th>Amount</th><th>Notes</th><th>Actions</th></tr></thead>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Notes</th>
+      <th>Split With</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
   <tbody>
     <% @expenses.each do |e| %>
       <tr>
@@ -27,6 +37,7 @@
         <td><%= e.category.name %></td>
         <td><%= e.amount %></td>
         <td><%= e.notes %></td>
+        <td><%= participant_summary(e) %></td>
         <td>
           <%= link_to "Edit", edit_expense_path(e) %> |
           <%= link_to "Delete", expense_path(e), data: { turbo_confirm: "Delete this?" }, method: :delete %>

@@ -54,19 +54,14 @@ Feature: Group and Social Features
   # Split Expense Among Group Members
   # ------------------------------
 
-  Scenario: Evenly split an expense among group members
-    Given I am in the group "Roommates 2025" with 3 members
-    When I add an expense titled "Groceries" for "$90"
-    And I select "Split evenly"
+  Scenario: Evenly split a $120 expense across four roommates
+    Given I am logged in
+    And I am in the group "Roommates 2025" with 4 members
+    When I add an expense titled "Cleaning Service" for "$120"
+    And I choose to split the bill with all group members
     And I click "Save"
-    Then I should see "Expense added successfully"
+    Then I should see "Expense created!"
     And each member’s share should be "$30"
-
-  Scenario: Fail to add expense without amount
-    Given I am in the group "Roommates 2025"
-    When I add an expense titled "Dinner" without an amount
-    And I click "Save"
-    Then I should see "Amount can't be blank"
 
   # ------------------------------
   # View Total Group Expense

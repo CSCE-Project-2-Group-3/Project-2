@@ -12,12 +12,16 @@
 
 <hr>
 
-<h3>Expenses (Coming Soon)</h3>
+<h3>Expenses</h3>
 <%= link_to "Add New Expense", new_group_expense_path(@group), class: "btn btn-primary" %>
 <ul>
   <% if @group.expenses.any? %>
     <% @group.expenses.each do |expense| %>
-      <li><%= expense.title %> - $<%= expense.amount %></li>
+      <li>
+        <strong><%= expense.title %></strong> - $<%= expense.amount %>
+        <br>
+        <small>Split with: <%= participant_summary(expense) %></small>
+      </li>
     <% end %>
   <% else %>
     <li>No expenses to show yet.</li>
