@@ -3,13 +3,22 @@
 # =============================
 # Navigation & Basic Actions
 # =============================
+Given('I am in the group {string}') do |group_name|
+  group = Group.find_by(name: group_name) || FactoryBot.create(:group, name: group_name)
+  # Assuming you have a join model like GroupMembership
+  unless group.users.include?(current_user)
+    group.users << current_user
+  end
+  # Optionally visit the group page to "enter" the group
+  visit group_path(group)
+end
 
 Given('I am on the {string} page') do |page_name|
   visit path_to(page_name)
 end
 
 When('I click {string}') do |button_text|
-  click_on button_text
+  click_on button_text, exact: false
 end
 
 When('I enter {string} as the group name') do |group_name|
@@ -144,6 +153,7 @@ def path_to(page_name)
   case page_name.downcase
   when 'groups' then groups_path
   when 'group summary' then group_path(@group)
+  when 'new expenses' then new_expense_path
   else
     raise "No path defined for page '#{page_name}'"
   end
