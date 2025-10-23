@@ -13,7 +13,7 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     if @group.save
       @group.users << current_user
-      redirect_to groups_path, notice: 'Group created successfully.'
+      redirect_to groups_path, notice: "Group created successfully."
     else
       flash.now[:alert] = @group.errors.full_messages.to_sentence
       render :new
@@ -24,13 +24,13 @@ class GroupsController < ApplicationController
     @group = Group.find_by(join_code: params[:join_code]&.strip&.upcase)
     if @group
       if @group.users.include?(current_user)
-        redirect_to groups_path, alert: 'You are already in this group.'
+        redirect_to groups_path, alert: "You are already in this group."
       else
         @group.users << current_user
         redirect_to groups_path, notice: "Joined #{@group.name} successfully."
       end
     else
-      redirect_to groups_path, alert: 'Invalid join code.'
+      redirect_to groups_path, alert: "Invalid join code."
     end
   end
 

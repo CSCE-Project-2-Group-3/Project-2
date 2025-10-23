@@ -12,10 +12,10 @@
 
 <hr>
 
-<!-- Future Expense Section -->
 <h3>Expenses (Coming Soon)</h3>
+<%= link_to "Add New Expense", new_group_expense_path(@group), class: "btn btn-primary" %>
 <ul>
-  <% if defined?(@group.expenses) && @group.respond_to?(:expenses) %>
+  <% if @group.expenses.any? %>
     <% @group.expenses.each do |expense| %>
       <li><%= expense.title %> - $<%= expense.amount %></li>
     <% end %>

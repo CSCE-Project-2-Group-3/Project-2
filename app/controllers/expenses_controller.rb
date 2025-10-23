@@ -1,5 +1,6 @@
 class ExpensesController < ApplicationController
   before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_group
 
   def index
     @expenses = Expense.includes(:category)
@@ -9,15 +10,25 @@ class ExpensesController < ApplicationController
   end
 
   def new
-    @expense = Expense.new(spent_on: Date.current)
+    if @group
+      @expense = @group.expenses.build
+    else
+      @expense = current_user.expenses.build
+    end
   end
 
   def create
-    @expense = Expense.new(expense_params)
-    if @expense.save
-      redirect_to expenses_path, notice: "Expense added successfully."
+    if @group
+      @expense = @group.expenses.build(expense_params)
+      @expense.user = current_user
     else
-      render :new, status: :unprocessable_entity
+      @expense = current_user.expenses.build(expense_params)
+    end
+
+    if @expense.save
+      redirect_to @group ? group_path(@group) : expenses_path, notice: "Expense created!"
+    else
+      render :new
     end
   end
 
@@ -63,5 +74,9 @@ class ExpensesController < ApplicationController
 
   def expense_params
     params.require(:expense).permit(:title, :notes, :amount, :spent_on, :category_id)
+  end
+  
+  def set_group
+    @group = Group.find_by(id: params[:group_id])
   end
 end

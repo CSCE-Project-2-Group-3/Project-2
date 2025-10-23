@@ -7,7 +7,22 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :groups do
     post :join, on: :collection
+    resources :expenses, only: [:new, :create, :index]
   end
+
+  # Expense management routes
+  resources :expenses do
+    collection do
+      post :bulk_upload
+      get  :download_template
+    end
+  end
+
+  # Category routes
+  resources :categories, only: [ :index, :new, :create, :destroy ]
+  resources :categories, only: [ :new, :create ]
+
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

@@ -83,7 +83,7 @@ end
 
 Given('the group {string} has expenses of {string} and {string}') do |group_name, amount1, amount2|
   @group = Group.find_or_create_by!(name: group_name)
-  [amount1, amount2].each do |amt|
+  [ amount1, amount2 ].each do |amt|
     @group.expenses.create!(title: "Expense #{amt}", amount: amt.delete('$'))
   end
 end

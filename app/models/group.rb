@@ -1,6 +1,7 @@
 class Group < ApplicationRecord
   has_many :group_memberships, dependent: :destroy
   has_many :users, through: :group_memberships
+  has_many :expenses, dependent: :destroy
 
   # Future: has_many :expenses, dependent: :destroy
 
@@ -8,6 +9,11 @@ class Group < ApplicationRecord
 
   validates :name, presence: { message: "Group name can't be blank" }
   validates :join_code, uniqueness: true
+
+  def add_member(user)
+    return if users.include?(user)
+    users << user
+  end
 
   private
 
