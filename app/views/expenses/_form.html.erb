@@ -1,4 +1,5 @@
-<%= form_with model: @expense, local: true do |f| %>
+<% form_object = @group.present? ? [@group, @expense] : @expense %>
+<%= form_with model: form_object, local: true do |f| %>
   <% if @expense.errors.any? %>
     <div style="color:red">
       <strong><%= pluralize(@expense.errors.count, "error") %>:</strong>
@@ -17,20 +18,41 @@
   </p>
 
   <p>
-  <%= f.label :spent_on, "Spent on" %><br>
-  <%= f.date_field :spent_on, required: true %>
+    <%= f.label :spent_on, "Spent on" %><br>
+    <%= f.date_field :spent_on, required: true %>
   </p>
-
 
   <p>
     <%= f.label :category_id, "Category" %><br>
     <%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Select a category" %>
+    <%= link_to "+ Add new category", new_category_path, target: "_blank", style: "margin-left: 10px; color: blue;" %>
   </p>
 
   <p>
     <%= f.label :notes %><br>
     <%= f.text_area :notes, rows: 3 %>
   </p>
+
+  <% group_for_split = @group || @expense.group %>
+  <% if group_for_split.present? %>
+    <fieldset style="margin:1rem 0; padding:.75rem; border:1px solid #ccc;">
+      <legend>Split Bill</legend>
+      <p style="margin-top:0; font-size:0.9rem; color:#555;">Leave blank to split with just you.</p>
+      <button type="button"
+              style="margin-bottom:0.5rem;"
+              onclick="(function(button){ const fieldset = button.closest('fieldset'); if(!fieldset) return; fieldset.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true); })(this);">
+        Split with all
+      </button>
+      <%= hidden_field_tag 'expense[participant_ids][]', '' %>
+      <% group_for_split.users.order(:full_name, :email).each do |member| %>
+        <% label_text = member.full_name.presence || member.email %>
+        <div style="margin-bottom:0.3rem;">
+          <%= check_box_tag 'expense[participant_ids][]', member.id, @expense.participant_ids.include?(member.id), id: "expense_participant_#{member.id}" %>
+          <%= label_tag "expense_participant_#{member.id}", label_text %>
+        </div>
+      <% end %>
+    </fieldset>
+  <% end %>
 
   <p><%= f.submit "Save Expense" %></p>
 <% end %>

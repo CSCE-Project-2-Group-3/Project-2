@@ -13,6 +13,9 @@
   <dt>Category</dt>
   <dd><%= @expense.category&.name || "—" %></dd>
 
+  <dt>Split with</dt>
+  <dd><%= participant_summary(@expense) %></dd>
+
   <% if @expense.notes.present? %>
     <dt>Notes</dt>
     <dd><%= simple_format(@expense.notes) %></dd>
@@ -30,4 +33,23 @@
                 expense_path(@expense),
                 method: :delete,
                 data: { turbo_confirm: "Are you sure you want to delete this expense?" } %>
+</div>
+
+<hr>
+
+<div class="comments-section">
+  <h2>Comments</h2>
+  <div class="comments-thread">
+    <% @expense.comments.each do |comment| %>
+      <div class="comment"><strong><%= comment.user.email %></strong>: <%= comment.body %></div>
+    <% end %>
+  </div>
+
+  <%= form_with(model: [@expense, Comment.new], local: true) do |f| %>
+    <div style="margin-top:0.75rem;">
+      <%= f.label :body, 'Comment' %><br>
+      <%= f.text_area :body, rows: 3, required: true %>
+    </div>
+    <%= f.submit 'Post Comment' %>
+  <% end %>
 </div>

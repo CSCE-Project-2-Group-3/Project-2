@@ -65,12 +65,7 @@ RSpec.describe User, type: :model do
 
     context 'when user already exists' do
       let!(:existing_user) do
-        User.create!(
-          email: 'test@example.com',
-          password: 'password123',
-          provider: 'google_oauth2',
-          uid: '123456'
-        )
+        create(:user, email: 'test@example.com', provider: 'google_oauth2', uid: '123456')
       end
 
       it 'returns the existing user' do

@@ -5,17 +5,20 @@ module Imports
     Result = Struct.new(:created, :skipped, keyword_init: true)
     class ImportError < StandardError; end
 
-    def self.call(file:)
-      new(file).call
+    def self.call(file:, user:)
+      new(file, user).call
     end
 
-    def initialize(file)
+    def initialize(file, user)
       @file = file
+      @user = user
       @created = 0
       @skipped = 0
     end
 
     def call
+      raise ImportError, "User must be provided." if @user.nil?
+
       spreadsheet = open_spreadsheet(@file)
       header = spreadsheet.row(1).map { |h| h.to_s.strip.downcase }
       required = %w[title amount spent_on category]
@@ -33,7 +36,8 @@ module Imports
             amount: BigDecimal(row["amount"].to_s),
             spent_on: Date.parse(row["spent_on"].to_s),
             notes: row["notes"],
-            category: category
+            category: category,
+            user: @user
           )
           @created += 1
         rescue => e

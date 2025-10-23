@@ -9,7 +9,7 @@ RSpec.describe Imports::ExpensesImport, type: :service do
   end
 
   it 'imports valid rows successfully' do
-    result = described_class.call(file: csv_file)
+    result = described_class.call(file: csv_file, user: create(:user))
     expect(result.created).to be > 0
     expect(result.skipped).to eq(0)
   end
@@ -20,7 +20,7 @@ RSpec.describe Imports::ExpensesImport, type: :service do
     bad_file.rewind
 
     bad_upload = Rack::Test::UploadedFile.new(bad_file.path, 'text/csv')
-    result = described_class.call(file: bad_upload)
+    result = described_class.call(file: bad_upload, user: create(:user))
 
     expect(result.skipped).to be >= 0
     expect(result.created).to be >= 0
@@ -34,7 +34,7 @@ RSpec.describe Imports::ExpensesImport, type: :service do
 
     # Expect the specific custom ImportError, not a crash
     expect do
-      described_class.call(file: upload)
+      described_class.call(file: upload, user: create(:user))
     end.to raise_error(Imports::ExpensesImport::ImportError, /Unsupported file type/i)
   ensure
     fake_file.close

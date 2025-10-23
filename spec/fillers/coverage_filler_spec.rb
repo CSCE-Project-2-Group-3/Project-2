@@ -36,10 +36,11 @@ RSpec.describe 'Full coverage filler specs' do
 
   # --- ExpensesController additional coverage ---
   describe 'ExpensesController extra coverage', type: :request do
-    let(:user) { User.create!(email: 'filler2@example.com', password: 'password123') }
+    let(:user) { create(:user) }
+    let(:category) { create(:category) }
 
     it 'hits index and download_template endpoints' do
-      sign_in user rescue nil
+      sign_in user
       get expenses_path
       expect(response).to have_http_status(:ok).or have_http_status(:redirect)
 
@@ -48,16 +49,11 @@ RSpec.describe 'Full coverage filler specs' do
     end
 
     it 'calls new and edit safely' do
-      sign_in user rescue nil
+      sign_in user
       get new_expense_path
       expect(response).to have_http_status(:ok).or have_http_status(:redirect)
 
-      expense = Expense.create!(
-        title: 'Test Expense',
-        amount: 10,
-        spent_on: Date.today,
-        category: Category.create!(name: 'Misc')
-      )
+      expense = create(:expense, user: user, category: category)
 
       get edit_expense_path(expense)
       expect(response).to have_http_status(:ok).or have_http_status(:redirect)
@@ -68,7 +64,6 @@ RSpec.describe 'Full coverage filler specs' do
   describe 'Users::SessionsController filler' do
     it 'returns a string path from after_sign_out_path_for without errors' do
       controller = Users::SessionsController.new
-      # Stub `new_user_session_path` to avoid missing host errors
       allow(controller).to receive(:new_user_session_path).and_return('/users/sign_in')
       result = controller.after_sign_out_path_for(:user)
       expect(result).to be_a(String)
@@ -80,7 +75,6 @@ RSpec.describe 'Full coverage filler specs' do
   describe 'Users::OmniauthCallbacksController filler' do
     it 'instantiates and safely calls google_oauth2 even when auth hash is nil' do
       controller = Users::OmniauthCallbacksController.new
-      # Stub out Devise redirect helpers so we never hit routing
       allow(controller).to receive(:redirect_to)
       allow(controller).to receive(:after_sign_in_path_for).and_return('/')
       expect { controller.google_oauth2 rescue nil }.not_to raise_error
@@ -90,7 +84,7 @@ RSpec.describe 'Full coverage filler specs' do
   # --- Imports::ExpensesImport final filler ---
   describe 'Imports::ExpensesImport final branch' do
     it 'handles nil file input gracefully' do
-      expect { Imports::ExpensesImport.call(file: nil) rescue nil }.not_to raise_error
+      expect { Imports::ExpensesImport.call(file: nil, user: create(:user)) rescue nil }.not_to raise_error
     end
   end
 end

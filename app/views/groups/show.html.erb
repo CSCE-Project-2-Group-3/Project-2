@@ -1,0 +1,31 @@
+<h2><%= @group.name %></h2>
+<p><strong>Join Code:</strong> <%= @group.join_code %></p>
+
+<hr>
+
+<h3>Members:</h3>
+<ul>
+  <% @group.users.each do |user| %>
+    <li><%= user.email %></li>
+  <% end %>
+</ul>
+
+<hr>
+
+<h3>Expenses</h3>
+<%= link_to "Add New Expense", new_group_expense_path(@group), class: "btn btn-primary" %>
+<% total_amount = @group.expenses.sum(:amount).to_f %>
+<p><strong>Total:</strong> <%= number_to_currency(total_amount, precision: (total_amount % 1).zero? ? 0 : 2) %></p>
+<ul>
+  <% if @group.expenses.any? %>
+    <% @group.expenses.each do |expense| %>
+      <li>
+        <strong><%= link_to expense.title, expense_path(expense) %></strong> - <%= number_to_currency(expense.amount) %>
+        <br>
+        <small>Split with: <%= participant_summary(expense) %></small>
+      </li>
+    <% end %>
+  <% else %>
+    <li>No expenses to show yet.</li>
+  <% end %>
+</ul>

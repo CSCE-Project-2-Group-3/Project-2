@@ -1,35 +1,5 @@
 <h1>Add New Expense</h1>
 
-<%= form_with(model: @expense, local: true) do |form| %>
-  <div>
-    <%= form.label :title %><br>
-    <%= form.text_field :title %>
-  </div>
-
-  <div>
-    <%= form.label :amount %><br>
-    <%= form.number_field :amount, step: 0.01 %>
-  </div>
-
-  <div>
-    <%= form.label :spent_on %><br>
-    <%= form.date_field :spent_on %>
-  </div>
-
-  <div>
-    <%= form.label :category_id, "Category" %><br>
-    <%= form.collection_select :category_id, Category.all, :id, :name, prompt: "Select a category" %>
-    <%= link_to "+ Add new category", new_category_path, target: "_blank", style: "margin-left: 10px; color: blue;" %>
-  </div>
-
-  <div>
-    <%= form.label :notes %><br>
-    <%= form.text_area :notes %>
-  </div>
-
-  <div>
-    <%= form.submit "Save Expense" %>
-  </div>
-<% end %>
+<%= render 'form' %>
 
 <p><%= link_to "Back to Expenses", expenses_path %></p>

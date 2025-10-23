@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Authentication', type: :feature do
   # Use unique email each run to avoid duplicate validation issues
-  let(:user) { User.create!(email: "test_#{SecureRandom.hex(4)}@example.com", password: 'password123') }
+  let(:user) { create(:user, email: "test_#{SecureRandom.hex(4)}@example.com") }
 
   describe 'Sign in' do
     it 'allows user to sign in with email and password' do

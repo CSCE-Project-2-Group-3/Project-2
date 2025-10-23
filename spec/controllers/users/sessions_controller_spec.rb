@@ -6,16 +6,14 @@ RSpec.describe Users::SessionsController, type: :controller do
   end
 
   describe '#after_sign_in_path_for' do
-    let(:user) { User.create!(email: 'test@example.com', password: 'password123') }
+    let(:user) { create(:user) }
 
     context 'when there is a stored location' do
       before do
-        # Use the session directly instead of stored_location_for helper
         session["user_return_to"] = '/some_path'
       end
 
       it 'returns the stored location' do
-        # Mock the stored_location_for method to avoid Devise mapping issues
         allow(controller).to receive(:stored_location_for).with(user).and_return('/some_path')
         expect(controller.after_sign_in_path_for(user)).to eq('/some_path')
       end
@@ -23,7 +21,6 @@ RSpec.describe Users::SessionsController, type: :controller do
 
     context 'when there is no stored location' do
       it 'returns root path' do
-        # Mock stored_location_for to return nil (no stored location)
         allow(controller).to receive(:stored_location_for).with(user).and_return(nil)
         expect(controller.after_sign_in_path_for(user)).to eq(root_path)
       end

@@ -12,14 +12,14 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
 
   describe 'GET #google_oauth2' do
     it 'signs in an existing user' do
-      user = User.create!(email: 'omniauth@example.com', password: 'password123')
+      user = create(:user, email: 'omniauth@example.com', provider: 'google_oauth2', uid: '12345')
 
       expect do
         get :google_oauth2
       end.not_to change(User, :count)
 
       expect(response).to redirect_to(expenses_path)
-      expect(controller.current_user).to be_present   # ✅ simplified
+      expect(controller.current_user).to be_present
       expect(controller.current_user.email).to eq(user.email)
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Users::OmniauthCallbacksController, type: :controller do
 
     it 'redirects to fallback path on failure' do
       get :google_oauth2, params: {}, session: { 'devise.omniauth_data' => nil }
-      expect(response).to redirect_to(expenses_path)  # ✅ match actual redirect
+      expect(response).to redirect_to(expenses_path)
     end
   end
 end

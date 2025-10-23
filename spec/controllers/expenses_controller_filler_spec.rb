@@ -2,7 +2,10 @@
 require 'rails_helper'
 
 RSpec.describe ExpensesController, type: :controller do
-  let!(:category) { Category.create!(name: 'Transport') }
+  let(:user) { create(:user) }
+  let!(:category) { create(:category) }
+
+  before { sign_in user }
 
   describe 'POST #create' do
     it 'creates a new expense' do
@@ -16,12 +19,13 @@ RSpec.describe ExpensesController, type: :controller do
           }
         }
       end.to change(Expense, :count).by(1)
+      expect(Expense.last.user).to eq(user)
     end
   end
 
   describe 'DELETE #destroy' do
     it 'deletes an expense' do
-      expense = Expense.create!(title: 'Lunch', amount: 5, spent_on: Date.current, category: category)
+      expense = create(:expense, user: user, category: category)
 
       expect do
         delete :destroy, params: { id: expense.id }
@@ -41,13 +45,15 @@ RSpec.describe ExpensesController, type: :controller do
   # ✅ NEW: Covers the success redirect/notice line in bulk_upload
   describe 'POST #bulk_upload (success path)' do
     it 'redirects with a success notice when import succeeds' do
-      # Stub the importer to avoid touching Roo/DB and drive the success branch
       fake_result = Imports::ExpensesImport::Result.new(created: 2, skipped: 1)
-      allow(Imports::ExpensesImport).to receive(:call).and_return(fake_result)
 
       file = Tempfile.new(%w[fake .csv])
       begin
         upload = Rack::Test::UploadedFile.new(file.path, 'text/csv')
+
+        allow(Imports::ExpensesImport).to receive(:call)
+          .with(file: anything, user: user)
+          .and_return(fake_result)
 
         post :bulk_upload, params: { file: upload }
 
