@@ -19,7 +19,7 @@ RSpec.describe ExpensesController, type: :controller do
         }
       end.to change(Expense, :count).by(1)
       expect(Expense.last.user).to eq(user)
-      expect(Expense.last.participant_ids).to eq([user.id])
+      expect(Expense.last.participant_ids).to eq([ user.id ])
     end
   end
 
@@ -40,13 +40,13 @@ RSpec.describe ExpensesController, type: :controller do
           amount: 40.0,
           spent_on: Date.current,
           category_id: category.id,
-          participant_ids: ['', member.id.to_s, 'junk']
+          participant_ids: [ '', member.id.to_s, 'junk' ]
         }
       }
 
       saved = Expense.last
       expect(saved.group).to eq(group)
-      expect(saved.participant_ids).to eq([member.id])
+      expect(saved.participant_ids).to eq([ member.id ])
     end
   end
 

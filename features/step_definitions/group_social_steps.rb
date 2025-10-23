@@ -72,7 +72,7 @@ Given('the group {string} has expenses of {string} and {string}') do |group_name
   @group = Group.find_or_create_by!(name: group_name)
   GroupMembership.find_or_create_by!(group: @group, user: @user)
   category = Category.first || FactoryBot.create(:category)
-  [amount1, amount2].each do |amt|
+  [ amount1, amount2 ].each do |amt|
     @group.expenses.create!(title: "Expense #{amt}", amount: amt.delete('$'), spent_on: Date.today, category: category, user: @user)
   end
 end

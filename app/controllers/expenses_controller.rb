@@ -73,13 +73,13 @@ class ExpensesController < ApplicationController
     permitted[:participant_ids] = sanitize_participant_ids(permitted[:participant_ids])
     permitted
   end
-  
+
   def set_group
     @group = if params[:group_id]
                Group.find_by(id: params[:group_id])
-             else
+    else
                @expense&.group
-             end
+    end
   end
 
   def sanitize_participant_ids(raw_ids)

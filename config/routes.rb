@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :groups do
     post :join, on: :collection
-    resources :expenses, only: [:new, :create, :index]
+    resources :expenses, only: [ :new, :create, :index ]
   end
 
   # Expense management routes

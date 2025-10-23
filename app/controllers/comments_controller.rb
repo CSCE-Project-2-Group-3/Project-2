@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
     comment = @expense.comments.build(comment_params.merge(user: current_user))
 
     if comment.save
-      redirect_back fallback_location: expense_path(@expense), notice: 'Comment posted successfully'
+      redirect_back fallback_location: expense_path(@expense), notice: "Comment posted successfully"
     else
       redirect_back fallback_location: expense_path(@expense), alert: comment.errors.full_messages.to_sentence
     end

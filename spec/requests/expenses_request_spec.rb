@@ -10,7 +10,7 @@ RSpec.describe 'ExpensesController', type: :request do
   let!(:shared_expense) do
     create(:group_membership, user: user, group: group)
     create(:group_membership, user: other_user, group: group)
-    create(:expense, :with_group, user: other_user, group: group, category: category, title: 'Shared Dinner', participant_users: [user])
+    create(:expense, :with_group, user: other_user, group: group, category: category, title: 'Shared Dinner', participant_users: [ user ])
   end
   let!(:other_expense) { create(:expense, user: other_user, category: category, title: 'Someone Else') }
 

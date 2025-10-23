@@ -17,13 +17,13 @@ class Expense < ApplicationRecord
     table = arel_table
 
     if sqlite_adapter?
-      patterns = ["[#{id}]", "[#{id},%", "%,#{id},%", "%,#{id}]"]
+      patterns = [ "[#{id}]", "[#{id},%", "%,#{id},%", "%,#{id}]" ]
       participant_clause = patterns.map { |pattern| table[:participant_ids].matches(pattern) }
                                    .reduce { |memo, node| memo.or(node) }
       participant_clause ||= table[:participant_ids].matches("[#{id}]")
       where(table[:user_id].eq(id)).or(where(participant_clause))
     else
-      where(table[:user_id].eq(id)).or(where('? = ANY(participant_ids)', id))
+      where(table[:user_id].eq(id)).or(where("? = ANY(participant_ids)", id))
     end
   }
 

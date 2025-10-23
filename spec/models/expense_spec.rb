@@ -25,7 +25,7 @@ RSpec.describe 'Expense requests', type: :request do
       expense = Expense.last
       expect(expense.user).to eq(user)
       expect(expense.group).to be_nil
-      expect(expense.participant_ids).to eq([user.id])
+      expect(expense.participant_ids).to eq([ user.id ])
       expect(response).to redirect_to(expenses_path)
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe 'Expense requests', type: :request do
       expense = Expense.last
       expect(expense.user).to eq(user)
       expect(expense.group).to eq(group)
-      expect(expense.participant_ids).to eq([user.id])
+      expect(expense.participant_ids).to eq([ user.id ])
       expect(response).to redirect_to(group_path(group))
     end
 
@@ -59,12 +59,12 @@ RSpec.describe 'Expense requests', type: :request do
           amount: 75,
           spent_on: Date.today,
           category_id: category.id,
-          participant_ids: [other_member.id]
+          participant_ids: [ other_member.id ]
         }
       }
 
       expense = Expense.last
-      expect(expense.participant_ids).to match_array([other_member.id])
+      expect(expense.participant_ids).to match_array([ other_member.id ])
       expect(response).to redirect_to(group_path(group))
     end
   end
@@ -98,43 +98,43 @@ RSpec.describe Expense, type: :model do
     it 'defaults to the creator when blank' do
       expense = build(:expense, user: user, category: category, participant_ids: [])
       expense.valid?
-      expect(expense.participant_ids).to eq([user.id])
+      expect(expense.participant_ids).to eq([ user.id ])
     end
 
     it 'deduplicates participant IDs' do
-      expense = build(:expense, user: user, category: category, participant_ids: [member.id, member.id, user.id])
+      expense = build(:expense, user: user, category: category, participant_ids: [ member.id, member.id, user.id ])
       expense.group = group
       expect(expense).to be_valid
-      expect(expense.participant_ids).to match_array([member.id, user.id])
+      expect(expense.participant_ids).to match_array([ member.id, user.id ])
     end
 
     it 'allows the creator to exclude themselves when others selected' do
-      expense = build(:expense, user: user, category: category, group: group, participant_ids: [member.id])
+      expense = build(:expense, user: user, category: category, group: group, participant_ids: [ member.id ])
       expect(expense).to be_valid
     end
 
     it 'rejects participants who are not in the group' do
       outsider = create(:user)
-      expense = build(:expense, user: user, category: category, group: group, participant_ids: [outsider.id])
+      expense = build(:expense, user: user, category: category, group: group, participant_ids: [ outsider.id ])
       expect(expense).not_to be_valid
       expect(expense.errors[:participant_ids]).to include('must be members of the group')
     end
 
     it 'prevents personal expenses from including other users' do
       outsider = create(:user)
-      expense = build(:expense, user: user, category: category, participant_ids: [outsider.id])
+      expense = build(:expense, user: user, category: category, participant_ids: [ outsider.id ])
       expect(expense).not_to be_valid
       expect(expense.errors[:participant_ids]).to include('can only include yourself for personal expenses')
     end
 
     it 'drops non-numeric entries when normalizing raw ids' do
       expense = build(:expense, user: user, category: category)
-      expect(expense.send(:normalize_ids, ['abc', member.id, ''])).to eq([member.id])
+      expect(expense.send(:normalize_ids, [ 'abc', member.id, '' ])).to eq([ member.id ])
     end
 
     it 'deserializes array values unchanged' do
       expense = build(:expense, user: user, category: category)
-      expect(expense.send(:deserialize_participant_ids, [member.id, user.id])).to eq([member.id, user.id])
+      expect(expense.send(:deserialize_participant_ids, [ member.id, user.id ])).to eq([ member.id, user.id ])
     end
 
     it 'deserializes nil values to an empty array' do
@@ -144,7 +144,7 @@ RSpec.describe Expense, type: :model do
 
     it 'wraps scalar values in an array when deserializing' do
       expense = build(:expense, user: user, category: category)
-      expect(expense.send(:deserialize_participant_ids, member.id)).to eq([member.id])
+      expect(expense.send(:deserialize_participant_ids, member.id)).to eq([ member.id ])
     end
 
     it 'falls back to an empty array when JSON parsing fails' do
@@ -171,7 +171,7 @@ RSpec.describe Expense, type: :model do
     end
 
     it 'includes group expenses where the user is a participant' do
-      expense = create(:expense, :with_group, user: owner, group: group, category: category, participant_users: [participant])
+      expense = create(:expense, :with_group, user: owner, group: group, category: category, participant_users: [ participant ])
       expect(described_class.for_user(participant.id)).to include(expense)
     end
 
