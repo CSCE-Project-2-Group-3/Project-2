@@ -152,4 +152,32 @@ RSpec.describe Expense, type: :model do
       expect(expense.send(:deserialize_participant_ids, '[not-json]')).to eq([])
     end
   end
+
+  describe '.for_user' do
+    let(:category) { create(:category) }
+    let(:group) { create(:group) }
+    let(:owner) { create(:user) }
+    let(:participant) { create(:user) }
+    let(:other) { create(:user) }
+
+    before do
+      create(:group_membership, user: owner, group: group)
+      create(:group_membership, user: participant, group: group)
+    end
+
+    it 'includes expenses owned by the user' do
+      expense = create(:expense, user: owner, category: category)
+      expect(described_class.for_user(owner.id)).to include(expense)
+    end
+
+    it 'includes group expenses where the user is a participant' do
+      expense = create(:expense, :with_group, user: owner, group: group, category: category, participant_users: [participant])
+      expect(described_class.for_user(participant.id)).to include(expense)
+    end
+
+    it 'excludes expenses unrelated to the user' do
+      expense = create(:expense, user: other, category: category)
+      expect(described_class.for_user(participant.id)).not_to include(expense)
+    end
+  end
 end

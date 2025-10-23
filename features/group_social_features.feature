@@ -68,12 +68,15 @@ Feature: Group and Social Features
   # ------------------------------
 
   Scenario: View total group expenses
-    Given the group "Roommates 2025" has expenses of "$90" and "$60"
+    Given I am logged in
+    And I am already a member of "Roommates 2025"
+    And the group "Roommates 2025" has expenses of "$90" and "$60"
     When I visit the group summary page
     Then I should see "Total: $150"
 
   Scenario: View total when there are no expenses
-    Given the group "New Group" has no expenses
+    Given I am logged in
+    And the group "New Group" has no expenses
     When I visit the group summary page
     Then I should see "Total: $0"
 

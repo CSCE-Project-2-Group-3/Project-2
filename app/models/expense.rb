@@ -11,6 +11,20 @@ class Expense < ApplicationRecord
   before_validation :normalize_participant_ids
 
   scope :recent, -> { order(spent_on: :desc) }
+  scope :for_user, lambda { |user_id|
+    id = Array(user_id).first.to_i
+    table = arel_table
+
+    if sqlite_adapter?
+      patterns = ["[#{id}]", "[#{id},%", "%,#{id},%", "%,#{id}]"]
+      participant_clause = patterns.map { |pattern| table[:participant_ids].matches(pattern) }
+                                   .reduce { |memo, node| memo.or(node) }
+      participant_clause ||= table[:participant_ids].matches("[#{id}]")
+      where(table[:user_id].eq(id)).or(where(participant_clause))
+    else
+      where(table[:user_id].eq(id)).or(where('? = ANY(participant_ids)', id))
+    end
+  }
 
   def participants
     return User.none if participant_ids.blank?
@@ -81,6 +95,10 @@ class Expense < ApplicationRecord
   end
 
   def sqlite_adapter?
+    ActiveRecord::Base.connection.adapter_name.downcase.include?("sqlite")
+  end
+
+  def self.sqlite_adapter?
     ActiveRecord::Base.connection.adapter_name.downcase.include?("sqlite")
   end
 end

@@ -79,6 +79,7 @@ end
 
 Given('the group {string} has no expenses') do |group_name|
   @group = Group.find_or_create_by!(name: group_name)
+  GroupMembership.find_or_create_by!(group: @group, user: @user)
   @group.expenses.destroy_all
 end
 

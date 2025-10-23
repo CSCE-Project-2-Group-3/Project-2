@@ -3,7 +3,8 @@ class ExpensesController < ApplicationController
   before_action :set_group, only: [ :new, :create, :edit, :update ]
 
   def index
-    @expenses = Expense.includes(:category, :user)
+    @expenses = Expense.for_user(current_user.id)
+                       .includes(:category, :user)
                        .order(spent_on: :desc)
                        .page(params[:page]).per(20)
     @total = @expenses.sum(:amount)

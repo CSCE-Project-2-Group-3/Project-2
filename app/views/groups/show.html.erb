@@ -14,6 +14,7 @@
 
 <h3>Expenses</h3>
 <%= link_to "Add New Expense", new_group_expense_path(@group), class: "btn btn-primary" %>
+<p><strong>Total:</strong> <%= number_to_currency(@group.expenses.sum(:amount) || 0) %></p>
 <ul>
   <% if @group.expenses.any? %>
     <% @group.expenses.each do |expense| %>
