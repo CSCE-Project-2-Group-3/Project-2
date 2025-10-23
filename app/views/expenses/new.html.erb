@@ -1,5 +1,5 @@
 <h1>Add New Expense</h1>
-<p>DEBUG group: <%= @group.inspect %></p>
+
 <%= form_with(model: [@group, @expense], local: true) do |form| %>
   <div>
     <%= form.label :title %><br>

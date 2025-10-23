@@ -12,7 +12,7 @@ When('I go to the new expense page') do
 end
 
 When('I go to the new expense page for group {string}') do |group_name|
-  group = Group.find_by(name: group_name)
+  group = Group.find_by!(name: group_name)
   visit new_group_expense_path(group)
 end
 
@@ -27,9 +27,7 @@ rescue Capybara::ElementNotFound
 end
 
 When('I select {string} from the expense dropdown {string}') do |option, field|
-  category = Category.find_or_create_by!(name: option)
-  visit current_path
-  select category.name, from: field
+  select option, from: field
 end
 
 
@@ -51,6 +49,13 @@ Then('I should see the expense message {string}') do |text|
 end
 
 Then('I should be on the group page for {string}') do |group_name|
-  group = Group.find_by(name: group_name)
-  expect(page).to have_current_path(group_path(group))
+  group = Group.find_by!(name: group_name)
+  expected_path = group_path(group)
+
+  Timeout.timeout(5) do
+    loop until page.current_path == expected_path
+  end
+
+  # Optional: confirm the heading or something unique to group show page
+  expect(page).to have_content(group.name)
 end
