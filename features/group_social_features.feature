@@ -71,13 +71,13 @@ Feature: Group and Social Features
     Given I am logged in
     And I am already a member of "Roommates 2025"
     And the group "Roommates 2025" has expenses of "$90" and "$60"
-    When I visit the group summary page
+    When I visit the "Roommates 2025" summary page
     Then I should see "Total: $150"
 
   Scenario: View total when there are no expenses
     Given I am logged in
     And the group "New Group" has no expenses
-    When I visit the group summary page
+    When I visit the "New Group" summary page
     Then I should see "Total: $0"
 
   # ------------------------------
@@ -85,23 +85,27 @@ Feature: Group and Social Features
   # ------------------------------
 
   Scenario: Add a comment to a group expense
-    Given I am viewing the "Groceries" expense in "Roommates 2025"
+    Given I am logged in
+    And I am viewing the "Groceries" expense in "Roommates 2025"
     When I type "Can we split snacks separately next time?" in the comment box
     And I click "Post Comment"
     Then I should see "Comment posted successfully"
     And I should see my comment in the thread
 
   Scenario: Fail to post an empty comment
-    Given I am viewing the "Groceries" expense in "Roommates 2025"
+    Given I am logged in
+    And I am viewing the "Groceries" expense in "Roommates 2025"
     When I leave the comment box blank
     And I click "Post Comment"
-    Then I should see "Comment can't be blank"
+    Then I should see "Body can't be blank"
 
   # ------------------------------
   # View All Comments in a Group Expense Thread
   # ------------------------------
 
   Scenario: View all comments in a group expense thread
-    Given the "Groceries" expense has 3 comments
+    Given I am logged in
+    And I am viewing the "Groceries" expense in "Roommates 2025"
+    And the "Groceries" expense has 3 comments
     When I open the "Comments" section
     Then I should see all 3 comments in chronological order

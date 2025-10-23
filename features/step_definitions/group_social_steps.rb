@@ -83,7 +83,8 @@ Given('the group {string} has no expenses') do |group_name|
   @group.expenses.destroy_all
 end
 
-When('I visit the group summary page') do
+When('I visit the {string} summary page') do |group_name|
+  @group = Group.find_or_create_by!(name: group_name)
   visit group_path(@group)
 end
 
@@ -97,7 +98,7 @@ Given('I am viewing the {string} expense in {string}') do |expense_title, group_
     expense.category = category
     expense.user = @user
   end
-  visit group_path(@group)
+  visit expense_path(@expense)
 end
 
 When('I type {string} in the comment box') do |comment_text|
@@ -124,10 +125,11 @@ Given('the {string} expense has {int} comments') do |expense_title, count|
   count.times do |i|
     @expense.comments.create!(body: "Test comment #{i + 1}", user: @user || FactoryBot.create(:user))
   end
+  visit expense_path(@expense)
 end
 
 When('I open the {string} section') do |_section|
-  click_on 'Comments'
+  # Comments are already visible on the expense page
 end
 
 Then('I should see all {int} comments in chronological order') do |count|

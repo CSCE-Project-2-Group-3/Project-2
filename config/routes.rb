@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   # Expense management routes
   resources :expenses do
+    resources :comments, only: :create
     collection do
       post :bulk_upload
       get  :download_template

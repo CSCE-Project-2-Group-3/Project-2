@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_23_160000) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_23_170000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -44,6 +44,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_23_160000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "expense_id", null: false
+    t.integer "user_id", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_id"], name: "index_comments_on_expense_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "expenses", force: :cascade do |t|
@@ -97,6 +107,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_23_160000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "expenses"
+  add_foreign_key "comments", "users"
   add_foreign_key "expenses", "categories"
   add_foreign_key "expenses", "groups"
   add_foreign_key "expenses", "users"

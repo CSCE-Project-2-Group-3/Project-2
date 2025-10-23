@@ -2,6 +2,7 @@ class Expense < ApplicationRecord
   belongs_to :category
   belongs_to :user
   belongs_to :group, optional: true
+  has_many :comments, dependent: :destroy
 
   validates :title, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: 0 }
