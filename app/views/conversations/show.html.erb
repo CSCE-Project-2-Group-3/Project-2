@@ -1,29 +1,20 @@
-<% other = @conversation.other_user(current_user) %>
-<h1>Conversation with <%= other&.full_name || other&.email || "User ##{other&.id}" %></h1>
+<h2>Conversation with <%= @conversation.other_user(current_user)&.full_name %></h2>
 
-<div class="messages" id="messages">
-  <% @messages.each do |msg| %>
-    <div id="message-<%= msg.id %>" class="message <%= 'mine' if msg.user_id == current_user.id %>">
-      <div class="meta">
-        <strong><%= msg.user.full_name || msg.user.email %></strong>
-        <span class="time"><%= msg.created_at.strftime("%b %-d, %Y %l:%M %P") %></span>
-      </div>
-      <div class="body"><%= simple_format(h(msg.body)) %></div>
-    </div>
+<div id="messages">
+  <% if @messages.any? %>
+    <% @messages.each do |msg| %>
+      <p><strong><%= msg.user.full_name %>:</strong> <%= msg.body %></p>
+    <% end %>
+  <% else %>
+    <p>No messages yet</p>
   <% end %>
 </div>
 
-<div class="new-message">
-  <%= form_with model: @message, url: messages_path, local: true do |f| %>
-    <%= f.hidden_field :conversation_id, value: @conversation.id %>
-    <%= f.hidden_field :conversation_id, value: @conversation.id, name: "conversation_id" %> <!-- redundant for safety -->
-    <div class="field">
-      <%= f.label :body, "Message" %><br>
-      <%= f.text_area :body, rows: 4, required: true %>
-    </div>
-    <div class="actions">
-      <%= f.submit "Send" %>
-      <%= link_to "Back", conversations_path, class: "button" %>
-    </div>
-  <% end %>
-</div>
+<%= form_tag messages_path(conversation_id: @conversation.id), method: :post do %>
+  <div>
+    <label for="message_body">Message</label>
+    <%= text_area_tag "message_body", "", id: "message_body", name: "message[body]" %>
+  </div>
+  <%= submit_tag "Send" %>
+<% end %>
+

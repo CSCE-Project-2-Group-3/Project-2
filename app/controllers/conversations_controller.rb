@@ -20,7 +20,6 @@ class ConversationsController < ApplicationController
   end
 
   def create
-    # Expect either :recipient_id OR :user_id (we'll support both); also allow passing expense_author_id
     recipient_id = params[:recipient_id] || params[:user_id] || params[:expense_author_id]
     recipient = User.find_by(id: recipient_id)
 
@@ -34,9 +33,9 @@ class ConversationsController < ApplicationController
       return
     end
 
-    conversation = Conversation.find_or_create_between(current_user, recipient)
+    @conversation = Conversation.find_or_create_between(current_user, recipient)
 
-    redirect_to conversation_path(conversation)
+    redirect_to conversation_path(@conversation)
   end
 
   private
