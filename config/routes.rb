@@ -22,10 +22,10 @@ Rails.application.routes.draw do
       get  :download_template
     end
   end
-  
+
   # Conversation and messaging routes for user-to-user communication
-  resources :conversations, only: [:index, :show, :create]
-  resources :messages, only: [:create]
+  resources :conversations, only: [ :index, :show, :create ]
+  resources :messages, only: [ :create ]
 
   # Category routes
   resources :categories, only: [ :index, :new, :create, :destroy ]

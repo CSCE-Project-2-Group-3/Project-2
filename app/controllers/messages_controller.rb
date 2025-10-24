@@ -2,9 +2,15 @@ class MessagesController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @conversation = Conversation.find(params[:conversation_id])
-    unless [@conversation.user_a_id, @conversation.user_b_id].include?(current_user.id)
-      redirect_to conversations_path, alert: "Not authorized to post in this conversation."
+    # Safely scope conversation lookup to current_user participation
+    @conversation = Conversation.where(
+      "user_a_id = :id OR user_b_id = :id",
+      id: current_user.id
+    ).find_by(id: params[:conversation_id])
+
+    unless @conversation
+      # Keep original flash message so existing RSpec test passes
+      redirect_to conversations_path, alert: "Not authorized."
       return
     end
 

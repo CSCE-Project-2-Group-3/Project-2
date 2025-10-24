@@ -11,7 +11,7 @@ RSpec.describe 'ExpensesController filler coverage', type: :request do
     expect(response).to have_http_status(:ok).or have_http_status(:redirect)
 
     post expenses_path, params: { expense: { title: '', amount: '', spent_on: '' } }
-    expect(response).to have_http_status(:unprocessable_entity).or have_http_status(:redirect)
+    expect(response).to have_http_status(:unprocessable_content).or have_http_status(:redirect)
 
     get download_template_expenses_path
     expect(response).to have_http_status(:ok).or have_http_status(:redirect)

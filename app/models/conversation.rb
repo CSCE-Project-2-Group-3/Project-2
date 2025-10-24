@@ -24,7 +24,7 @@ class Conversation < ApplicationRecord
   end
 
   def participants
-    User.where(id: [user_a_id, user_b_id])
+    User.where(id: [ user_a_id, user_b_id ])
   end
 
   def other_user(user)
@@ -40,7 +40,7 @@ class Conversation < ApplicationRecord
   end
 
   def self.order_pair(id1, id2)
-    ids = [id1.to_i, id2.to_i].sort
+    ids = [ id1.to_i, id2.to_i ].sort
     return ids[0], ids[1]
   end
 

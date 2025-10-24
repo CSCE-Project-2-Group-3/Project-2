@@ -3,14 +3,21 @@ class ConversationsController < ApplicationController
 
   def index
     # show all conversations the current_user participates in
-    @conversations = Conversation.where("user_a_id = :id OR user_b_id = :id", id: current_user.id)
-                                 .includes(:messages)
-                                 .order("conversations.updated_at desc")
+    @conversations = Conversation.where(
+      "user_a_id = :id OR user_b_id = :id",
+      id: current_user.id
+    ).includes(:messages)
+     .order("conversations.updated_at desc")
   end
 
   def show
-    @conversation = Conversation.find(params[:id])
-    unless participant?(@conversation, current_user)
+    # Scoped find to prevent unscoped access
+    @conversation = Conversation.where(
+      "user_a_id = :id OR user_b_id = :id",
+      id: current_user.id
+    ).find_by(id: params[:id])
+
+    unless @conversation
       redirect_to conversations_path, alert: "You are not authorized to view that conversation."
       return
     end
@@ -41,6 +48,6 @@ class ConversationsController < ApplicationController
   private
 
   def participant?(conversation, user)
-    [conversation.user_a_id, conversation.user_b_id].include?(user.id)
+    [ conversation.user_a_id, conversation.user_b_id ].include?(user.id)
   end
 end

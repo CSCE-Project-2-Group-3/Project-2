@@ -29,7 +29,7 @@ RSpec.describe "Final full coverage fillers" do
 
     it "renders new on invalid create" do
       post :create, params: { expense: { title: "", amount: 10, spent_on: Date.today, category_id: category.id } }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "renders edit successfully" do
@@ -44,7 +44,7 @@ RSpec.describe "Final full coverage fillers" do
 
     it "renders edit on invalid update" do
       patch :update, params: { id: expense.id, expense: { title: "" } }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
     end
 
     it "destroys an expense successfully" do

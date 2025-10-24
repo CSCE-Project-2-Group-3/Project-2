@@ -21,6 +21,6 @@ RSpec.describe CategoriesController, type: :controller do
     }.not_to change(Category, :count)
 
     # Some apps return 422, some just render :ok; cover both safely
-    expect(response).to have_http_status(:unprocessable_entity).or have_http_status(:ok)
+    expect(response).to have_http_status(:unprocessable_content).or have_http_status(:ok)
   end
 end
