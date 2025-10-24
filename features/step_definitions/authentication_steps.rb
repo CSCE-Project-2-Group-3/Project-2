@@ -4,12 +4,19 @@ Given("I am not logged in") do
 end
 
 Given("I am logged in") do
-  @user = User.create!(email: 'test@example.com', password: 'password123')
+  @user = User.find_or_create_by!(email: 'test@example.com') do |u|
+    u.password = 'password123'
+  end
+
+  logout(:user) rescue nil  # ensure clean session
   visit new_user_session_path
-  fill_in 'Email', with: @user.email
-  fill_in 'Password', with: 'password123'
+
+  fill_in 'user_email', with: @user.email
+  fill_in 'user_password', with: 'password123'
   click_button 'Log in'
 end
+
+
 
 Given("a user exists with email {string} and password {string}") do |email, password|
   User.create!(email: email, password: password)

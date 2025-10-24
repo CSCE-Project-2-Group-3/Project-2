@@ -1,0 +1,8 @@
+<li>
+  <%= link_to conversation_path(conversation) do %>
+    <%= conversation.other_user(current_user).full_name %>
+    <% if conversation.messages.last %>
+      - <%= truncate(conversation.messages.last.body, length: 80) %>
+    <% end %>
+  <% end %>
+</li>

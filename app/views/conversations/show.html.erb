@@ -1,0 +1,20 @@
+<h2>Conversation with <%= @conversation.other_user(current_user)&.full_name %></h2>
+
+<div id="messages">
+  <% if @messages.any? %>
+    <% @messages.each do |msg| %>
+      <p><strong><%= msg.user.full_name %>:</strong> <%= msg.body %></p>
+    <% end %>
+  <% else %>
+    <p>No messages yet</p>
+  <% end %>
+</div>
+
+<%= form_tag messages_path(conversation_id: @conversation.id), method: :post do %>
+  <div>
+    <label for="message_body">Message</label>
+    <%= text_area_tag "message_body", "", id: "message_body", name: "message[body]" %>
+  </div>
+  <%= submit_tag "Send" %>
+<% end %>
+

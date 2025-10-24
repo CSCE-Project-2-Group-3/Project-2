@@ -6,7 +6,12 @@
 
 
 require 'cucumber/rails'
+require 'factory_bot'
 
+World(FactoryBot::Syntax::Methods)
+
+DatabaseCleaner.strategy = :transaction
+Cucumber::Rails::Database.javascript_strategy = :truncation
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
@@ -56,10 +61,14 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 # Add Devise test helpers for Cucumber
 World(Devise::Test::IntegrationHelpers)
 
-# Alternative login method for Cucumber
-def login_as(user)
-  visit new_user_session_path
-  fill_in "Email", with: user.email
-  fill_in "Password", with: user.password
-  click_button "Log in"
+# Use Warden test helper for direct login
+World(Warden::Test::Helpers)
+Warden.test_mode!
+
+def warden_login_as(user, _opts = {})
+  # use Warden's login directly, avoids visiting login page
+  Warden.test_mode!
+  Warden.on_next_request do |proxy|
+    proxy.set_user(user, scope: :user)
+  end
 end

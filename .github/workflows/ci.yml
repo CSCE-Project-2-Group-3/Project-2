@@ -2,13 +2,13 @@ name: CI - Ruby on Rails
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "**" ]
     paths:
       - '**.rb'
       - 'Gemfile'
       - 'Gemfile.lock'
   pull_request:
-    branches: [ main ]
+    branches: [ "**" ]
     paths:
       - '**.rb'
       - 'Gemfile'
@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Brakeman scan
         run: brakeman -A -q --no-progress --format html -o brakeman-report.html
-        continue-on-error: true   # ✅ prevents exit code 3 from failing the workflow
+        continue-on-error: true   
 
       - name: Upload Brakeman report
         uses: actions/upload-artifact@v4
