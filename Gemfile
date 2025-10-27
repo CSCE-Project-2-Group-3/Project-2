@@ -48,6 +48,11 @@ gem "thruster", require: false
 # Optional Active Storage image processing
 gem "image_processing", "~> 1.2"
 
+gem "groupdate"
+gem "ruby-openai"
+gem "tailwindcss-rails"
+gem "dotenv-rails"
+
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
   gem "brakeman", require: false
