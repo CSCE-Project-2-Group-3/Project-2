@@ -1,0 +1,201 @@
+<h1 class="text-3xl font-bold text-tamu-gray-800 mb-6">Your Dashboard</h1>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="text-xl font-semibold">Filter Expenses</h3>
+  </div>
+  <div class="card-body">
+    <%= form_with(url: dashboard_path, method: :get, local: true) do |f| %>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <div>
+          <%= f.label :category_id, "Category", class: "form-label" %>
+          <%= f.collection_select :category_id, 
+                @categories, 
+                :id, 
+                :name, 
+                { selected: params[:category_id], include_blank: "All Categories" }, 
+                { class: "form-select" } %>
+        </div>
+        
+        <div>
+          <%= f.label :start_date, "Start Date", class: "form-label" %>
+          <%= f.date_field :start_date, value: params[:start_date], class: "form-control" %>
+        </div>
+        
+        <div>
+          <%= f.label :end_date, "End Date", class: "form-label" %>
+          <%= f.date_field :end_date, value: params[:end_date], class: "form-control" %>
+        </div>
+        
+        <div class="flex space-x-2">
+          <%= f.submit "Filter", class: "btn-maroon" %>
+          <%# We define btn-secondary in our CSS to be tamu-gray %>
+          <%= link_to "Clear", dashboard_path, class: "btn-secondary" %> 
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="text-xl font-semibold">🤖 Your AI Spending Summary</h3>
+  </div>
+  <div class="card-body">
+    <p class="text-tamu-gray-700"><%= @ai_summary %></p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="card h-full">
+    <div class="card-body">
+      <h2 class="text-2xl font-semibold text-tamu-gray-800">Personal Expenses</h2>
+      <hr class="my-3">
+      
+      <h4 class="text-lg font-medium">Total Spent: 
+        <span class="font-bold text-tamu-maroon"><%= number_to_currency(@personal_total) %></span>
+      </h4>
+      
+      <br>
+
+      <h5 class="text-lg font-semibold mb-2">Recent Personal Expenses:</h5>
+      <% if @recent_personal_expenses.any? %>
+        <ul class="divide-y divide-gray-200">
+          <% @recent_personal_expenses.each do |expense| %>
+            <li class="py-3 flex justify-between items-center">
+              <div>
+                <strong><%= link_to expense.title, expense_path(expense), class: "text-tamu-maroon hover:underline" %></strong>
+                <small class="block text-gray-500"><%= expense.category.name %> on <%= expense.spent_on %></small>
+              </div>
+              <span class="bg-tamu-maroon text-white text-sm font-medium px-3 py-1 rounded-full"><%= number_to_currency(expense.amount) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No personal expenses found matching your filters.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card h-full">
+    <div class="card-body">
+      <h2 class="text-2xl font-semibold text-tamu-gray-800">Group Expenses</h2>
+      <hr class="my-3">
+      
+      <h4 class="text-lg font-medium">Total Spent (in groups): 
+        <span class="font-bold text-green-700"><%= number_to_currency(@group_total) %></span>
+      </h4>
+      
+      <br>
+
+      <h5 class="text-lg font-semibold mb-2">Recent Group Expenses:</h5>
+      <% if @recent_group_expenses.any? %>
+        <ul class="divide-y divide-gray-200">
+          <% @recent_group_expenses.each do |expense| %>
+            <li class="py-3 flex justify-between items-center">
+              <div>
+                <strong><%= link_to expense.title, expense_path(expense), class: "text-tamu-maroon hover:underline" %></strong>
+                <small class="block text-gray-500">
+                  In <%= link_to expense.group.name, group_path(expense.group), class: "text-tamu-accent hover:underline" %> 
+                  on <%= expense.spent_on %>
+                </small>
+              </div>
+              <span class="bg-green-600 text-white text-sm font-medium px-3 py-1 rounded-full"><%= number_to_currency(expense.amount) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No group expenses found matching your filters.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="text-lg font-semibold mb-3">Personal Spending by Category</h5>
+      <div style="max-height: 400px;">
+        <canvas id="categoryPieChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-body">
+      <h5 class="text-lg font-semibold mb-3">Spending Over Time (Last 30 Days)</h5>
+      <div style="max-height: 400px;">
+        <canvas id="spendingBarChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<script>
+  document.addEventListener('turbo:load', () => {
+    // --- 1. PIE CHART ---
+    const pieCtx = document.getElementById('categoryPieChart');
+    if (pieCtx) {
+      let existingPieChart = Chart.getChart(pieCtx);
+      if (existingPieChart) {
+        existingPieChart.destroy();
+      }
+      
+      new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+          labels: <%= @category_labels.to_json.html_safe %>,
+          datasets: [{
+            label: 'Spending',
+            data: <%= @category_data.to_json.html_safe %>,
+            backgroundColor: [
+              '#500000', // TAMU Maroon
+              '#8A6319', // TAMU Accent
+              '#4A5568', // TAMU Gray 700
+              '#A0AEC0', // TAMU Gray 500
+              '#EDF2F7', // TAMU Gray 200
+              'rgba(255, 159, 64, 0.7)' // Orange
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+
+    // --- 2. BAR CHART ---
+    const barCtx = document.getElementById('spendingBarChart');
+    if (barCtx) {
+      let existingBarChart = Chart.getChart(barCtx);
+      if (existingBarChart) {
+        existingBarChart.destroy();
+      }
+
+      new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: <%= @spending_over_time.keys.to_json.html_safe %>,
+          datasets: [{
+            label: 'Total Spending per Day',
+            data: <%= @spending_over_time.values.to_json.html_safe %>,
+            backgroundColor: '#500000' // TAMU Maroon
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  });
+</script>

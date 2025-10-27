@@ -31,7 +31,16 @@ When("I click on {string}") do |link_text|
 end
 
 When("I click the {string} button") do |button_text|
-  click_button button_text
+  if button_text == "Logout"
+    # For logout, click the first logout button found
+    first('button', text: button_text).click
+  else
+    click_button button_text
+  end
+end
+
+When("I click on {string} with class {string}") do |link_text, link_class|
+  find('a', text: link_text, class: link_class).click
 end
 
 When("I fill in {string} with {string}") do |field, value|
