@@ -1,26 +1,38 @@
-<h1>Expense Tracker Home</h1>
+<div class="text-center py-12">
+  <h1 class="text-5xl font-bold text-tamu-gray-900 mb-6">
+    Expense Tracker Home
+  </h1>
 
-<% if current_user %>
-  <h2>Welcome, <%= current_user.email %>!</h2>
+  <% if current_user %>
+    <h2 class="text-2xl font-semibold text-tamu-gray-800 mb-4">
+      Welcome, <%= current_user.full_name.presence || current_user.email %>!
+    </h2>
+    <p class="text-xl text-tamu-gray-700 mb-8">
+      Ready to manage your expenses?
+    </p>
 
-  <p>
-    <%= link_to "Go to Expense Table", expenses_path, class: "btn btn-primary" %>
-  </p>
+    <div class="flex flex-col items-center space-y-4">
+      <%= link_to "Go to Dashboard", dashboard_path, class: "btn-success w-64 text-center" %>
+      <%= link_to "Go to Expense Table", expenses_path, class: "btn-primary w-64 text-center" %>
+      <%= link_to "Edit Account", edit_user_registration_path, class: "btn-secondary w-64 text-center" %>
+      
+      <%= button_to "Logout", destroy_user_session_path,
+            method: :delete,
+            form: { data: { turbo: false }, style: "display:inline" },
+            class: "btn-danger w-64 text-center" %>
+    </div>
 
-  <p>
-    <%= link_to "Edit Account", edit_user_registration_path, class: "btn btn-secondary" %>
-  </p>
+  <% else %>
+    <h2 class="text-3xl font-semibold text-tamu-gray-800 mb-4">
+      Welcome to Expense Tracker
+    </h2>
+    <p class="text-xl text-tamu-gray-700 mb-8">
+      Sign in to manage your group and personal expenses.
+    </p>
 
-  <p>
-    <%= button_to "Logout", destroy_user_session_path,
-          method: :delete,
-          form: { data: { turbo: false }, style: "display:inline" },
-          class: "btn btn-danger" %>
-  </p>
-
-<% else %>
-  <p>
-    <%= link_to "Login", new_user_session_path, class: "btn btn-primary" %>
-    <%= link_to "Create Account", new_user_registration_path, class: "btn btn-secondary" %>
-  </p>
-<% end %>
+    <div class="flex justify-center space-x-4">
+      <%= link_to "Login", new_user_session_path, class: "btn-primary" %>
+      <%= link_to "Create Account", new_user_registration_path, class: "btn-secondary" %>
+    </div>
+  <% end %>
+</div>
