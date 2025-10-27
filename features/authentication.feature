@@ -6,7 +6,7 @@ Feature: User Authentication
   Scenario: View home page when not logged in
     Given I am not logged in
     When I am on the home page
-    Then I should see "Expense Tracker Home"
+    Then I should see "Welcome to Expense Tracker"
     And I should see "Login"
     And I should see "Create Account"
     And I should not see "Welcome"
@@ -26,7 +26,7 @@ Feature: User Authentication
     Given I am not logged in
     And a user exists with email "user@example.com" and password "password123"
     When I am on the home page
-    And I click on "Login"
+    And I click on "Login" with class "btn-primary"
     Then I should be on the login page
     When I fill in "Email" with "user@example.com"
     And I fill in "Password" with "password123"

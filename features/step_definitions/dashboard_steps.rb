@@ -40,10 +40,6 @@ Given "I am a registered user and I am logged in" do
     select(option_text, from: label_text)
   end
 
-  When "I click the {string} button" do |button_text|
-    click_button(button_text)
-  end
-
   Then "I should not see {string}" do |content|
     expect(page).not_to have_content(content)
   end
@@ -53,6 +49,19 @@ Given "I am a registered user and I am logged in" do
     # This tells RSpec to "intercept" the 'get_ai_summary' call
     # on *any* instance of PagesController and return our text.
     allow_any_instance_of(PagesController).to receive(:get_ai_summary).and_return(summary_text)
+  end
+
+  # ADD THESE STEPS to dashboard_steps.rb
+
+  Then('I should see {string} in the {string} list') do |content, list_header|
+    # This finds the list by its header (h5) and then looks for the content inside it
+    list = find("h5", text: list_header).find(:xpath, "..") # Find parent element
+    expect(list).to have_content(content)
+  end
+  
+  Then('I should not see {string} in the {string} list') do |content, list_header|
+    list = find("h5", text: list_header).find(:xpath, "..") # Find parent element
+    expect(list).not_to have_content(content)
   end
 
   # This step just checks for the canvas element by its ID

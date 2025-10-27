@@ -34,6 +34,10 @@ When("I click the {string} button") do |button_text|
   click_button button_text
 end
 
+When("I click on {string} with class {string}") do |link_text, link_class|
+  find('a', text: link_text, class: link_class).click
+end
+
 When("I fill in {string} with {string}") do |field, value|
   fill_in field, with: value
 end
