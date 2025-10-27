@@ -21,7 +21,7 @@ RSpec.describe PagesController, type: :controller do
 
     context 'when user is signed in' do
       # Assumes you have a :user factory defined
-      let(:user) { create(:user) } 
+      let(:user) { create(:user) }
 
       before { sign_in user }
 
@@ -43,7 +43,7 @@ RSpec.describe PagesController, type: :controller do
     let!(:user) { create(:user) }
     let!(:food_category) { create(:category, name: 'Food') }
     let!(:rent_category) { create(:category, name: 'Housing') }
-    let!(:group) { create(:group, name: 'Roommates', users: [user]) }
+    let!(:group) { create(:group, name: 'Roommates', users: [ user ]) }
 
     context "when user is not logged in" do
       it "redirects to the login page" do
@@ -62,7 +62,7 @@ RSpec.describe PagesController, type: :controller do
           category: food_category,
           user: user
         )
-        
+
         create(:expense,
           title: 'Rent',
           amount: 800,
@@ -77,7 +77,7 @@ RSpec.describe PagesController, type: :controller do
 
         # Sign in the user
         sign_in user
-        
+
         # Make the request
         get :dashboard
       end
@@ -105,7 +105,7 @@ RSpec.describe PagesController, type: :controller do
       it "assigns the recent group expenses" do
         expect(assigns(:recent_group_expenses).first.title).to eq('Rent')
       end
-      
+
       it "assigns the categories for the filter" do
         expect(assigns(:categories)).to include(food_category, rent_category)
       end
@@ -115,8 +115,8 @@ RSpec.describe PagesController, type: :controller do
       end
 
       it "assigns the data for the category pie chart" do
-        expect(assigns(:category_labels)).to eq(["Food"])
-        expect(assigns(:category_data)).to eq([150])
+        expect(assigns(:category_labels)).to eq([ "Food" ])
+        expect(assigns(:category_data)).to eq([ 150 ])
       end
     end
   end

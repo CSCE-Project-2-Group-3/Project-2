@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-
   include ActionView::Helpers::NumberHelper
   # Make sure only logged-in users can see the dashboard
   before_action :authenticate_user!, only: [ :dashboard ]
@@ -24,15 +23,15 @@ class PagesController < ApplicationController
     if params[:end_date].present?
       all_expenses = all_expenses.where("spent_on <= ?", params[:end_date])
     end
-    
+
     # 3. GET DATA FOR FILTERS & CHARTS
     # For the filter dropdown
     @categories = Category.all
-    
+
     # For the bar graph (Spending Over Time)
     # This must run on the *filtered* `all_expenses` scope
-    @spending_over_time = all_expenses.group_by_day(:spent_on, 
-                                                   last: 30, 
+    @spending_over_time = all_expenses.group_by_day(:spent_on,
+                                                   last: 30,
                                                    format: "%b %d").sum(:amount)
 
     # 4. SPLIT & CALCULATE SUMMARIES
@@ -52,7 +51,7 @@ class PagesController < ApplicationController
     # We use @personal_expenses, which is already filtered
     category_data = @personal_expenses.group_by { |expense| expense.category.name }
                                       .transform_values { |expenses| expenses.sum(&:amount) }
-    
+
     @category_labels = category_data.keys
     @category_data = category_data.values
 
@@ -65,7 +64,7 @@ class PagesController < ApplicationController
   end
 
   private
-  
+
   def get_ai_summary(total:, category_data:, recent_expenses:)
     # Don't bother calling the API if there's no data
     return "Start logging expenses to get your AI summary!" if total == 0
@@ -76,26 +75,26 @@ class PagesController < ApplicationController
     Spending by Category: #{category_data.to_json}
     5 Most Recent Expenses: #{recent_expenses.map { |e| "#{e.title} (#{number_to_currency(e.amount)})" }.to_json}
     """
-  
+
     # 2. Create the prompt
     prompt = """
-    You are a friendly financial assistant. Based on the following spending data, 
+    You are a friendly financial assistant. Based on the following spending data,
     write a short, 2-3 sentence summary for the user. Give one positive insight
     and one helpful tip. Be encouraging and brief.
-    
+
     Data:
     #{prompt_data}
-    
+
     Summary:
     """
-  
+
     # 3. Call the API
     begin
       client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
       response = client.chat(
         parameters: {
           model: "gpt-3.5-turbo", # Cheaper and faster
-          messages: [{ role: "user", content: prompt }],
+          messages: [ { role: "user", content: prompt } ],
           temperature: 0.7,
           max_tokens: 150
         }
