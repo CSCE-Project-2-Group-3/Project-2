@@ -58,7 +58,7 @@ Given "I am a registered user and I am logged in" do
     list = find("h5", text: list_header).find(:xpath, "..") # Find parent element
     expect(list).to have_content(content)
   end
-  
+
   Then('I should not see {string} in the {string} list') do |content, list_header|
     list = find("h5", text: list_header).find(:xpath, "..") # Find parent element
     expect(list).not_to have_content(content)
