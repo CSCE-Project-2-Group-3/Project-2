@@ -7,6 +7,7 @@
 
 require 'cucumber/rails'
 require 'factory_bot'
+require 'rspec/mocks/standalone'
 
 World(FactoryBot::Syntax::Methods)
 
