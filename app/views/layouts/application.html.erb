@@ -3,42 +3,88 @@
   <head>
     <title><%= content_for(:title) || "Expense Tracker" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# This links to your application.tailwind.css file %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    
+    <%# We don't need the CDN script or <style> block anymore! %>
   </head>
 
-  <body>
+  <body class="antialiased">
+    <%# 1. Styled Flash Messages (using classes from step 2) %>
     <% if notice %>
-      <p class="alert alert-success"><%= notice %></p>
+      <div class="flash-notice"><%= notice %></div>
     <% end %>
     <% if alert %>
-      <p class="alert alert-danger"><%= alert %></p>
+      <div class="flash-alert"><%= alert %></div>
     <% end %>
 
-    <%= yield %>
-    <% if user_signed_in? %>
-      <nav>
-        <%= link_to "Expenses", expenses_path %> |
-        <%= link_to "Conversations", conversations_path %> |
-        <%= link_to "Groups", groups_path %> |
-        <%= link_to "Account", edit_user_registration_path %>
+    <%# 2. Modern Header (like your ZapMail project) %>
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div>
+          <a href="/">
+            <%# We can use text for now, or you can add a logo %>
+            <span class="text-2xl font-bold text-tamu-maroon">ExpenseTracker</span>
+          </a>
+        </div>
+        <div class="flex items-center space-x-2">
+          <% if user_signed_in? %>
+            <%# --- Your Expense Tracker Links, styled as icons --- %>
+            
+            <%= link_to dashboard_path, class: "p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:text-tamu-maroon transition-colors", title: "Dashboard" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+            <% end %>
+            
+            <%= link_to expenses_path, class: "p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:text-tamu-maroon transition-colors", title: "All Expenses" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+            <% end %>
+
+            <%= link_to groups_path, class: "p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:text-tamu-maroon transition-colors", title: "My Groups" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            <% end %>
+
+            <%= link_to conversations_path, class: "p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:text-tamu-maroon transition-colors", title: "Messages" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            <% end %>
+
+            <%= link_to edit_user_registration_path, class: "p-2 rounded-full text-gray-500 hover:bg-gray-200 hover:text-tamu-maroon transition-colors", title: "My Account" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            <% end %>
+            
+            <%# Logout Button %>
+            <%= button_to destroy_user_session_path, method: :delete, class: 'ml-2 p-2 rounded-full text-gray-500 hover:bg-red-100 hover:text-red-600 transition-colors', title: "Logout", form: { data: { turbo: false } } do %>
+              <svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+            <% end %>
+          <% else %>
+            <%# Login/Signup (using .btn-maroon from step 2) %>
+            <%= link_to 'Login', new_user_session_path, class: 'text-tamu-maroon font-medium hover:underline mr-4' %>
+            <%= link_to 'Sign Up', new_user_registration_path, class: 'btn-maroon' %>
+          <% end %>
+        </div>
       </nav>
-    <% end %>
+    </header>
 
+    <%# 3. Main Content Area %>
+    <main class="container mx-auto px-6 py-8">
+      <%= yield %>
+    </main>
+    
+    <%# We no longer need the old <nav> at the bottom %>
   </body>
 </html>
