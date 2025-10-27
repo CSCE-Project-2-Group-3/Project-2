@@ -8,36 +8,37 @@ class PagesController < ApplicationController
 
   def dashboard
     # 1. START WITH THE BASE SCOPE
-    # We'll apply filters to this
     all_expenses = Expense.for_user(current_user.id)
                           .includes(:category, :user, :group)
                           .recent
 
-    # 2. APPLY FILTERS (Features 17 & 18)
+    # 2. APPLY FILTERS TO PERSONAL EXPENSES ONLY
+    personal_expenses_query = all_expenses.where(group_id: nil)
     if params[:category_id].present?
-      all_expenses = all_expenses.where(category_id: params[:category_id])
+      personal_expenses_query = personal_expenses_query.where(category_id: params[:category_id])
     end
     if params[:start_date].present?
-      all_expenses = all_expenses.where("spent_on >= ?", params[:start_date])
+      personal_expenses_query = personal_expenses_query.where("spent_on >= ?", params[:start_date])
     end
     if params[:end_date].present?
-      all_expenses = all_expenses.where("spent_on <= ?", params[:end_date])
+      personal_expenses_query = personal_expenses_query.where("spent_on <= ?", params[:end_date])
     end
 
-    # 3. GET DATA FOR FILTERS & CHARTS
+    # 3. GET GROUP EXPENSES (UNFILTERED)
+    group_expenses_query = all_expenses.where.not(group_id: nil)
+
+    # 4. GET DATA FOR FILTERS & CHARTS
     # For the filter dropdown
     @categories = Category.all
 
-    # For the bar graph (Spending Over Time)
-    # This must run on the *filtered* `all_expenses` scope
-    @spending_over_time = all_expenses.group_by_day(:spent_on,
-                                                   last: 30,
-                                                   format: "%b %d").sum(:amount)
+    # For the bar graph (Spending Over Time) - use filtered personal expenses
+    @spending_over_time = personal_expenses_query.group_by_day(:spent_on,
+                                                             last: 30,
+                                                             format: "%b %d").sum(:amount)
 
-    # 4. SPLIT & CALCULATE SUMMARIES
-    # We use `to_a` here to run the query, so all future operations
-    # are on the in-memory array, not re-querying the DB.
-    @personal_expenses, @group_expenses = all_expenses.to_a.partition { |e| e.group_id.nil? }
+    # 5. CALCULATE SUMMARIES
+    @personal_expenses = personal_expenses_query.to_a
+    @group_expenses = group_expenses_query.to_a
 
     # Features 15 & 16 (Summaries)
     @personal_total = @personal_expenses.sum(&:amount)
@@ -47,7 +48,7 @@ class PagesController < ApplicationController
     @recent_personal_expenses = @personal_expenses.take(5)
     @recent_group_expenses = @group_expenses.take(5)
 
-    # 5. GET DATA FOR PIE CHART
+    # 6. GET DATA FOR PIE CHART
     # We use @personal_expenses, which is already filtered
     category_data = @personal_expenses.group_by { |expense| expense.category.name }
                                       .transform_values { |expenses| expenses.sum(&:amount) }
@@ -55,7 +56,7 @@ class PagesController < ApplicationController
     @category_labels = category_data.keys
     @category_data = category_data.values
 
-    # 6. GET AI SUMMARY
+    # 7. GET AI SUMMARY
     @ai_summary = get_ai_summary(
       total: @personal_total,
       category_data: category_data,
@@ -66,6 +67,11 @@ class PagesController < ApplicationController
   private
 
   def get_ai_summary(total:, category_data:, recent_expenses:)
+    # Check if we have a stubbed summary for testing
+    if PagesController.class_variable_defined?(:@@stubbed_ai_summary)
+      return PagesController.class_variable_get(:@@stubbed_ai_summary)
+    end
+
     # Don't bother calling the API if there's no data
     return "Start logging expenses to get your AI summary!" if total == 0
 

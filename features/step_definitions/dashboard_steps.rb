@@ -40,15 +40,11 @@ Given "I am a registered user and I am logged in" do
     select(option_text, from: label_text)
   end
 
-  Then "I should not see {string}" do |content|
-    expect(page).not_to have_content(content)
-  end
 
   # This step mocks the controller method
   Given "I have stubbed the AI summary to return {string}" do |summary_text|
-    # This tells RSpec to "intercept" the 'get_ai_summary' call
-    # on *any* instance of PagesController and return our text.
-    allow_any_instance_of(PagesController).to receive(:get_ai_summary).and_return(summary_text)
+    # Store the stubbed summary in a class variable
+    PagesController.class_variable_set(:@@stubbed_ai_summary, summary_text)
   end
 
   # ADD THESE STEPS to dashboard_steps.rb

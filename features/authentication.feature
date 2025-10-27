@@ -9,7 +9,7 @@ Feature: User Authentication
     Then I should see "Welcome to Expense Tracker"
     And I should see "Login"
     And I should see "Create Account"
-    And I should not see "Welcome"
+    And I should not see "Welcome,"
 
 
   Scenario: Sign up with email and password
