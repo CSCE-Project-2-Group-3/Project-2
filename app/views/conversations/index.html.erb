@@ -1,25 +1,49 @@
-<h1>Your Conversations</h1>
+<h1>Conversations</h1>
 
+<h2>Your Active Conversations</h2>
 <% if @conversations.empty? %>
-  <p>You have no conversations yet. Click "Send Message" on an expense to start one.</p>
+  <p>No active conversations yet.</p>
 <% else %>
-  <ul class="conversations-list">
+  <ul>
     <% @conversations.each do |conv| %>
       <% other = conv.other_user(current_user) %>
       <li>
         <%= link_to conversation_path(conv) do %>
           <strong><%= other&.full_name || other&.email || "User ##{other&.id}" %></strong>
-          <% last = conv.messages.last %>
-          <div class="snippet">
-            <% if last %>
+          <% if (last = conv.messages.last) %>
+            <div class="snippet">
               <em><%= truncate("#{last.user.full_name || last.user.email}: #{last.body}", length: 80) %></em>
               <span class="time"><%= time_ago_in_words(last.created_at) %> ago</span>
-            <% else %>
-              <em>No messages yet</em>
-            <% end %>
-          </div>
+            </div>
+          <% else %>
+            <em>No messages yet</em>
+          <% end %>
         <% end %>
       </li>
     <% end %>
   </ul>
+<% end %>
+
+<hr>
+
+<h2>Start a Conversation by Group</h2>
+<% if @messageable_by_group.empty? %>
+  <p>You are not in any groups yet.</p>
+<% else %>
+  <% @messageable_by_group.each do |group, members| %>
+    <h3><%= group.name %></h3>
+    <% if members.any? %>
+      <ul>
+        <% members.each do |member| %>
+          <li>
+            <%= member.full_name.presence || member.email %>
+            <%= button_to "Message", conversations_path(recipient_id: member.id),
+                method: :post, class: "btn btn-primary" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No other members in this group.</p>
+    <% end %>
+  <% end %>
 <% end %>

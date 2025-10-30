@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  get "messages/create"
-  get "conversations/index"
-  get "conversations/show"
-  get "conversations/create"
+  # get "messages/create"
+  # get "conversations/index"
+  # get "conversations/show"
+  # get "conversations/create"
   # Devise authentication routes
   devise_for :users, controllers: {
     registrations: "users/registrations",

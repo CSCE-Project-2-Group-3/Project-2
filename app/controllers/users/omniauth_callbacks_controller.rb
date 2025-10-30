@@ -10,12 +10,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def google_oauth2
     @user = User.from_omniauth(auth)
-    if @user.present?
-      sign_out_all_scopes
-      flash[:success] = I18n.t "devise.omniauth_callbacks.success", kind: "Google"
-      sign_in_and_redirect @user, event: :authentication # this will throw if @user is not activated
+
+    if @user.persisted?
+      flash[:success] = I18n.t("devise.omniauth_callbacks.success", kind: "Google")
+      sign_in_and_redirect @user, event: :authentication
     else
-      flash[:alert] = I18n.t "devise.omniauth_callbacks.failure", kind: "Google", reason: "#{auth.info.email} is not authorized."
+      flash[:alert] = I18n.t(
+        "devise.omniauth_callbacks.failure",
+        kind: "Google",
+        reason: "Account could not be created."
+      )
       redirect_to new_user_session_path
     end
   end
