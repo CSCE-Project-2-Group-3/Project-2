@@ -151,6 +151,23 @@ RSpec.describe Expense, type: :model do
       expense = build(:expense, user: user, category: category)
       expect(expense.send(:deserialize_participant_ids, '[not-json]')).to eq([])
     end
+
+    it 'returns an empty relation when participant_ids are blank' do
+      expense = Expense.new(
+        title: 'Empty Participants',
+        amount: 5,
+        spent_on: Date.today,
+        category: category,
+        user: user
+      )
+      expense.participant_ids = []
+      expect(expense.participants).to be_empty
+    end
+
+    it 'returns participating users when ids are present' do
+      expense = create(:expense, user: user, category: category, group: group, participant_ids: [ member.id ])
+      expect(expense.participants).to match_array([ member ])
+    end
   end
 
   describe '.for_user' do
@@ -178,6 +195,12 @@ RSpec.describe Expense, type: :model do
     it 'excludes expenses unrelated to the user' do
       expense = create(:expense, user: other, category: category)
       expect(described_class.for_user(participant.id)).not_to include(expense)
+    end
+
+    it 'builds the ANY participant query when not using sqlite' do
+      allow(described_class).to receive(:sqlite_adapter?).and_return(false)
+      sql = described_class.for_user(owner.id).to_sql
+      expect(sql).to include("ANY(participant_ids)")
     end
   end
 end

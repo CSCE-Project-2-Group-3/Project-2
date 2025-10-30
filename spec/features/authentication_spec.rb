@@ -33,7 +33,7 @@ RSpec.describe 'Authentication', type: :feature do
       click_button 'Sign up'
 
       # ✅ App redirects to /expenses after sign-up
-      expect(page).to have_current_path(expenses_path)
+      expect(page).to have_current_path(dashboard_path)
     end
   end
 
