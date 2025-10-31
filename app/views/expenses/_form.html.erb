@@ -1,4 +1,10 @@
-<% form_object = @group.present? ? [@group, @expense] : @expense %>
+<%# Determine the correct form object - use simple expense for edit, nested only for new %>
+<% if action_name == 'edit' || @group.blank? %>
+  <% form_object = @expense %>
+<% else %>
+  <% form_object = [@group, @expense] %>
+<% end %>
+
 <%= form_with model: form_object, local: true do |f| %>
   <% if @expense.errors.any? %>
     <div style="color:red">
@@ -19,7 +25,15 @@
 
   <p>
     <%= f.label :spent_on, "Spent on" %><br>
-    <%= f.date_field :spent_on, required: true %>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <%= f.date_field :spent_on, required: true, id: "expense_spent_on" %>
+      <button type="button" 
+              onclick="document.getElementById('expense_spent_on').value = new Date().toISOString().split('T')[0]"
+              style="padding: 4px 8px; background: #500000; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;"
+              title="Fill with today's date">
+        📅 Today
+      </button>
+    </div>
   </p>
 
   <p>
