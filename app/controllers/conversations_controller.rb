@@ -28,8 +28,12 @@ class ConversationsController < ApplicationController
     @messages = @conversation.messages.recent.includes(:user, :quoted_expenses)
     @message = Message.new
     @other_user = @conversation.other_user(current_user)
-    @expenses = @other_user.expenses.order(spent_on: :desc).limit(20)
-  end
+    # Only show expenses from shared groups, not private expenses
+    shared_group_ids = current_user.groups.pluck(:id) & @other_user.groups.pluck(:id)
+    @expenses = @other_user.expenses
+                          .where(group_id: shared_group_ids)
+                          .order(spent_on: :desc)
+                          .limit(20)  end
 
   def create
     recipient_id = params[:recipient_id] || params[:user_id] || params[:expense_author_id]

@@ -24,6 +24,8 @@ class MessagesController < ApplicationController
       redirect_to conversation_path(@conversation, anchor: "message-#{@message.id}")
     else
       @messages = @conversation.messages.includes(:user, :quoted_expenses)
+      @other_user = @conversation.other_user(current_user)
+      @expenses = @other_user ? @other_user.expenses.order(spent_on: :desc).limit(20) : []
       render "conversations/show", status: :unprocessable_entity
     end
   end
