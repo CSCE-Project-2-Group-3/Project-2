@@ -3,6 +3,8 @@ class Expense < ApplicationRecord
   belongs_to :user
   belongs_to :group, optional: true
   has_many :comments, dependent: :destroy
+  has_many :message_expenses, dependent: :destroy
+  has_many :messages, through: :message_expenses
 
   validates :title, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: 0 }

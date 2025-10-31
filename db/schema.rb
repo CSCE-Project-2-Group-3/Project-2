@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_30_211123) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_30_231803) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -96,6 +96,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_30_211123) do
     t.index ["join_code"], name: "index_groups_on_join_code"
   end
 
+  create_table "message_expenses", force: :cascade do |t|
+    t.integer "message_id", null: false
+    t.integer "expense_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_id"], name: "index_message_expenses_on_expense_id"
+    t.index ["message_id"], name: "index_message_expenses_on_message_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.integer "conversation_id", null: false
     t.integer "user_id", null: false
@@ -132,6 +141,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_30_211123) do
   add_foreign_key "expenses", "users"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "message_expenses", "expenses"
+  add_foreign_key "message_expenses", "messages"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"
 end

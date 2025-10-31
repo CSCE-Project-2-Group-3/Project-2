@@ -25,7 +25,7 @@ class ConversationsController < ApplicationController
       return
     end
 
-    @messages = @conversation.messages.recent.includes(:user, :quoted_expense)
+    @messages = @conversation.messages.recent.includes(:user, :quoted_expenses)
     @message = Message.new
     @other_user = @conversation.other_user(current_user)
     @expenses = @other_user.expenses.order(spent_on: :desc).limit(20)

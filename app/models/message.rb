@@ -1,7 +1,9 @@
 class Message < ApplicationRecord
   belongs_to :conversation
   belongs_to :user
-  belongs_to :quoted_expense, class_name: "Expense", optional: true
+
+  has_many :message_expenses, dependent: :destroy
+  has_many :quoted_expenses, through: :message_expenses, source: :expense
 
   validates :body, presence: true
 

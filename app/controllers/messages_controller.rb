@@ -16,10 +16,14 @@ class MessagesController < ApplicationController
     @message.user = current_user
 
     if @message.save
+      if params[:message][:quoted_expense_ids].present?
+        @message.quoted_expenses = Expense.where(id: params[:message][:quoted_expense_ids])
+      end
+
       @conversation.touch
       redirect_to conversation_path(@conversation, anchor: "message-#{@message.id}")
     else
-      @messages = @conversation.messages.recent.includes(:user, :quoted_expense)
+      @messages = @conversation.messages.includes(:user, :quoted_expenses)
       render "conversations/show", status: :unprocessable_entity
     end
   end
@@ -27,6 +31,6 @@ class MessagesController < ApplicationController
   private
 
   def message_params
-    params.require(:message).permit(:body, :quoted_expense_id)
+    params.require(:message).permit(:body, quoted_expense_ids: [])
   end
 end
