@@ -15,7 +15,7 @@ RSpec.describe "Conversations", type: :request do
 
     it "prevents creating a conversation with self" do
       post conversations_path, params: { recipient_id: user1.id }
-      expect(response).to redirect_to(expenses_path)
+      expect(response).to redirect_to(conversations_path)
       expect(flash[:notice]).to match(/cannot start/)
     end
 
@@ -33,14 +33,14 @@ RSpec.describe "Conversations", type: :request do
 
     it "redirects with an alert when the recipient cannot be resolved" do
       post conversations_path
-      expect(response).to redirect_to(expenses_path)
+      expect(response).to redirect_to(conversations_path)
       expect(flash[:alert]).to eq("Recipient not found.")
       expect(Conversation.count).to eq(0)
     end
 
     it "redirects with an alert when the recipient id does not exist" do
       post conversations_path, params: { recipient_id: 0 }
-      expect(response).to redirect_to(expenses_path)
+      expect(response).to redirect_to(conversations_path)
       expect(flash[:alert]).to eq("Recipient not found.")
     end
   end

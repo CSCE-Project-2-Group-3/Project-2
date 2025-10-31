@@ -1,20 +1,54 @@
-<h2>Conversation with <%= @conversation.other_user(current_user)&.full_name %></h2>
+<h2>Conversation with <%= @other_user.full_name.presence || @other_user.email %></h2>
 
 <div id="messages">
   <% if @messages.any? %>
     <% @messages.each do |msg| %>
-      <p><strong><%= msg.user.full_name %>:</strong> <%= msg.body %></p>
+      <div class="message" id="message-<%= msg.id %>">
+        <p><strong><%= msg.user.full_name || msg.user.email %>:</strong> <%= msg.body %></p>
+        <% if msg.quoted_expenses.any? %>
+          <div class="quoted-expense">
+            <em>Quoted Expenses:</em>
+            <ul>
+              <% msg.quoted_expenses.each do |qe| %>
+                <li>
+                  <strong><%= qe.title %></strong> — $<%= qe.amount %> on <%= qe.spent_on %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
     <% end %>
   <% else %>
     <p>No messages yet</p>
   <% end %>
 </div>
 
+<hr>
+
+<h3>Send a new message</h3>
+
 <%= form_tag messages_path(conversation_id: @conversation.id), method: :post do %>
   <div>
-    <label for="message_body">Message</label>
-    <%= text_area_tag "message_body", "", id: "message_body", name: "message[body]" %>
+    <label for="message_body">Message</label><br>
+    <textarea id="message_body" name="message[body]" rows="3" required></textarea>
   </div>
-  <%= submit_tag "Send" %>
-<% end %>
 
+  <div>
+    <label for="message_quoted_expense_ids">Quote expenses (optional)</label><br>
+    <select id="message_quoted_expense_ids"
+            name="message[quoted_expense_ids][]"
+            multiple
+            size="5"
+            style="min-width: 300px;">
+      <% @expenses.each do |exp| %>
+        <option value="<%= exp.id %>"><%= exp.title %> — $<%= exp.amount %> on <%= exp.spent_on %></option>
+      <% end %>
+    </select>
+    <p style="font-size: 0.9em; color: #555;">(Hold Ctrl or ⌘ to select multiple)</p>
+  </div>
+
+  <div style="margin-top:8px;">
+    <input type="submit" value="Send" class="btn btn-success">
+  </div>
+<% end %>
