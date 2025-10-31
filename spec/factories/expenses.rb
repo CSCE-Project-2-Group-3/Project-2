@@ -12,6 +12,16 @@ FactoryBot.define do
 
     trait :with_group do
       association :group
+
+      after(:build) do |expense, evaluator|
+        # Ensure user is a member of the group
+        expense.group.users << expense.user unless expense.group.users.include?(expense.user)
+
+        # Set participant_ids to only include the user themselves for group expenses
+        if expense.participant_ids.blank?
+          expense.participant_ids = [ expense.user_id ]
+        end
+      end
     end
 
     after(:build) do |expense, evaluator|
