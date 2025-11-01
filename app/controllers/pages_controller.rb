@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   include ActionView::Helpers::NumberHelper
   # Make sure only logged-in users can see the dashboard
   before_action :authenticate_user!, only: [ :dashboard ]
+  skip_before_action :authenticate_user!, only: [ :home, :not_found ]
 
   def home
   end

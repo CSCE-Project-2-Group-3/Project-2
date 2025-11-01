@@ -101,6 +101,36 @@
           null
         ]
       },
+      "/home/qacer6973/projects/project2/Project2/app/controllers/application_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          5,
+          null,
+          null,
+          null,
+          1,
+          3,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          2,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
       "/home/qacer6973/projects/project2/Project2/app/controllers/categories_controller.rb": {
         "lines": [
           1,
@@ -109,34 +139,18 @@
           null,
           null,
           1,
-          2,
-          2,
+          3,
+          3,
           1,
           null,
-          1,
-          null,
-          null,
-          null,
-          1,
-          null,
-          1,
           2,
           null,
-          null
-        ]
-      },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/application_controller.rb": {
-        "lines": [
-          1,
-          null,
-          1,
-          1,
-          4,
-          null,
           null,
           null,
           1,
-          2,
+          null,
+          1,
+          3,
           null,
           null
         ]
@@ -356,6 +370,7 @@
           1,
           1,
           null,
+          1,
           1,
           null,
           1,
@@ -761,7 +776,7 @@
           1,
           1,
           1,
-          97,
+          98,
           null
         ]
       },
@@ -771,14 +786,6 @@
           1,
           1,
           null,
-          1,
-          null
-        ]
-      },
-      "/home/qacer6973/projects/project2/Project2/app/models/message_expense.rb": {
-        "lines": [
-          1,
-          1,
           1,
           null
         ]
@@ -852,8 +859,16 @@
           null,
           null
         ]
+      },
+      "/home/qacer6973/projects/project2/Project2/app/models/message_expense.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
       }
     },
-    "timestamp": 1761882318
+    "timestamp": 1762016870
   }
 }
