@@ -2,7 +2,6 @@ class ConversationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # show all conversations the current_user participates in
     @conversations = Conversation.where(
       "user_a_id = :id OR user_b_id = :id",
       id: current_user.id
@@ -11,7 +10,6 @@ class ConversationsController < ApplicationController
   end
 
   def show
-    # Scoped find to prevent unscoped access
     @conversation = Conversation.where(
       "user_a_id = :id OR user_b_id = :id",
       id: current_user.id

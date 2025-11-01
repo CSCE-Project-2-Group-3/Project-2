@@ -1,6 +1,6 @@
 class ExpensesController < ApplicationController
   before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
-  before_action :set_group, only: [ :new, :create, :edit, :update ]
+  before_action :set_group, only: [ :new, :create ]
 
   def index
     @expenses = Expense.for_user(current_user.id)
@@ -27,13 +27,14 @@ class ExpensesController < ApplicationController
   end
 
   def edit
-    @group ||= @expense.group
+    @group = @expense.group
   end
 
   def update
     if @expense.update(expense_params)
       redirect_to expenses_path, notice: "Expense updated successfully."
     else
+      @group = @expense.group
       render :edit, status: :unprocessable_entity
     end
   end
@@ -43,7 +44,6 @@ class ExpensesController < ApplicationController
     redirect_to expenses_path, notice: "Expense deleted."
   end
 
-  # --- Bulk upload ---
   def bulk_upload
     return redirect_to(expenses_path, alert: "Please select a CSV or Excel file.") if params[:file].blank?
 
@@ -75,11 +75,7 @@ class ExpensesController < ApplicationController
   end
 
   def set_group
-    @group = if params[:group_id]
-               Group.find_by(id: params[:group_id])
-    else
-               @expense&.group
-    end
+    @group = Group.find_by(id: params[:group_id]) if params[:group_id]
   end
 
   def sanitize_participant_ids(raw_ids)

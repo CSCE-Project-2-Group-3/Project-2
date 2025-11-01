@@ -3,8 +3,6 @@ class Group < ApplicationRecord
   has_many :users, through: :group_memberships
   has_many :expenses, dependent: :destroy
 
-  # Future: has_many :expenses, dependent: :destroy
-
   before_create :generate_join_code
 
   validates :name, presence: { message: "Group name can't be blank" }
@@ -18,6 +16,6 @@ class Group < ApplicationRecord
   private
 
   def generate_join_code
-    self.join_code ||= SecureRandom.hex(4).upcase  # Example: “A9F3C1D2”
+    self.join_code ||= SecureRandom.hex(4).upcase
   end
 end
