@@ -1,25 +1,39 @@
-<h1>Your Conversations</h1>
+<h1 class="text-3xl font-bold mb-6" style="color: var(--tamu-gray-800);">Your Conversations</h1>
 
 <% if @conversations.empty? %>
-  <p>You have no conversations yet. Click "Send Message" on an expense to start one.</p>
+  <div class="bg-white rounded-lg shadow-md p-6 text-center">
+    <p class="text-gray-600">You have no conversations yet.</p>
+    <p class="text-sm text-gray-500 mt-2">Click "Send Message" on an expense to start one.</p>
+  </div>
 <% else %>
-  <ul class="conversations-list">
-    <% @conversations.each do |conv| %>
-      <% other = conv.other_user(current_user) %>
-      <li>
-        <%= link_to conversation_path(conv) do %>
-          <strong><%= other&.full_name || other&.email || "User ##{other&.id}" %></strong>
-          <% last = conv.messages.last %>
-          <div class="snippet">
-            <% if last %>
-              <em><%= truncate("#{last.user.full_name || last.user.email}: #{last.body}", length: 80) %></em>
-              <span class="time"><%= time_ago_in_words(last.created_at) %> ago</span>
-            <% else %>
-              <em>No messages yet</em>
-            <% end %>
-          </div>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
+  <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+    <ul class="divide-y divide-gray-200">
+      <% @conversations.each do |conv| %>
+        <% other = conv.other_user(current_user) %>
+        <li>
+          <%= link_to conversation_path(conv), class: "block p-4 hover:bg-gray-50 transition-colors" do %>
+            <strong class="text-lg font-semibold" style="color: var(--tamu-gray-800);"><%= other&.full_name || other&.email || "User ##{other&.id}" %></strong>
+            
+            <% last = conv.messages.last %>
+            <div class="snippet flex justify-between items-center mt-1">
+              <% if last %>
+                <em class="text-sm text-gray-600 truncate not-italic">
+                  <%# Show "You:" if the last message was from the current user %>
+                  <% if last.user == current_user %>
+                    <span class="font-medium">You:</span>
+                  <% else %>
+                    <span class="font-medium"><%= last.user.full_name || last.user.email %>:</span>
+                  <% end %>
+                  <%= last.body %>
+                </em>
+                <span class="time text-xs text-gray-400 flex-shrink-0 ml-4"><%= time_ago_in_words(last.created_at) %> ago</span>
+              <% else %>
+                <em class="text-sm text-gray-500 not-italic">No messages yet</em>
+              <% end %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 <% end %>

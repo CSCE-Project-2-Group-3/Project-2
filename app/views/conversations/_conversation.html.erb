@@ -1,8 +1,11 @@
-<li>
-  <%= link_to conversation_path(conversation) do %>
-    <%= conversation.other_user(current_user).full_name %>
+<li class="border-b border-gray-200 last:border-b-0">
+  <%= link_to conversation_path(conversation), class: "block p-4 hover:bg-gray-50 transition-colors" do %>
+    <div class="font-semibold" style="color: var(--tamu-gray-800);"><%= conversation.other_user(current_user).full_name %></div>
     <% if conversation.messages.last %>
-      - <%= truncate(conversation.messages.last.body, length: 80) %>
+      <p class="text-sm text-gray-600 truncate mt-1">
+        <span class="font-medium"><%= conversation.messages.last.user == current_user ? "You:" : "#{conversation.messages.last.user.full_name}:" %></span>
+        <%= truncate(conversation.messages.last.body, length: 80) %>
+      </p>
     <% end %>
   <% end %>
 </li>

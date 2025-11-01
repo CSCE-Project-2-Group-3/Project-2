@@ -1,20 +1,43 @@
-<h2>Conversation with <%= @conversation.other_user(current_user)&.full_name %></h2>
+<div class="bg-white rounded-lg shadow-md p-6">
+  
+  <h2 class="text-2xl font-bold mb-4 pb-4 border-b border-gray-200">
+    Conversation with 
+    <span style="color: var(--tamu-maroon);"><%= @conversation.other_user(current_user)&.full_name %></span>
+  </h2>
 
-<div id="messages">
-  <% if @messages.any? %>
-    <% @messages.each do |msg| %>
-      <p><strong><%= msg.user.full_name %>:</strong> <%= msg.body %></p>
+  <%# Message Display Area %>
+  <div id="messages" class="bg-gray-50 border border-gray-200 rounded-lg p-4 h-96 overflow-y-auto mb-4 space-y-4">
+    <% if @messages.any? %>
+      <% @messages.each do |msg| %>
+        <div class="flex">
+          <div class="<%= msg.user == current_user ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-200 text-gray-800' %> p-3 rounded-lg max-w-xs lg:max-w-md shadow-sm">
+            <strong class="block font-medium text-sm <%= msg.user == current_user ? 'text-blue-100' : 'text-gray-500' %>">
+              <%= msg.user.full_name %>
+            </strong>
+            <p class="text-base"><%= msg.body %></p>
+            <div class="text-xs text-right opacity-70 mt-1">
+              <%= time_ago_in_words(msg.created_at) %> ago
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-gray-500 text-center">No messages yet. Say hello!</p>
     <% end %>
-  <% else %>
-    <p>No messages yet</p>
-  <% end %>
-</div>
-
-<%= form_tag messages_path(conversation_id: @conversation.id), method: :post do %>
-  <div>
-    <label for="message_body">Message</label>
-    <%= text_area_tag "message_body", "", id: "message_body", name: "message[body]" %>
   </div>
-  <%= submit_tag "Send" %>
-<% end %>
 
+  <%# New Message Form %>
+  <%= form_tag messages_path(conversation_id: @conversation.id), method: :post do %>
+    <div class="mb-2">
+      <label for="message_body" class="block text-sm font-medium mb-1" style="color: var(--tamu-gray-700);">Your Message</label>
+      <%= text_area_tag "message_body", "", 
+          id: "message_body", 
+          name: "message[body]", 
+          rows: 3, 
+          class: "form-input w-full block border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm",
+          placeholder: "Type your message..." %>
+    </div>
+    <%= submit_tag "Send", class: "btn-maroon py-2 px-4 rounded-lg font-semibold cursor-pointer" %>
+  <% end %>
+
+</div>
