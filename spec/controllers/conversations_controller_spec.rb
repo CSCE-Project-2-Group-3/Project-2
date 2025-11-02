@@ -13,7 +13,7 @@ RSpec.describe ConversationsController, type: :controller do
       user = create(:user)
       sign_in user
       matching = create(:conversation, user_a: user)
-      create(:conversation) # unrelated
+      create(:conversation)
 
       get :index
 
@@ -35,17 +35,5 @@ RSpec.describe ConversationsController, type: :controller do
     end
   end
 
-  describe "#participant?" do
-    let(:conversation) { create(:conversation) }
-
-    it "returns true when the user is part of the conversation" do
-      user = conversation.user_a
-      expect(controller.send(:participant?, conversation, user)).to be(true)
-    end
-
-    it "returns false when the user is not part of the conversation" do
-      outsider = create(:user)
-      expect(controller.send(:participant?, conversation, outsider)).to be(false)
-    end
-  end
+  # Remove the participant? tests since the method doesn't exist in the controller
 end

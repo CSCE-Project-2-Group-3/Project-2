@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+<<<<<<< HEAD
+=======
+  # get "messages/create"
+  # get "conversations/index"
+  # get "conversations/show"
+  # get "conversations/create"
+  # Devise authentication routes
+>>>>>>> main
   devise_for :users, controllers: {
     registrations: "users/registrations",
     sessions: "users/sessions",

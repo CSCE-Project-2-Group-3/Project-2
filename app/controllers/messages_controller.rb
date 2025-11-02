@@ -16,11 +16,16 @@ class MessagesController < ApplicationController
     @message.user = current_user
 
     if @message.save
-      # Update conversation timestamp so it sorts correctly in index
+      if params[:message][:quoted_expense_ids].present?
+        @message.quoted_expenses = Expense.where(id: params[:message][:quoted_expense_ids])
+      end
+
       @conversation.touch
       redirect_to conversation_path(@conversation, anchor: "message-#{@message.id}")
     else
-      @messages = @conversation.messages.recent.includes(:user)
+      @messages = @conversation.messages.includes(:user, :quoted_expenses)
+      @other_user = @conversation.other_user(current_user)
+      @expenses = @other_user ? @other_user.expenses.order(spent_on: :desc).limit(20) : []
       render "conversations/show", status: :unprocessable_entity
     end
   end
@@ -28,6 +33,6 @@ class MessagesController < ApplicationController
   private
 
   def message_params
-    params.require(:message).permit(:body)
+    params.require(:message).permit(:body, quoted_expense_ids: [])
   end
 end

@@ -1,7 +1,11 @@
 {
   "RSpec": {
     "coverage": {
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/user.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/user.rb": {
+>>>>>>> main
         "lines": [
           1,
           null,
@@ -10,15 +14,30 @@
           null,
           null,
           1,
+          null,
+          9,
+          null,
+          9,
+          null,
           9,
           6,
-          6,
-          6,
-          6,
           null,
           null,
           null,
           null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          3,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          9,
           null,
           1,
           1,
@@ -27,26 +46,42 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/application_record.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/application_record.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/helpers/application_helper.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/helpers/application_helper.rb": {
+>>>>>>> main
         "lines": [
           1,
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/helpers/conversations_helper.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/helpers/conversations_helper.rb": {
+>>>>>>> main
         "lines": [
           1,
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/helpers/expenses_helper.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/helpers/expenses_helper.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -74,18 +109,27 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/helpers/messages_helper.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/helpers/messages_helper.rb": {
+>>>>>>> main
         "lines": [
           1,
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/helpers/pages_helper.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/helpers/pages_helper.rb": {
+>>>>>>> main
         "lines": [
           1,
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/helpers/widget_summaries_helper.rb": {
         "lines": [
           1,
@@ -93,6 +137,9 @@
         ]
       },
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/categories_controller.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/controllers/categories_controller.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -116,7 +163,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/application_controller.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/controllers/application_controller.rb": {
+>>>>>>> main
         "lines": [
           1,
           null,
@@ -132,7 +183,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/conversations_controller.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/controllers/conversations_controller.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -144,15 +199,18 @@
           null,
           null,
           null,
+          1,
+          1,
+          0,
+          0,
+          null,
           null,
           null,
           1,
-          null,
           2,
           null,
           null,
           null,
-          null,
           2,
           1,
           1,
@@ -160,6 +218,12 @@
           null,
           1,
           1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
           null,
           null,
           1,
@@ -177,19 +241,16 @@
           null,
           null,
           3,
-          null,
           3,
-          null,
-          null,
-          1,
-          null,
-          1,
-          2,
           null,
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/expenses_controller.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/controllers/expenses_controller.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -290,7 +351,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/groups_controller.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/controllers/groups_controller.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -342,7 +407,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/pages_controller.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/controllers/pages_controller.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -462,7 +531,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/services/imports/expenses_import.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/services/imports/expenses_import.rb": {
+>>>>>>> main
         "lines": [
           1,
           null,
@@ -531,7 +604,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/conversation.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/conversation.rb": {
+>>>>>>> main
         "lines": [
           1,
           null,
@@ -571,7 +648,7 @@
           1,
           null,
           1,
-          22,
+          20,
           null,
           null,
           1,
@@ -585,8 +662,14 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/expense.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/expense.rb": {
+>>>>>>> main
         "lines": [
+          1,
+          1,
           1,
           1,
           1,
@@ -694,7 +777,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/group_membership.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/group_membership.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -704,7 +791,11 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/group.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/group.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -731,18 +822,26 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/message.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/message.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
           1,
           null,
           1,
+          1,
           null,
-          3,
+          1,
+          null,
+          2,
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/services/dashboard_ai_analyzer_service.rb": {
         "lines": [
           null,
@@ -858,6 +957,9 @@
         ]
       },
       "C:/Users/prade/OneDrive/Documents/Project-2/app/services/dashboard_data_service.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/category.rb": {
+>>>>>>> main
         "lines": [
           1,
           null,
@@ -946,6 +1048,7 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/widget_summaries_controller.rb": {
         "lines": [
           1,
@@ -986,6 +1089,9 @@
         ]
       },
       "C:/Users/prade/OneDrive/Documents/Project-2/app/models/comment.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/comment.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
@@ -995,20 +1101,58 @@
           null
         ]
       },
+<<<<<<< HEAD
       "C:/Users/prade/OneDrive/Documents/Project-2/app/controllers/messages_controller.rb": {
+=======
+      "/home/qacer6973/projects/project2/Project2/app/models/message_expense.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/qacer6973/projects/project2/Project2/app/controllers/comments_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          2,
+          null,
+          2,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null
+        ]
+      },
+      "/home/qacer6973/projects/project2/Project2/app/controllers/messages_controller.rb": {
+>>>>>>> main
         "lines": [
           1,
           1,
           null,
           1,
-          null,
           3,
           null,
           null,
           null,
           null,
           3,
-          null,
           1,
           1,
           null,
@@ -1017,10 +1161,15 @@
           2,
           null,
           2,
+          1,
+          0,
+          null,
           null,
           1,
           1,
           null,
+          1,
+          1,
           1,
           1,
           null,
@@ -1063,6 +1212,10 @@
         ]
       }
     },
+<<<<<<< HEAD
     "timestamp": 1762033988
+=======
+    "timestamp": 1761882318
+>>>>>>> main
   }
 }

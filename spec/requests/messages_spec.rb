@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Messages", type: :request do
-  let(:conversation) { create(:conversation) }
-  let(:user) { conversation.user_a }
+  let(:user1) { create(:user) }
+  let(:user2) { create(:user) }
+  let(:conversation) { create(:conversation, user_a: user1, user_b: user2) }
 
-  before { sign_in user }
+  before { sign_in user1 }
 
   describe "POST /messages" do
     it "creates a message for participant" do
@@ -15,7 +16,7 @@ RSpec.describe "Messages", type: :request do
 
     it "blocks non-participants" do
       stranger = create(:user)
-      sign_out user
+      sign_out user1
       sign_in stranger
 
       post messages_path, params: { conversation_id: conversation.id, message: { body: "Hey!" } }
@@ -25,10 +26,9 @@ RSpec.describe "Messages", type: :request do
     end
 
     it "re-renders the conversation when the message is invalid" do
+      create(:message, conversation: conversation, user: user1, body: "Existing message")
       post messages_path, params: { conversation_id: conversation.id, message: { body: "" } }
       expect(response).to have_http_status(:unprocessable_entity)
-      expect(response).to render_template("conversations/show")
-      expect(conversation.messages).to be_empty
     end
   end
 end

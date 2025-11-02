@@ -2,50 +2,54 @@ class ConversationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @conversations = Conversation.where(
-      "user_a_id = :id OR user_b_id = :id",
-      id: current_user.id
-    ).includes(:messages)
-     .order("conversations.updated_at desc")
+    # shows conversations + messageable users grouped by shared groups
+    @conversations = Conversation
+      .where("user_a_id = :id OR user_b_id = :id", id: current_user.id)
+      .includes(:messages)
+      .order(updated_at: :desc)
+
+    @groups = current_user.groups.includes(:users)
+    @messageable_by_group = @groups.each_with_object({}) do |group, hash|
+      members = group.users.where.not(id: current_user.id)
+      hash[group] = members
+    end
   end
 
   def show
-    @conversation = Conversation.where(
-      "user_a_id = :id OR user_b_id = :id",
-      id: current_user.id
-    ).find_by(id: params[:id])
+    @conversation = Conversation
+      .where("user_a_id = :id OR user_b_id = :id", id: current_user.id)
+      .find_by(id: params[:id])
 
     unless @conversation
       redirect_to conversations_path, alert: "You are not authorized to view that conversation."
       return
     end
 
-    @messages = @conversation.messages.recent.includes(:user)
+    @messages = @conversation.messages.recent.includes(:user, :quoted_expenses)
     @message = Message.new
-  end
+    @other_user = @conversation.other_user(current_user)
+    # Only show expenses from shared groups, not private expenses
+    shared_group_ids = current_user.groups.pluck(:id) & @other_user.groups.pluck(:id)
+    @expenses = @other_user.expenses
+                          .where(group_id: shared_group_ids)
+                          .order(spent_on: :desc)
+                          .limit(20)  end
 
   def create
     recipient_id = params[:recipient_id] || params[:user_id] || params[:expense_author_id]
     recipient = User.find_by(id: recipient_id)
 
     unless recipient
-      redirect_back fallback_location: expenses_path, alert: "Recipient not found."
+      redirect_back fallback_location: conversations_path, alert: "Recipient not found."
       return
     end
 
     if recipient.id == current_user.id
-      redirect_back fallback_location: expenses_path, notice: "You cannot start a conversation with yourself."
+      redirect_back fallback_location: conversations_path, notice: "You cannot start a conversation with yourself."
       return
     end
 
     @conversation = Conversation.find_or_create_between(current_user, recipient)
-
     redirect_to conversation_path(@conversation)
-  end
-
-  private
-
-  def participant?(conversation, user)
-    [ conversation.user_a_id, conversation.user_b_id ].include?(user.id)
   end
 end

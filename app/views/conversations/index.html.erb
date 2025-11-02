@@ -1,5 +1,6 @@
 <h1 class="text-3xl font-bold mb-6" style="color: var(--tamu-gray-800);">Your Conversations</h1>
 
+<h2>Your Active Conversations</h2>
 <% if @conversations.empty? %>
   <div class="bg-white rounded-lg shadow-md p-6 text-center">
     <p class="text-gray-600">You have no conversations yet.</p>
@@ -36,4 +37,28 @@
       <% end %>
     </ul>
   </div>
+<% end %>
+
+<hr>
+
+<h2>Start a Conversation by Group</h2>
+<% if @messageable_by_group.empty? %>
+  <p>You are not in any groups yet.</p>
+<% else %>
+  <% @messageable_by_group.each do |group, members| %>
+    <h3><%= group.name %></h3>
+    <% if members.any? %>
+      <ul>
+        <% members.each do |member| %>
+          <li>
+            <%= member.full_name.presence || member.email %>
+            <%= button_to "Message", conversations_path(recipient_id: member.id),
+                method: :post, class: "btn btn-primary" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No other members in this group.</p>
+    <% end %>
+  <% end %>
 <% end %>
