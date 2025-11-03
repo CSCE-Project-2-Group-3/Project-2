@@ -12,10 +12,11 @@ class MessagesController < ApplicationController
       return
     end
 
-    @message = @conversation.messages.build(message_params)
+    @message = @conversation.messages.new(message_params)
     @message.user = current_user
 
     if @message.save
+      # Link quoted expenses after successful save
       if params[:message][:quoted_expense_ids].present?
         @message.quoted_expenses = Expense.where(id: params[:message][:quoted_expense_ids])
       end
@@ -23,9 +24,21 @@ class MessagesController < ApplicationController
       @conversation.touch
       redirect_to conversation_path(@conversation, anchor: "message-#{@message.id}")
     else
-      @messages = @conversation.messages.includes(:user, :quoted_expenses)
+      # Re-render form with necessary data for expense dropdown
+      @messages = @conversation.messages.recent.includes(:user, :quoted_expenses)
       @other_user = @conversation.other_user(current_user)
-      @expenses = @other_user ? @other_user.expenses.order(spent_on: :desc).limit(20) : []
+
+      # Only show expenses from shared groups (security + nil safety)
+      if @other_user
+        shared_group_ids = current_user.groups.pluck(:id) & @other_user.groups.pluck(:id)
+        @expenses = @other_user.expenses
+                              .where(group_id: shared_group_ids)
+                              .order(spent_on: :desc)
+                              .limit(20)
+      else
+        @expenses = []
+      end
+
       render "conversations/show", status: :unprocessable_entity
     end
   end

@@ -9,12 +9,27 @@
   <div id="messages" class="bg-gray-50 border border-gray-200 rounded-lg p-4 h-96 overflow-y-auto mb-4 space-y-4">
     <% if @messages.any? %>
       <% @messages.each do |msg| %>
-        <div class="flex">
+        <div class="flex" id="message-<%= msg.id %>">
           <div class="<%= msg.user == current_user ? 'ml-auto bg-blue-500 text-white' : 'mr-auto bg-gray-200 text-gray-800' %> p-3 rounded-lg max-w-xs lg:max-w-md shadow-sm">
             <strong class="block font-medium text-sm <%= msg.user == current_user ? 'text-blue-100' : 'text-gray-500' %>">
               <%= msg.user.full_name %>
             </strong>
             <p class="text-base"><%= msg.body %></p>
+            
+            <%# Quoted Expenses Display %>
+            <% if msg.quoted_expenses.any? %>
+              <div class="quoted-expense mt-2 p-2 bg-white bg-opacity-20 rounded border border-white border-opacity-30">
+                <em class="text-sm <%= msg.user == current_user ? 'text-blue-100' : 'text-gray-600' %>">Quoted Expenses:</em>
+                <ul class="text-sm mt-1 space-y-1">
+                  <% msg.quoted_expenses.each do |qe| %>
+                    <li class="<%= msg.user == current_user ? 'text-blue-50' : 'text-gray-700' %>">
+                      <strong><%= qe.title %></strong> — $<%= qe.amount %> on <%= qe.spent_on %>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            
             <div class="text-xs text-right opacity-70 mt-1">
               <%= time_ago_in_words(msg.created_at) %> ago
             </div>
@@ -26,17 +41,26 @@
     <% end %>
   </div>
 
-  <%# New Message Form %>
+  <%# New Message Form with Expense Quoting %>
   <%= form_tag messages_path(conversation_id: @conversation.id), method: :post do %>
-    <div class="mb-2">
+    <div class="mb-4">
       <label for="message_body" class="block text-sm font-medium mb-1" style="color: var(--tamu-gray-700);">Your Message</label>
-      <%= text_area_tag "message_body", "", 
-          id: "message_body", 
-          name: "message[body]", 
-          rows: 3, 
-          class: "form-input w-full block border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm",
-          placeholder: "Type your message..." %>
+      <%= text_area_tag "message_body", "", id: "message_body", name: "message[body]", rows: 3, class: "form-input w-full block border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm", placeholder: "Type your message..." %>
     </div>
+
+    <%# Expense Quoting Dropdown %>
+    <% if @expenses.any? %>
+      <div class="mb-4">
+        <label for="message_quoted_expense_ids" class="block text-sm font-medium mb-1" style="color: var(--tamu-gray-700);">Quote expenses (optional)</label>
+        <select id="message_quoted_expense_ids" name="message[quoted_expense_ids][]" multiple size="5" class="w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm">
+          <% @expenses.each do |exp| %>
+            <option value="<%= exp.id %>"><%= exp.title %> — $<%= exp.amount %> on <%= exp.spent_on %></option>
+          <% end %>
+        </select>
+        <p class="text-sm text-gray-500 mt-1">(Hold Ctrl or ⌘ to select multiple)</p>
+      </div>
+    <% end %>
+
     <%= submit_tag "Send", class: "btn-maroon py-2 px-4 rounded-lg font-semibold cursor-pointer" %>
   <% end %>
 

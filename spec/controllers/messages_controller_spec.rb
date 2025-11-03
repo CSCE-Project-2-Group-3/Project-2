@@ -119,6 +119,24 @@ RSpec.describe MessagesController, type: :controller do
         expect(assigns(:other_user)).to eq(other_user)
         expect(assigns(:expenses)).not_to be_nil
       end
+
+      # NEW TEST: This will hit the @expenses = [] line
+      context "when other_user returns nil" do
+        it "sets @expenses to empty array" do
+          # Create a conversation where other_user would return nil
+          # We'll mock the other_user method to return nil
+          allow_any_instance_of(Conversation).to receive(:other_user).and_return(nil)
+
+          post :create, params: {
+            conversation_id: conversation.id,
+            message: { body: "" } # Invalid message to trigger the else branch
+          }
+
+          expect(assigns(:expenses)).to eq([])
+          expect(response).to render_template("conversations/show")
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
     end
 
     context "when not authorized" do
