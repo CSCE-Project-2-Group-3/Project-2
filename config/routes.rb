@@ -7,37 +7,33 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: "users/registrations",
     sessions: "users/sessions",
-    omniauth_callbacks: "users/omniauth_callbacks" }
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
+
   resources :groups do
     post :join, on: :collection
     resources :expenses, only: [ :new, :create, :index ]
   end
 
-  # Expense management routes
   resources :expenses do
     resources :comments, only: :create
     collection do
       post :bulk_upload
-      get  :download_template
+      get :download_template
     end
   end
 
-  # Conversation and messaging routes for user-to-user communication
   resources :conversations, only: [ :index, :show, :create ]
   resources :messages, only: [ :create ]
-
-  # Category routes
-  resources :categories, only: [ :index, :new, :create, :destroy ]
   resources :categories, only: [ :new, :create ]
 
   get "dashboard", to: "pages#dashboard"
+  resource :widget_summary, only: [ :show ]
+  get "empty_modal", to: "widget_summaries#empty"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check endpoint for load balancers and uptime monitors
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Root route – always goes to home page
   root to: "pages#home"
 
   get "*path", to: "pages#not_found"

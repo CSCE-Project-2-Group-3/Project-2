@@ -1,72 +1,101 @@
-<%# Determine the correct form object - use simple expense for edit, nested only for new %>
-<% if action_name == 'edit' || @group.blank? %>
-  <% form_object = @expense %>
-<% else %>
-  <% form_object = [@group, @expense] %>
-<% end %>
+<%# Determine page title based on whether the expense is new or being edited %>
+<% title = @expense.persisted? ? "Edit Expense" : "Add New Expense" %>
 
-<%= form_with model: form_object, local: true do |f| %>
-  <% if @expense.errors.any? %>
-    <div style="color:red">
-      <strong><%= pluralize(@expense.errors.count, "error") %>:</strong>
-      <%= @expense.errors.full_messages.to_sentence %>
+<div class="max-w-xl mx-auto mt-10 p-6 sm:p-8 bg-white shadow-lg rounded-lg border border-gray-200">
+  <h2 class="text-3xl font-extrabold mb-6 text-center" style="color: var(--tamu-maroon);">
+    <%= title %>
+  </h2>
+
+  <%# Determine the correct form object for nested vs non-nested routes %>
+  <% form_object =
+      if action_name == "new" && @group.present?
+        [@group, @expense] # nested new
+      else
+        @expense # edit or non-nested
+      end %>
+
+  <%= form_with model: form_object, local: true, class: "space-y-6" do |f| %>
+
+    <%# --- Styled Error Messages --- %>
+    <% if @expense.errors.any? %>
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+        <strong class="font-bold"><%= pluralize(@expense.errors.count, "error") %>:</strong>
+        <span class="block sm:inline"><%= @expense.errors.full_messages.to_sentence %></span>
+      </div>
+    <% end %>
+
+    <%# --- Title --- %>
+    <div>
+      <%= f.label :title, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :title, required: true, class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
     </div>
-  <% end %>
 
-  <p>
-    <%= f.label :title %><br>
-    <%= f.text_field :title, required: true %>
-  </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <%# --- Amount --- %>
+      <div>
+        <%= f.label :amount, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.number_field :amount, step: 0.01, min: 0, required: true, class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
+      </div>
 
-  <p>
-    <%= f.label :amount %><br>
-    <%= f.number_field :amount, step: 0.01, min: 0, required: true %>
-  </p>
+      <%# --- Spent On --- %>
+      <%# --- Spent On --- %>
+      <div>
+        <%= f.label :spent_on, "Spent on", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.date_field :spent_on, 
+              required: true, 
+              value: @expense.spent_on || Date.current,  # This sets today's date for new expenses
+              class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
+      </div>
 
-  <p>
-    <%= f.label :spent_on, "Spent on" %><br>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <%= f.date_field :spent_on, required: true, id: "expense_spent_on" %>
-      <button type="button" 
-              onclick="document.getElementById('expense_spent_on').value = new Date().toISOString().split('T')[0]"
-              style="padding: 4px 8px; background: #500000; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;"
-              title="Fill with today's date">
-        📅 Today
-      </button>
+    <%# --- Category --- %>
+    <div>
+      <%= f.label :category_id, "Category", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <div class="flex items-center space-x-3">
+        <%= f.collection_select :category_id, Category.all, :id, :name, { prompt: "Select a category" }, { class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" } %>
+        <%= link_to "+ Add new category", new_category_path, target: "_blank", class: "text-sm font-medium whitespace-nowrap", style: "color: var(--tamu-accent);" %>
+      </div>
     </div>
-  </p>
 
-  <p>
-    <%= f.label :category_id, "Category" %><br>
-    <%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Select a category" %>
-    <%= link_to "+ Add new category", new_category_path, target: "_blank", style: "margin-left: 10px; color: blue;" %>
-  </p>
+    <%# --- Notes --- %>
+    <div>
+      <%= f.label :notes, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_area :notes, rows: 3, class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
+    </div>
 
-  <p>
-    <%= f.label :notes %><br>
-    <%= f.text_area :notes, rows: 3 %>
-  </p>
-
-  <% group_for_split = @group || @expense.group %>
-  <% if group_for_split.present? %>
-    <fieldset style="margin:1rem 0; padding:.75rem; border:1px solid #ccc;">
-      <legend>Split Bill</legend>
-      <p style="margin-top:0; font-size:0.9rem; color:#555;">Leave blank to split with just you.</p>
-      <button type="button"
-              style="margin-bottom:0.5rem;"
-              onclick="(function(button){ const fieldset = button.closest('fieldset'); if(!fieldset) return; fieldset.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true); })(this);">
-        Split with all
-      </button>
-      <%= hidden_field_tag 'expense[participant_ids][]', '' %>
-      <% group_for_split.users.order(:full_name, :email).each do |member| %>
-        <% label_text = member.full_name.presence || member.email %>
-        <div style="margin-bottom:0.3rem;">
-          <%= check_box_tag 'expense[participant_ids][]', member.id, @expense.participant_ids.include?(member.id), id: "expense_participant_#{member.id}" %>
-          <%= label_tag "expense_participant_#{member.id}", label_text %>
+    <%# --- Split Bill Fieldset --- %>
+    <% group_for_split = @group || @expense.group %>
+    <% if group_for_split.present? %>
+      <fieldset class="p-4 rounded-md border" style="background-color: var(--tamu-gray-100); border-color: var(--tamu-gray-200);">
+        <legend class="text-lg font-semibold px-2" style="color: var(--tamu-gray-800);">
+          Split Bill
+        </legend>
+        <p class="text-sm -mt-2 mb-4 px-2" style="color: var(--tamu-gray-500);">
+          Select who to split this bill with.
+        </p>
+        
+        <button type="button" class="mb-4 py-1 px-3 rounded-md text-sm font-medium bg-white border border-gray-300 hover:bg-gray-50"
+                onclick="(function(button){ const fieldset = button.closest('fieldset'); if(!fieldset) return; fieldset.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true); })(this);">
+          Split with all
+        </button>
+        
+        <%= hidden_field_tag 'expense[participant_ids][]', '' %>
+        
+        <%# Checkbox grid %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+          <% group_for_split.users.order(:full_name, :email).each do |member| %>
+            <% label_text = member.full_name.presence || member.email %>
+            <div class="flex items-center">
+              <%= check_box_tag 'expense[participant_ids][]', member.id, @expense.participant_ids.include?(member.id), id: "expense_participant_#{member.id}", class: "h-4 w-4 rounded border-gray-300", style: "color: var(--tamu-maroon);" %>
+              <%= label_tag "expense_participant_#{member.id}", label_text, class: "ml-2 block text-sm", style: "color: var(--tamu-gray-700);" %>
+            </div>
+          <% end %>
         </div>
-      <% end %>
-    </fieldset>
-  <% end %>
+      </fieldset>
+    <% end %>
 
-  <p><%= f.submit "Save Expense" %></p>
-<% end %>
+    <%# --- Submit Button --- %>
+    <div class="actions">
+      <%= f.submit "Save Expense", class: "w-full btn-maroon font-semibold py-2 px-4 rounded-lg cursor-pointer transition duration-150 ease-in-out" %>
+    </div>
+  <% end %>
+</div>

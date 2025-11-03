@@ -1,5 +1,10 @@
-<h1>Add New Expense</h1>
+<%# 1. "Back" link, aligned with the card below %>
+<div class="max-w-xl mx-auto mb-4">
+  <%= link_to "← Back to Expenses", expenses_path, class: "text-sm font-medium transition-colors",
+              style: "color: var(--tamu-maroon);",
+              onmouseover: "this.style.color='#a17b3e'",
+              onmouseout: "this.style.color='var(--tamu-maroon)'" %>
+</div>
 
+<%# 2. The main form card %>
 <%= render 'form' %>
-
-<p><%= link_to "Back to Expenses", expenses_path %></p>

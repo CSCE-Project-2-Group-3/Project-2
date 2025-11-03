@@ -1,56 +1,78 @@
-<h1>Expense Tracker</h1>
+<%# 
+  A single, unified card for all expense management.
+  This removes the redundant header and improves the UI orientation.
+%>
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
 
-<% if notice %>
-  <p style="color: green;"><%= notice %></p>
-<% end %>
-<% if alert %>
-  <p style="color: red;"><%= alert %></p>
-<% end %>
+  <%# 1. Card Header: Title & Add New Button %>
+  <div class="p-4 sm:p-6 border-b border-gray-200">
+    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+      <h2 class="text-xl font-semibold" style="color: var(--tamu-maroon);">
+        All Expenses
+      </h2>
+      <%= link_to "Add New Expense", new_expense_path, class: "btn-maroon py-2 px-4 rounded-lg font-semibold text-center whitespace-nowrap" %>
+    </div>
+  </div>
 
+  <%# 2. Card Body: Bulk Upload & Expenses Table %>
+  <div class="p-4 sm:p-6">
+    
+    <%# --- Bulk Upload Section (Nested) --- %>
+    <div class="mb-6 p-4 rounded-lg" style="background-color: var(--tamu-gray-100);">
+      <h3 class="text-lg font-semibold mb-4" style="color: var(--tamu-gray-800);">
+        Bulk Import Expenses
+      </h3>
+      <%= form_with url: bulk_upload_expenses_path, multipart: true, local: true, class: "flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0" do %>
+        <%= file_field_tag :file, accept: ".csv,.xlsx", class: "block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:cursor-pointer file:bg-white hover:file:bg-gray-50", style: "color: var(--tamu-gray-700);" %>
+        <%= submit_tag "Bulk Import", class: "btn-maroon py-2 px-4 rounded-lg font-semibold cursor-pointer" %>
+        <%= link_to "Download Template", download_template_expenses_path, class: "text-sm font-medium hover:underline", style: "color: var(--tamu-maroon);" %>
+      <% end %>
+    </div>
 
-<%= form_with url: bulk_upload_expenses_path, multipart: true, local: true do %>
-  <%= file_field_tag :file, accept: ".csv,.xlsx" %>
-  <%= submit_tag "Bulk Import" %>
-  <%= link_to "Download Template", download_template_expenses_path %>
-<% end %>
+    <%# --- Expenses Table --- %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead style="background-color: var(--tamu-gray-100);">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Split With</th>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @expenses.each do |e| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= e.spent_on.strftime("%Y-%m-%d") %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= e.title %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= e.category.try(:name) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right"><%= number_to_currency(e.amount) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= truncate(e.notes, length: 30) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"><%= participant_summary(e) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-right">
+                <%= link_to "Edit", edit_expense_path(e), class: "font-medium hover:underline", style: "color: var(--tamu-accent);" %>
+                <%= link_to "Delete", expense_path(e), data: { turbo_confirm: "Delete this?" }, method: :delete, class: "ml-4 font-medium text-red-600 hover:text-red-800 hover:underline" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<%= link_to "Add New Expense", new_expense_path, class: "btn btn-primary" %>
+  <%# 3. Card Footer: Total and Pagination %>
+  <div class="p-4 sm:p-6 border-t border-gray-200">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-lg font-bold" style="color: var(--tamu-gray-800);">
+        <strong>Total:</strong> <%= number_to_currency(@total) %>
+      </p>
+      <div class="text-sm">
+        <%= paginate @expenses %>
+      </div>
+    </div>
+  </div>
 
-
-<table border="1" cellspacing="0" cellpadding="5">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Title</th>
-      <th>Category</th>
-      <th>Amount</th>
-      <th>Notes</th>
-      <th>Split With</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @expenses.each do |e| %>
-      <tr>
-        <td><%= e.spent_on %></td>
-        <td><%= e.title %></td>
-        <td><%= e.category.name %></td>
-        <td><%= e.amount %></td>
-        <td><%= e.notes %></td>
-        <td><%= participant_summary(e) %></td>
-        <td>
-          <%= link_to "Edit", edit_expense_path(e) %> |
-          <%= link_to "Delete", expense_path(e), data: { turbo_confirm: "Delete this?" }, method: :delete %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<p><strong>Total:</strong> <%= @total %></p>
-<%= paginate @expenses %>
-<div style="margin-top:12px;">
-  <%= button_to "Logout", destroy_user_session_path,
-        method: :delete,
-        form: { data: { turbo: false }, style: "display:inline" } %>
 </div>

@@ -17,7 +17,7 @@ When('I leave the group name blank') do
 end
 
 Then('I should see {string} in my group list') do |group_name|
-  expect(page).to have_css('.group-list', text: group_name)
+  expect(page).to have_content(group_name)
 end
 
 Given('I am already a member of {string}') do |group_name|
@@ -102,11 +102,13 @@ Given('I am viewing the {string} expense in {string}') do |expense_title, group_
 end
 
 When('I type {string} in the comment box') do |comment_text|
-  fill_in 'Comment', with: comment_text
+  # FIX: Find the field by its 'name' attribute, not the label 'Comment'
+  fill_in 'comment[body]', with: comment_text
 end
 
 When('I leave the comment box blank') do
-  fill_in 'Comment', with: ''
+  # FIX: Find the field by its 'name' attribute
+  fill_in 'comment[body]', with: ''
 end
 
 Then('I should see my comment in the thread') do

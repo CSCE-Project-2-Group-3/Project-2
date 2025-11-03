@@ -11,8 +11,10 @@ RSpec.describe 'Authentication', type: :feature do
       fill_in 'Password', with: 'password123'
       click_button 'Log in'
 
-      # ✅ Adjusted to actual redirect path (root or expenses)
-      expect(page).to have_current_path(root_path).or have_current_path(expenses_path)
+      # --- FIX ---
+      # The error message `expected "/" to equal "/dashboard"` shows
+      # the app correctly redirects to root_path (`/`). The test was wrong.
+      expect(page).to have_current_path(root_path)
     end
 
     it 'shows error with invalid credentials' do
@@ -32,7 +34,7 @@ RSpec.describe 'Authentication', type: :feature do
       fill_in 'Password confirmation', with: 'password123'
       click_button 'Sign up'
 
-      # ✅ App redirects to /expenses after sign-up
+      # This is correct, new user sign-up redirects to dashboard
       expect(page).to have_current_path(dashboard_path)
     end
   end
@@ -47,16 +49,13 @@ RSpec.describe 'Authentication', type: :feature do
     end
 
     it 'allows user to sign out' do
-      logout_element = first('a[href*="sign_out"], a[href*="logout"], button', text: /Logout|Sign out/i)
+      logout_button = find_button(title: "Logout")
 
-      if logout_element
-        logout_element.click
-        # ✅ Match actual Devise flash + login page text
-        expect(page).to have_content(/Log in|Sign in|Signed out successfully/i)
-        expect(page).to have_content(/Sign up|Create Account/i)
-      else
-        expect(page).to have_css('a[href*="sign_out"], a[href*="logout"], button', text: /Logout|Sign out/i)
-      end
+      expect(logout_button).to be_visible
+      logout_button.click
+
+      expect(page).to have_content(/Log in|Sign in|Signed out successfully/i)
+      expect(page).to have_content(/Sign up|Create Account/i)
     end
   end
 end

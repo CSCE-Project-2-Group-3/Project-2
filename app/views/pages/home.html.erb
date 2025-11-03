@@ -1,38 +1,188 @@
-<div class="text-center py-12">
-  <h1 class="text-5xl font-bold text-tamu-gray-900 mb-6">
-    Expense Tracker Home
-  </h1>
+<%# --- STYLES FOR THIS PAGE ONLY --- %>
+<%# We must add this block because inline styles can't handle hover effects %>
+<style>
+  .btn-get-started {
+    background-color: #8A6319; /* tamu-accent */
+    color: #FFFFFF;
+  }
+  .btn-get-started:hover {
+    background-color: #a17b3e; /* tamu-accent-bright */
+  }
+  .btn-learn-more {
+    border: 2px solid rgba(255, 255, 255, 0.5);
+  }
+  .btn-learn-more:hover {
+    background-color: #FFFFFF;
+    color: #500000; /* tamu-maroon */
+  }
+  .contributor-card:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+</style>
 
-  <% if current_user %>
-    <h2 class="text-2xl font-semibold text-tamu-gray-800 mb-4">
-      Welcome, <%= current_user.full_name.presence || current_user.email %>!
-    </h2>
-    <p class="text-xl text-tamu-gray-700 mb-8">
-      Ready to manage your expenses?
-    </p>
+<div class="min-h-screen flex flex-col" style="background-color: #f7fafc;"> <%# bg-tamu-gray-light %>
 
-    <div class="flex flex-col items-center space-y-4">
-      <%= link_to "Go to Dashboard", dashboard_path, class: "btn-success w-64 text-center" %>
-      <%= link_to "Go to Expense Table", expenses_path, class: "btn-primary w-64 text-center" %>
-      <%= link_to "Edit Account", edit_user_registration_path, class: "btn-secondary w-64 text-center" %>
+  <section class="relative py-20 flex flex-col items-center text-center overflow-hidden" style="background-color: #500000; color: #FFFFFF;"> <%# bg-tamu-maroon, text-tamu-white %>
+    
+    <%# --- White Dot Background Pattern --- %>
+    <div class="absolute inset-0 z-0 opacity-20">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1" fill="#FFFFFF" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#gridPattern)" />
+      </svg>
+    </div>
+    
+    <div class="relative z-10">
+      <div class="w-32 h-32 mb-8 mx-auto rounded-full bg-white flex items-center justify-center shadow-2xl backdrop-blur-sm animate-fade-in">
+        <%= image_tag "logo.png", alt: "ExpenseTracker Logo", class: "h-28 w-28" %>
+      </div>
+      <h1 class="text-5xl font-bold mb-4 animate-fade-in-up" style="animation-delay: 200ms;">
+        Welcome to ExpenseTracker
+      </h1>
+      <p class="text-xl max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 400ms;">
+        Take control of your finances. Track your spending, manage your budgets, and see where your money goes.
+      </p>
+      <div class="mt-8 flex gap-4 justify-center animate-fade-in-up" style="animation-delay: 600ms;">
+        <%# Replaced custom classes with new .btn- classes defined above %>
+        <%= link_to "Get Started", dashboard_path, class: "btn-get-started transition px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform" %>
+        <%= link_to "Learn More", "#about", class: "btn-learn-more px-8 py-3 rounded-lg font-semibold transition-colors" %>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="py-20 px-6" style="background-color: #f7fafc; color: #2d3748;" data-animate="fade-in-up"> <%# bg-tamu-gray-light, text-tamu-gray-800 %>
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-4xl font-bold mb-6 animate-fade-in-up" style="animation-delay: 800ms; color: #500000;"> <%# text-tamu-maroon %>
+        Why ExpenseTracker?
+      </h2>
+      <p class="text-lg leading-relaxed mb-4 animate-fade-in-up" style="animation-delay: 1s;">
+        As students at Texas A&M University, we wanted to build a tool that simplifies financial management. 
+        Our goal is to provide a clean, simple, and effective way to track your expenses without the clutter of other apps.
+      </p>
+      <p class="text-lg leading-relaxed animate-fade-in-up" style="animation-delay: 1.2s;">
+        ExpenseTracker allows you to categorize transactions, view spending trends, and manage your budget effortlessly — giving you more time to focus on what matters.
+      </p>
+    </div>
+  </section>
+
+  <section id="contributors" class="py-20 px-6 bg-white" data-animate="fade-in-up">
+    <div class="max-w-6xl mx-auto text-center">
+      <h2 class="text-4xl font-bold mb-12 animate-fade-in-up" style="animation-delay: 1.4s; color: #500000;"> <%# text-tamu-maroon %>
+        Contributors
+      </h2>
       
-      <%= button_to "Logout", destroy_user_session_path,
-            method: :delete,
-            form: { data: { turbo: false }, style: "display:inline" },
-            class: "btn-danger w-64 text-center" %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 animate-fade-in-up" style="animation-delay: 1.4s;">
+        
+        <div class="contributor-card rounded-lg p-6 shadow-md transition-all duration-300" style="background-color: #f7fafc;"> <%# bg-tamu-gray-light %>
+          <p class="text-xl font-semibold mb-2" style="color: #2d3748;">Amesh Shrestha</p> <%# text-tamu-gray-800 %>
+          <p style="color: #4a5568;" class="text-sm">TAMU Master's Student</p> <%# text-tamu-gray-700 %>
+        </div>
+        <div class="contributor-card rounded-lg p-6 shadow-md transition-all duration-300" style="background-color: #f7fafc;">
+          <p class="text-xl font-semibold mb-2" style="color: #2d3748;">Pradeep Periyasamy</p>
+          <p style="color: #4a5568;" class="text-sm">TAMU Master's Student</p>
+        </div>
+        <div class="contributor-card rounded-lg p-6 shadow-md transition-all duration-300" style="background-color: #f7fafc;">
+          <p class="text-xl font-semibold mb-2" style="color: #2d3748;">Quan Nguyen</p>
+          <p style="color: #4a5568;" class="text-sm">TAMU Master's Student</p>
+        </div>
+        <div class="contributor-card rounded-lg p-6 shadow-md transition-all duration-300" style="background-color: #f7fafc;">
+          <p class="text-xl font-semibold mb-2" style="color: #2d3748;">Venkateswarlu Nagineni</p>
+          <p style="color: #4a5568;" class="text-sm">TAMU Master's Student</p>
+        </div>
+        
+      </div>
     </div>
+  </section>
 
-  <% else %>
-    <h2 class="text-3xl font-semibold text-tamu-gray-800 mb-4">
-      Welcome to Expense Tracker
-    </h2>
-    <p class="text-xl text-tamu-gray-700 mb-8">
-      Sign in to manage your group and personal expenses.
-    </p>
+  <footer class="py-6 mt-auto text-center" style="background-color: #500000; color: #FFFFFF;"> <%# bg-tamu-maroon, text-tamu-white %>
+    <p class="text-sm">&copy; <%= Time.current.year %> ExpenseTracker | Built by Texas A&M Students</p>
+  </footer>
 
-    <div class="flex justify-center space-x-4">
-      <%= link_to "Login", new_user_session_path, class: "btn-primary" %>
-      <%= link_to "Create Account", new_user_registration_path, class: "btn-secondary" %>
-    </div>
-  <% end %>
 </div>
+
+<%# --- JAVASCRIPT FOR ANIMATIONS --- %>
+<script>
+  // Define a function to set up the animations
+  function setupLandingPageAnimations() {
+    
+    // 1. INJECT KEYFRAMES AND STYLES
+    // Check if styles are already injected to avoid duplication
+    if (!document.getElementById('landing-page-animation-styles')) {
+      const animationStyles = `
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        .animate-fade-in-slow { animation: fadeIn 2s ease-out forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+      `;
+      const styleSheet = document.createElement("style");
+      styleSheet.id = "landing-page-animation-styles"; // Add an ID to check
+      styleSheet.innerText = animationStyles;
+      document.head.appendChild(styleSheet);
+    }
+
+    if (!document.getElementById('landing-page-scroll-styles')) {
+      const onScrollStyles = `
+        [data-animate] {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        [data-animate].is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `;
+      const onScrollStyleSheet = document.createElement("style");
+      onScrollStyleSheet.id = "landing-page-scroll-styles";
+      onScrollStyleSheet.innerText = onScrollStyles;
+      document.head.appendChild(onScrollStyleSheet);
+    }
+    
+    // 2. SET UP THE INTERSECTION OBSERVER
+    const animatedElements = document.querySelectorAll('[data-animate]');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target); 
+        }
+      });
+    }, {
+      threshold: 0.1 // Run when 10% of the element is visible
+    });
+
+    animatedElements.forEach(el => {
+      // IMPORTANT: Reset visibility on navigation
+      el.classList.remove('is-visible'); 
+      observer.observe(el);
+    });
+  }
+
+  // Use 'turbo:load' to run the script on every page navigation
+  document.addEventListener("turbo:load", () => {
+    // Only run this script if we're on the landing page (i.e., we can find the #about section)
+    if (document.getElementById('about')) {
+      setupLandingPageAnimations();
+    }
+  });
+
+  // Also run on initial full page load (for non-Turbo visits)
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById('about')) {
+      setupLandingPageAnimations();
+    }
+  });
+</script>

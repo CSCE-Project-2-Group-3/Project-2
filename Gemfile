@@ -50,7 +50,6 @@ gem "image_processing", "~> 1.2"
 
 gem "groupdate"
 gem "ruby-openai"
-gem "tailwindcss-rails"
 gem "dotenv-rails"
 
 group :development, :test do
