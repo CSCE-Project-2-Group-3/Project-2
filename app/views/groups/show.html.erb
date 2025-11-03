@@ -1,31 +1,99 @@
-<h2><%= @group.name %></h2>
-<p><strong>Join Code:</strong> <%= @group.join_code %></p>
+<%# 1. Page Header: Group Name %>
+<div class="mb-6">
+  <h1 class="text-3xl font-bold" style="color: var(--tamu-maroon);">
+    <%= @group.name %>
+  </h1>
+</div>
 
-<hr>
+<%# 2. Info Boxes: Join Code & Total Expenses %>
+<% total_amount = @group.expenses.sum(:amount) %>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  
+  <%# --- Join Code Card --- %>
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+      Join Code
+    </h3>
+    <div class="flex items-center justify-between">
+      <span class="text-2xl font-semibold" style="color: var(--tamu-gray-800);"><%= @group.join_code %></span>
+      <%# You can add a "copy to clipboard" button here later if you want %>
+    </div>
+  </div>
 
-<h3>Members:</h3>
-<ul>
-  <% @group.users.each do |user| %>
-    <li><%= user.email %></li>
-  <% end %>
-</ul>
+  <%# --- Total Expenses Card --- %>
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+      Total Group Expenses
+    </h3>
+    <span class="text-2xl font-semibold" style="color: var(--tamu-gray-800);">
+      <%= number_to_currency(total_amount) %>
+    </span>
+  </div>
+</div>
 
-<hr>
+<%# 3. Main Content: Members & Expenses (2-Column) %>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-<h3>Expenses</h3>
-<%= link_to "Add New Expense", new_group_expense_path(@group), class: "btn btn-primary" %>
-<% total_amount = @group.expenses.sum(:amount).to_f %>
-<p><strong>Total:</strong> <%= number_to_currency(total_amount, precision: (total_amount % 1).zero? ? 0 : 2) %></p>
-<ul>
-  <% if @group.expenses.any? %>
-    <% @group.expenses.each do |expense| %>
-      <li>
-        <strong><%= link_to expense.title, expense_path(expense) %></strong> - <%= number_to_currency(expense.amount) %>
-        <br>
-        <small>Split with: <%= participant_summary(expense) %></small>
-      </li>
-    <% end %>
-  <% else %>
-    <li>No expenses to show yet.</li>
-  <% end %>
-</ul>
+  <%# --- Column 1: Members List --- %>
+  <div class="lg:col-span-1">
+    <div class="bg-white rounded-lg shadow-md">
+      <div class="p-4 sm:p-6 border-b border-gray-200">
+        <h3 class="text-lg font-semibold" style="color: var(--tamu-gray-800);">
+          Members
+        </h3>
+      </div>
+      <div class="p-4 sm:p-6">
+        <ul class="divide-y divide-gray-200">
+          <% @group.users.each do |user| %>
+            <li class="py-3 text-sm font-medium" style="color: var(--tamu-gray-700);">
+              <%= user.email %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <%# --- Column 2: Expenses List --- %>
+  <div class="lg:col-span-2">
+    <div class="bg-white rounded-lg shadow-md">
+      <%# Card Header %>
+      <div class="p-4 sm:p-6 border-b border-gray-200">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <h3 class="text-lg font-semibold" style="color: var(--tamu-gray-800);">
+            Expenses
+          </h3>
+          <%= link_to "Add New Expense", new_group_expense_path(@group), class: "btn-maroon py-2 px-4 rounded-lg font-semibold text-center whitespace-nowrap" %>
+        </div>
+      </div>
+      
+      <%# Card Body - List of Expenses %>
+      <div class="p-4 sm:p-6">
+        <% if @group.expenses.any? %>
+          <ul class="divide-y divide-gray-200">
+            <% @group.expenses.order(spent_on: :desc).each do |expense| %>
+              <li class="py-4">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <%= link_to expense.title, expense_path(expense), class: "text-lg font-medium hover:underline", style: "color: var(--tamu-accent);" %>
+                    <br>
+                    <small style="color: var(--tamu-gray-700);">
+                      Split with: <%= participant_summary(expense) %>
+                    </small>
+                  </div>
+                  <div class="text-lg font-semibold text-gray-900">
+                    <%= number_to_currency(expense.amount) %>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p style="color: var(--tamu-gray-500);">No expenses to show yet. Add one to get started!</p>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+
+</div>

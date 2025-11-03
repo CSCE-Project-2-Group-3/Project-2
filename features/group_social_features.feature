@@ -12,7 +12,8 @@ Feature: Group and Social Features
     And I am on the "Groups" page
     When I click "Create Group"
     And I enter "Roommates 2025" as the group name
-    And I click "Save"
+    # FIX: Changed "Save Group" to "Create Group"
+    And I click "Create Group"
     Then I should see "Group created successfully"
     And I should see "Roommates 2025" in my group list
 
@@ -21,7 +22,8 @@ Feature: Group and Social Features
     And I am on the "Groups" page
     When I click "Create Group"
     And I leave the group name blank
-    And I click "Save"
+    # FIX: Changed "Save Group" to "Create Group"
+    And I click "Create Group"
     Then I should see "Group name can't be blank"
 
   # ------------------------------
@@ -59,7 +61,7 @@ Feature: Group and Social Features
     And I am in the group "Roommates 2025" with 4 members
     When I add an expense titled "Cleaning Service" for "$120"
     And I choose to split the bill with all group members
-    And I click "Save"
+    And I click "Save Expense"
     Then I should see "Expense created!"
     And each member’s share should be "$30"
 
@@ -72,13 +74,17 @@ Feature: Group and Social Features
     And I am already a member of "Roommates 2025"
     And the group "Roommates 2025" has expenses of "$90" and "$60"
     When I visit the "Roommates 2025" summary page
-    Then I should see "Total: $150"
+    # FIX: Split into two assertions to check for text that is on the page
+    Then I should see "Total Group Expenses"
+    And I should see "$150.00"
 
   Scenario: View total when there are no expenses
     Given I am logged in
     And the group "New Group" has no expenses
     When I visit the "New Group" summary page
-    Then I should see "Total: $0"
+    # FIX: Split into two assertions
+    Then I should see "Total Group Expenses"
+    And I should see "$0.00"
 
   # ------------------------------
   # Comment on a Group Expense

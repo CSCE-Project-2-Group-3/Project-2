@@ -1,0 +1,2 @@
+module WidgetSummariesHelper
+end

@@ -51,13 +51,11 @@ module Imports
     private
 
     def open_spreadsheet(file)
-      ext  = File.extname(file&.original_filename.to_s)
+      ext = File.extname(file&.original_filename.to_s)
       path = file&.tempfile&.path
 
-      # :nocov: Defensive guard clauses (not part of normal flow)
       raise ImportError, "No file provided." if file.nil?
       raise ImportError, "Unsupported file type." unless %w[.csv .xlsx].include?(ext)
-      # :nocov:
 
       ext == ".xlsx" ? Roo::Excelx.new(path) : Roo::CSV.new(path)
     end

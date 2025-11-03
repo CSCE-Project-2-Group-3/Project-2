@@ -32,8 +32,8 @@ end
 
 When("I click the {string} button") do |button_text|
   if button_text == "Logout"
-    # For logout, click the first logout button found
-    first('button', text: button_text).click
+    # FIX: Find the icon-only button by its 'title' attribute
+    find_button(title: "Logout").click
   else
     click_button button_text
   end
