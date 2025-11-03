@@ -6,9 +6,16 @@
     <%= title %>
   </h2>
 
-  <% form_object = @group.present? ? [@group, @expense] : @expense %>
+  <%# Determine the correct form object for nested vs non-nested routes %>
+  <% form_object =
+      if action_name == "new" && @group.present?
+        [@group, @expense] # nested new
+      else
+        @expense # edit or non-nested
+      end %>
+
   <%= form_with model: form_object, local: true, class: "space-y-6" do |f| %>
-    
+
     <%# --- Styled Error Messages --- %>
     <% if @expense.errors.any? %>
       <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
@@ -31,11 +38,14 @@
       </div>
 
       <%# --- Spent On --- %>
+      <%# --- Spent On --- %>
       <div>
         <%= f.label :spent_on, "Spent on", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.date_field :spent_on, required: true, class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
+        <%= f.date_field :spent_on, 
+              required: true, 
+              value: @expense.spent_on || Date.current,  # This sets today's date for new expenses
+              class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
       </div>
-    </div>
 
     <%# --- Category --- %>
     <div>

@@ -43,4 +43,6 @@ Rails.application.routes.draw do
 
   # Root route – always goes to home page
   root to: "pages#home"
+
+  get "*path", to: "pages#not_found"
 end
