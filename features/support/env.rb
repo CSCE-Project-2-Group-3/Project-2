@@ -8,6 +8,28 @@
 require 'cucumber/rails'
 require 'factory_bot'
 require 'rspec/mocks/standalone'
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter '/spec/'
+  add_filter '/features/'
+  add_filter '/config/'
+  add_filter '/vendor/'
+end
+# Print summary after tests finish
+SimpleCov.at_exit do
+  SimpleCov.result.format!
+
+  # Print uncovered lines
+  puts "\n\n=== FILES WITH UNCOVERED LINES ==="
+  SimpleCov.result.files.each do |file|
+    missed_lines = file.missed_lines.map(&:line_number)
+    if missed_lines.any?
+      puts "\n#{file.filename}"
+      puts "  Coverage: #{file.covered_percent.round(2)}%"
+      puts "  Missed lines: #{missed_lines.join(', ')}"
+    end
+  end
+end
 
 World(FactoryBot::Syntax::Methods)
 

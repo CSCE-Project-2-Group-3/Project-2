@@ -57,6 +57,7 @@ group :development, :test do
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
   gem "rspec-rails", "~> 8.0"
+  gem "faker"
 end
 
 group :development do

@@ -1,0 +1,1 @@
+{"version":"1.0","expenses":[{"title":"Groceries","amount":"50.0","spent_on":"2023-01-01","notes":"Weekly groceries","category_name":"Food"},{"title":"Gas","amount":"40.0","spent_on":"2023-01-02","category_name":"Transportation"}],"categories":[{"name":"Food"},{"name":"Transportation"}],"groups":[{"name":"Roommates","join_code":"ROOM123","member_emails":["user58@example.com"]}]}

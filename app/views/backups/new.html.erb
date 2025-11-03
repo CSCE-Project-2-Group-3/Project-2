@@ -1,0 +1,119 @@
+<%# 
+  A single, unified card for backup and restore management.
+  Matches the design pattern of the expenses index page.
+%>
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+
+  <%# 1. Card Header: Title %>
+  <div class="p-4 sm:p-6 border-b border-gray-200">
+    <h2 class="text-xl font-semibold" style="color: var(--tamu-maroon);">
+      Backup & Restore
+    </h2>
+  </div>
+
+  <%# 2. Card Body: Backup and Restore Sections %>
+  <div class="p-4 sm:p-6 space-y-6">
+    
+    <%# --- Download Backup Section --- %>
+    <div class="p-4 rounded-lg" style="background-color: var(--tamu-gray-100);">
+      <h3 class="text-lg font-semibold mb-2" style="color: var(--tamu-gray-800);">
+        Download Backup
+      </h3>
+      <p class="text-sm mb-4" style="color: var(--tamu-gray-700);">
+        Download all your expenses, categories, groups, and messages as a JSON file.
+      </p>
+      <%= button_to "Download Backup",
+                    backups_path,
+                    method: :post,
+                    class: "btn-maroon py-2 px-4 rounded-lg font-semibold",
+                    form: { data: { turbo: false } } %>
+    </div>
+
+    <%# --- Restore Backup Section --- %>
+    <div class="p-4 rounded-lg" style="background-color: var(--tamu-gray-100);">
+      <h3 class="text-lg font-semibold mb-2" style="color: var(--tamu-gray-800);">
+        Restore Backup
+      </h3>
+      <p class="text-sm mb-4" style="color: var(--tamu-gray-700);">
+        Upload a previously downloaded backup file to restore your data.
+      </p>
+      
+      <%= form_with url: restore_backups_path,
+                    method: :post,
+                    multipart: true,
+                    local: true,
+                    class: "space-y-4" do |f| %>
+        
+        <%= f.file_field :backup_file,
+                        accept: ".json",
+                        required: true,
+                        class: "block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:cursor-pointer file:bg-white hover:file:bg-gray-50",
+                        style: "color: var(--tamu-gray-700);" %>
+        
+        <div class="p-3 rounded-lg" style="background-color: #FEF2F2; border-left: 4px solid #DC2626;">
+          <p class="text-sm" style="color: #991B1B;">
+            <strong>Warning:</strong> This will create new entries from the backup. Existing data will not be deleted.
+          </p>
+        </div>
+        
+        <%= f.submit "Restore Backup",
+                    class: "btn-maroon py-2 px-4 rounded-lg font-semibold cursor-pointer w-full sm:w-auto",
+                    data: { confirm: "Are you sure you want to restore this backup? This will add entries from the backup file." } %>
+      <% end %>
+    </div>
+
+    <%# --- Information Section --- %>
+    <div class="p-4 rounded-lg" style="background-color: var(--tamu-gray-100);">
+      <h3 class="text-lg font-semibold mb-3" style="color: var(--tamu-gray-800);">
+        What's included in the backup?
+      </h3>
+      <ul class="text-sm space-y-2 mb-4" style="color: var(--tamu-gray-700);">
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>All your personal expenses</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>Categories you've used</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>Groups you're a member of</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>Your conversations and messages</span>
+        </li>
+      </ul>
+      
+      <h4 class="text-base font-semibold mb-2" style="color: var(--tamu-gray-800);">
+        Important Notes:
+      </h4>
+      <ul class="text-sm space-y-2" style="color: var(--tamu-gray-700);">
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>Backup files are in JSON format</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>Keep your backup files secure as they contain your financial data</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>When restoring, you may need to rejoin groups manually if you're not already a member</span>
+        </li>
+        <li class="flex items-start">
+          <span class="mr-2">•</span>
+          <span>Restore will not create duplicate entries if the exact data already exists</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <%# 3. Card Footer: Back Link %>
+  <div class="p-4 sm:p-6 border-t border-gray-200">
+    <%= link_to "← Back to Dashboard", dashboard_path, class: "text-sm font-medium hover:underline", style: "color: var(--tamu-maroon);" %>
+  </div>
+
+</div>

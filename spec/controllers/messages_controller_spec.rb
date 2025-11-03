@@ -24,7 +24,27 @@ RSpec.describe MessagesController, type: :controller do
         expect(response).to redirect_to(conversation_path(conversation, anchor: "message-#{Message.last.id}"))
       end
 
-      # --- THIS TEST COVERS LINE 20 ---
+      it "creates a message with quoted expenses" do
+        expense1 = create(:expense, user: other_user)
+        expense2 = create(:expense, user: other_user)
+
+        expect do
+          post :create, params: {
+            conversation_id: conversation.id,
+            message: {
+              body: "Check out these expenses",
+              quoted_expense_ids: [ expense1.id, expense2.id ]
+            }
+          }
+        end.to change(Message, :count).by(1)
+
+        expect(response).to redirect_to(conversation_path(conversation, anchor: "message-#{Message.last.id}"))
+
+        message = Message.last
+        expect(message.quoted_expenses).to contain_exactly(expense1, expense2)
+        expect(conversation.reload.updated_at).to be_within(1.second).of(Time.current)
+      end
+
       it "attaches quoted expenses if provided" do
         expense = create(:expense, user: user)
         post :create, params: {
@@ -35,10 +55,39 @@ RSpec.describe MessagesController, type: :controller do
           }
         }
 
-        # This will execute the `if` block on line 20
         expect(Message.last.quoted_expenses).to include(expense)
       end
-      # --- END OF NEW TEST ---
+
+      it "creates a message without quoted expenses" do
+        expect do
+          post :create, params: {
+            conversation_id: conversation.id,
+            message: {
+              body: "Simple message"
+            }
+          }
+        end.to change(Message, :count).by(1)
+
+        expect(response).to redirect_to(conversation_path(conversation, anchor: "message-#{Message.last.id}"))
+
+        message = Message.last
+        expect(message.quoted_expenses).to be_empty
+      end
+
+      it "creates a message with empty quoted expense ids" do
+        expect do
+          post :create, params: {
+            conversation_id: conversation.id,
+            message: {
+              body: "Message with empty expense ids",
+              quoted_expense_ids: []
+            }
+          }
+        end.to change(Message, :count).by(1)
+
+        message = Message.last
+        expect(message.quoted_expenses).to be_empty
+      end
     end
 
     context "with invalid params" do
@@ -53,14 +102,70 @@ RSpec.describe MessagesController, type: :controller do
         expect(response).to render_template("conversations/show")
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
+      it "renders conversations/show when message fails to save" do
+        expect do
+          post :create, params: {
+            conversation_id: conversation.id,
+            message: {
+              body: "" # Invalid - empty body
+            }
+          }
+        end.not_to change(Message, :count)
+
+        expect(response).to render_template("conversations/show")
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(assigns(:messages)).to eq(conversation.messages.includes(:user, :quoted_expenses))
+        expect(assigns(:other_user)).to eq(other_user)
+        expect(assigns(:expenses)).not_to be_nil
+      end
+
+      # NEW TEST: This will hit the @expenses = [] line
+      context "when other_user returns nil" do
+        it "sets @expenses to empty array" do
+          # Create a conversation where other_user would return nil
+          # We'll mock the other_user method to return nil
+          allow_any_instance_of(Conversation).to receive(:other_user).and_return(nil)
+
+          post :create, params: {
+            conversation_id: conversation.id,
+            message: { body: "" } # Invalid message to trigger the else branch
+          }
+
+          expect(assigns(:expenses)).to eq([])
+          expect(response).to render_template("conversations/show")
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
     end
 
     context "when not authorized" do
-      it "redirects" do
-        unrelated_conversation = create(:conversation)
-        post :create, params: { conversation_id: unrelated_conversation.id, message: { body: "Hi" } }
+      it "redirects to conversations path with alert" do
+        other_conversation = create(:conversation) # Conversation user is not part of
+
+        post :create, params: {
+          conversation_id: other_conversation.id,
+          message: {
+            body: "Unauthorized message"
+          }
+        }
+
         expect(response).to redirect_to(conversations_path)
+        expect(flash[:alert]).to eq("Not authorized.")
       end
+    end
+  end
+
+  context "when not authenticated" do
+    it "requires authentication" do
+      sign_out user # Ensure no user is signed in
+
+      post :create, params: {
+        conversation_id: conversation.id,
+        message: { body: "Test message" }
+      }
+
+      expect(response).to redirect_to(new_user_session_path)
     end
   end
 end

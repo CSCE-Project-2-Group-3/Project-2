@@ -23,6 +23,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :backups, only: [ :new, :create ] do
+    collection do
+      post :restore
+    end
+  end
+
+  # Conversation and messaging routes for user-to-user communication
   resources :conversations, only: [ :index, :show, :create ]
   resources :messages, only: [ :create ]
   resources :categories, only: [ :new, :create ]
@@ -34,6 +41,7 @@ Rails.application.routes.draw do
   # Health check endpoint for load balancers and uptime monitors
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Root route – always goes to home page
   root to: "pages#home"
 
   get "*path", to: "pages#not_found"
