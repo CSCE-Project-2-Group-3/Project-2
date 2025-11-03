@@ -1,5 +1,5 @@
 class Conversation < ApplicationRecord
-  # Conversations are always between two users (user_a and user_b).
+  # Conversations are always between two users (user_a and user_b)
   belongs_to :user_a, class_name: "User"
   belongs_to :user_b, class_name: "User"
 
@@ -14,6 +14,7 @@ class Conversation < ApplicationRecord
     where(user_a_id: a, user_b_id: b)
   }
 
+  # Ensures consistent conversation lookup regardless of parameter order
   def self.find_or_create_between(user1, user2)
     return nil if user1.blank? || user2.blank? || user1.id == user2.id
     a, b = order_pair(user1.id, user2.id)
@@ -39,6 +40,7 @@ class Conversation < ApplicationRecord
     errors.add(:base, "Conversation must be between two different users") if user_a_id == user_b_id
   end
 
+  # Normalizes user IDs to ensure consistent conversation lookup
   def self.order_pair(id1, id2)
     ids = [ id1.to_i, id2.to_i ].sort
     return ids[0], ids[1]

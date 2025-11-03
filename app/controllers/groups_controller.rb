@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-    before_action :authenticate_user!
+  before_action :authenticate_user!
 
   def index
     @groups = current_user.groups
@@ -36,8 +36,6 @@ class GroupsController < ApplicationController
 
   def show
     @group = current_user.groups.find(params[:id])
-    # Placeholder for when Expense is ready:
-    # @expenses = @group.expenses
   end
 
   private

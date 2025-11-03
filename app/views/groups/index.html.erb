@@ -1,17 +1,49 @@
-<h1>Your Groups</h1>
+<%# 1. Page Header: Title & Create Button %>
+<div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
+  <h1 class="text-3xl font-bold" style="color: var(--tamu-maroon);">
+    Your Groups
+  </h1>
+  <%= link_to 'Create Group', new_group_path, class: 'btn-maroon py-2 px-4 rounded-lg font-semibold text-center whitespace-nowrap' %>
+</div>
 
-<%= link_to 'Create Group', new_group_path, class: 'btn btn-primary' %>
-
-<%= form_with url: join_groups_path, method: :post, local: true do |form| %>
-  <%= form.label :join_code, "Group Code:" %>
-  <%= form.text_field :join_code %>
-  <%= form.submit 'Join Group' %>
-<% end %>
-
-<ul class="group-list">
-  <% @groups.each do |group| %>
-    <li>
-      <%= link_to group.name, group_path(group) %> 
-    </li>
+<%# 2. Join Group Card %>
+<div class="mb-6 p-6 bg-white rounded-lg shadow-md">
+  <h3 class="text-lg font-semibold mb-4" style="color: var(--tamu-gray-800);">
+    Join a Group
+  </h3>
+  <%= form_with url: join_groups_path, method: :post, local: true, class: "flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-4 sm:space-y-0" do |form| %>
+    
+    <%# Form field takes up available space %>
+    <div class="flex-grow">
+      <%= form.label :join_code, "Enter Group Code:", class: "block text-sm font-medium mb-1", style: "color: var(--tamu-gray-700);" %>
+      <%= form.text_field :join_code, class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm", placeholder: "e.g., A1B2C3" %>
+    </div>
+    
+    <%# Submit button %>
+    <%= form.submit 'Join Group', class: 'btn-maroon py-2 px-4 rounded-lg font-semibold cursor-pointer whitespace-nowrap' %>
   <% end %>
-</ul>
+</div>
+
+<%# 3. My Groups List Card %>
+<div class="bg-white rounded-lg shadow-md">
+  <div class="p-4 sm:p-6 border-b border-gray-200">
+    <h3 class="text-lg font-semibold" style="color: var(--tamu-gray-800);">
+      My Groups
+    </h3>
+  </div>
+
+  <%# List of groups. Uses divide-y for clean separators %>
+  <div class="p-4 sm:p-6">
+    <% if @groups.empty? %>
+      <p style="color: var(--tamu-gray-500);">You are not a member of any groups yet. Create one or join one to get started.</p>
+    <% else %>
+      <ul class="divide-y divide-gray-200">
+        <% @groups.each do |group| %>
+          <li class="py-4">
+            <%= link_to group.name, group_path(group), class: "text-lg font-medium hover:underline", style: "color: var(--tamu-accent);" %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>

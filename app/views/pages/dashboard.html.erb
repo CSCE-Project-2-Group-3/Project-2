@@ -1,59 +1,62 @@
-<h1 class="text-3xl font-bold text-tamu-gray-800 mb-6">Your Dashboard</h1>
+<%# 1. Page Header %>
+<h1 class="text-3xl font-bold mb-6" style="color: var(--tamu-gray-800);">Your Dashboard</h1>
 
-<div class="card">
-  <div class="card-header">
-    <h3 class="text-xl font-semibold">Filter Expenses</h3>
+<%# 2. Filter Bar (Back to original) %>
+<%= form_with(url: dashboard_path, method: :get, local: true) do |f| %>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-6">
+    <div>
+      <%= f.label :category_id, "Category", class: "block text-sm font-medium", style: "color: var(--tamu-gray-700);" %>
+      <%= f.collection_select :category_id,
+            @categories,
+            :id,
+            :name,
+            { selected: params[:category_id], include_blank: "All Categories" },
+            { class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" } %>
+    </div>
+    
+    <div>
+      <%= f.label :start_date, "Start Date", class: "block text-sm font-medium", style: "color: var(--tamu-gray-700);" %>
+      <%= f.date_field :start_date, value: params[:start_date], class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
+    </div>
+    
+    <div>
+      <%= f.label :end_date, "End Date", class: "block text-sm font-medium", style: "color: var(--tamu-gray-700);" %>
+      <%= f.date_field :end_date, value: params[:end_date], class: "form-input mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 sm:text-sm" %>
+    </div>
+    
+    <%# 4th Column: Just Filter/Clear buttons %>
+    <div class="flex space-x-2">
+      <%= f.submit "Filter", class: "btn-maroon py-2 px-4 rounded-lg font-semibold cursor-pointer" %>
+      <%= link_to "Clear", dashboard_path, class: "py-2 px-4 rounded-lg font-semibold bg-gray-200 text-gray-800 hover:bg-gray-300" %> 
+    </div>
   </div>
-  <div class="card-body">
-    <%= form_with(url: dashboard_path, method: :get, local: true) do |f| %>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-        <div>
-          <%= f.label :category_id, "Category", class: "form-label" %>
-          <%= f.collection_select :category_id, 
-                @categories, 
-                :id, 
-                :name, 
-                { selected: params[:category_id], include_blank: "All Categories" }, 
-                { class: "form-select" } %>
-        </div>
-        
-        <div>
-          <%= f.label :start_date, "Start Date", class: "form-label" %>
-          <%= f.date_field :start_date, value: params[:start_date], class: "form-control" %>
-        </div>
-        
-        <div>
-          <%= f.label :end_date, "End Date", class: "form-label" %>
-          <%= f.date_field :end_date, value: params[:end_date], class: "form-control" %>
-        </div>
-        
-        <div class="flex space-x-2">
-          <%= f.submit "Filter", class: "btn-maroon" %>
-          <%# We define btn-secondary in our CSS to be tamu-gray %>
-          <%= link_to "Clear", dashboard_path, class: "btn-secondary" %> 
-        </div>
-      </div>
-    <% end %>
-  </div>
+<% end %>
+
+<%# 3. AI Summary (Full-width callout) %>
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+  <h3 class="text-xl font-semibold mb-3" style="color: var(--tamu-gray-800);">
+    🤖 Your AI Spending Summary
+  </h3>
+  <p class="text-gray-700"><%= @ai_summary %></p>
 </div>
 
-<div class="card">
-  <div class="card-header">
-    <h3 class="text-xl font-semibold">🤖 Your AI Spending Summary</h3>
-  </div>
-  <div class="card-body">
-    <p class="text-tamu-gray-700"><%= @ai_summary %></p>
-  </div>
-</div>
+<%# 4. Main Widget Grid (2x2 "Collage") %>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-  <div class="card h-full">
-    <div class="card-body">
-      <h2 class="text-2xl font-semibold text-tamu-gray-800">Personal Expenses</h2>
+  <%# --- Widget 1: Personal Expenses --- %>
+  <div class="bg-white rounded-lg shadow-md flex flex-col relative"> <%# Added relative %>
+    <div class="p-6">
+      <%# --- Info Icon --- %>
+      <%= link_to "i", 
+                  widget_summary_path(widget: "personal_expenses"), 
+                  data: { turbo_frame: "modal" }, 
+                  class: "absolute top-4 right-4 z-10 w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm hover:bg-gray-300 no-underline" %>
+
+      <h2 class="text-2xl font-semibold" style="color: var(--tamu-gray-800);">Personal Expenses</h2>
       <hr class="my-3">
       
       <h4 class="text-lg font-medium">Total Spent: 
-        <span class="font-bold text-tamu-maroon"><%= number_to_currency(@personal_total) %></span>
+        <span class="font-bold" style="color: var(--tamu-maroon);"><%= number_to_currency(@personal_total) %></span>
       </h4>
       
       <br>
@@ -64,22 +67,29 @@
           <% @recent_personal_expenses.each do |expense| %>
             <li class="py-3 flex justify-between items-center">
               <div>
-                <strong><%= link_to expense.title, expense_path(expense), class: "text-tamu-maroon hover:underline" %></strong>
-                <small class="block text-gray-500"><%= expense.category.name %> on <%= expense.spent_on %></small>
+                <strong><%= link_to expense.title, expense_path(expense), class: "hover:underline", style: "color: var(--tamu-maroon);" %></strong>
+                <small class="block text-gray-500"><%= expense.category.try(:name) %> on <%= expense.spent_on %></small>
               </div>
-              <span class="bg-tamu-maroon text-white text-sm font-medium px-3 py-1 rounded-full"><%= number_to_currency(expense.amount) %></span>
+              <span class="text-sm font-medium px-3 py-1 rounded-full text-white" style="background-color: var(--tamu-maroon);"><%= number_to_currency(expense.amount) %></span>
             </li>
           <% end %>
         </ul>
       <% else %>
-        <p>No personal expenses found matching your filters.</p>
+        <p class="text-gray-500">No personal expenses found matching your filters.</p>
       <% end %>
     </div>
   </div>
 
-  <div class="card h-full">
-    <div class="card-body">
-      <h2 class="text-2xl font-semibold text-tamu-gray-800">Group Expenses</h2>
+  <%# --- Widget 2: Group Expenses --- %>
+  <div class="bg-white rounded-lg shadow-md flex flex-col relative"> <%# Added relative %>
+    <div class="p-6">
+      <%# --- Info Icon --- %>
+      <%= link_to "i", 
+                  widget_summary_path(widget: "group_expenses"), 
+                  data: { turbo_frame: "modal" }, 
+                  class: "absolute top-4 right-4 z-10 w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm hover:bg-gray-300 no-underline" %>
+
+      <h2 class="text-2xl font-semibold" style="color: var(--tamu-gray-800);">Group Expenses</h2>
       <hr class="my-3">
       
       <h4 class="text-lg font-medium">Total Spent (in groups): 
@@ -94,9 +104,9 @@
           <% @recent_group_expenses.each do |expense| %>
             <li class="py-3 flex justify-between items-center">
               <div>
-                <strong><%= link_to expense.title, expense_path(expense), class: "text-tamu-maroon hover:underline" %></strong>
+                <strong><%= link_to expense.title, expense_path(expense), class: "hover:underline", style: "color: var(--tamu-maroon);" %></strong>
                 <small class="block text-gray-500">
-                  In <%= link_to expense.group.name, group_path(expense.group), class: "text-tamu-accent hover:underline" %> 
+                  In <%= link_to expense.group.name, group_path(expense.group), class: "hover:underline", style: "color: var(--tamu-accent);" %> 
                   on <%= expense.spent_on %>
                 </small>
               </div>
@@ -105,24 +115,50 @@
           <% end %>
         </ul>
       <% else %>
-        <p>No group expenses found matching your filters.</p>
+        <p class="text-gray-500">No group expenses found matching your filters.</p>
       <% end %>
     </div>
   </div>
-</div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="text-lg font-semibold mb-3">Personal Spending by Category</h5>
-      <div style="max-height: 400px;">
-        <canvas id="categoryPieChart"></canvas>
-      </div>
+  <%# --- Widget 3: Top 5 Largest Personal Expenses --- %>
+  <div class="bg-white rounded-lg shadow-md flex flex-col relative"> <%# Added relative %>
+    <div class="p-6">
+      <%# --- Info Icon --- %>
+      <%= link_to "i", 
+                  widget_summary_path(widget: "top_5_expenses"), 
+                  data: { turbo_frame: "modal" }, 
+                  class: "absolute top-4 right-4 z-10 w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm hover:bg-gray-300 no-underline" %>
+
+      <h2 class="text-2xl font-semibold" style="color: var(--tamu-gray-800);">Top 5 Largest Personal Expenses</h2>
+      <hr class="my-3">
+      
+      <% if @top_5_largest_personal_expenses.any? %>
+        <ul class="divide-y divide-gray-200">
+          <% @top_5_largest_personal_expenses.each do |expense| %>
+            <li class="py-3 flex justify-between items-center">
+              <div>
+                <strong><%= link_to expense.title, expense_path(expense), class: "hover:underline", style: "color: var(--tamu-maroon);" %></strong>
+                <small class="block text-gray-500"><%= expense.category.try(:name) %> on <%= expense.spent_on %></small>
+              </div>
+              <span class="text-sm font-medium px-3 py-1 rounded-full text-white" style="background-color: var(--tamu-maroon);"><%= number_to_currency(expense.amount) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-500">No large personal expenses found matching your filters.</p>
+      <% end %>
     </div>
   </div>
   
-  <div class="card">
-    <div class="card-body">
+  <%# --- Widget 4: Bar Chart --- %>
+  <div class="bg-white rounded-lg shadow-md relative"> <%# Added relative %>
+    <div class="p-6">
+      <%# --- Info Icon --- %>
+      <%= link_to "i", 
+                  widget_summary_path(widget: "spending_over_time"), 
+                  data: { turbo_frame: "modal" }, 
+                  class: "absolute top-4 right-4 z-10 w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm hover:bg-gray-300 no-underline" %>
+
       <h5 class="text-lg font-semibold mb-3">Spending Over Time (Last 30 Days)</h5>
       <div style="max-height: 400px;">
         <canvas id="spendingBarChart"></canvas>
@@ -131,9 +167,31 @@
   </div>
 </div>
 
-<!-- Chart.js CDN -->
+<%# 5. Full-width Pie Chart (moved below grid) %>
+<div class="bg-white rounded-lg shadow-md mt-6 relative"> <%# Added relative %>
+  <div class="p-6">
+    <%# --- Info Icon --- %>
+    <%= link_to "i", 
+                widget_summary_path(widget: "category_spending"), 
+                data: { turbo_frame: "modal" }, 
+                class: "absolute top-4 right-4 z-10 w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm hover:bg-gray-300 no-underline" %>
+
+    <h5 class="text-lg font-semibold mb-3">Personal Spending by Category</h5>
+    <div style="max-height: 400px;">
+      <canvas id="categoryPieChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<%# --- Modal Target Frame --- %>
+<div id="modal-container">
+  <%= turbo_frame_tag "modal" %>
+</div>
+
+<%# CORRECTED SCRIPT TAG %>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
+<%# Chart rendering script (Unchanged) %>
 <script>
   document.addEventListener('turbo:load', () => {
     // --- 1. PIE CHART ---

@@ -1,0 +1,28 @@
+<%# MODIFIED: app/views/widget_summaries/show.html.erb %>
+
+<%= turbo_frame_tag "modal" do %>
+  <%# 
+    REMOVED: data-controller and data-action attributes.
+    This div is no longer clickable to close.
+  %>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+       
+    <%# REMOVED: data-action="click->modal#stopClose" %>
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 relative">
+      
+      <%= link_to "×", 
+                  empty_modal_path, 
+                  data: { turbo_frame: "modal" }, 
+                  class: "absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl font-bold no-underline" %>
+      
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">
+        🤖 AI Analysis: <%= @widget_type.to_s.titleize %>
+      </h2>
+      
+      <div class="prose max-w-none text-gray-700">
+        <%= @summary_html %>
+      </div>
+      
+    </div>
+  </div>
+<% end %>
