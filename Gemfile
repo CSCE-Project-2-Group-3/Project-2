@@ -40,11 +40,6 @@ gem "roo", "~> 3.0"
 # Windows timezone support
 gem "tzinfo-data", platforms: %i[windows jruby]
 
-# Cache / Queue / Cable backends
-gem "solid_cache"
-gem "solid_queue"
-gem "solid_cable"
-
 # Boot optimization
 gem "bootsnap", require: false
 
