@@ -96,10 +96,28 @@ You'll need the following API keys to run the application, stored in `config/cre
 
 2.  **Google OAuth2 Keys**: For user sign-in
 
-      * Set up a project at [https://console.cloud.google.com/](https://console.cloud.google.com/)
-      * Enable the "Google Identity" API
-      * Generate OAuth 2.0 Client ID and Client Secret
-      * Add `http://localhost:3000/users/auth/google_oauth2/callback` to your "Authorized redirect URIs" for development.
+      * Visit [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+      * Create a new project (if not already)
+      * Configure OAuth consent screen: Choose External, fill out required fields (app name, email, etc.), add `http://localhost:3000` under Authorized domains, save and publish (testing mode is fine for local use)
+      * Go to Credentials → Create Credentials → OAuth Client ID
+      * Choose Web application
+      * Add redirect URI:
+      ```
+        http://localhost:3000/users/auth/google_oauth2/callback
+      ```
+      * Click Create
+      * Copy the Client ID and Client Secret → place them under `google_oauth:` in your credentials file
+
+      For details: https://console.cloud.google.com/apis/credentials
+
+3. **Gmail App Password**: For forgot-my-password email sending
+
+      * Go to https://myaccount.google.com/security
+      * Enable 2-Step Verification (required)
+      * Scroll down to App passwords
+      * Select: App: Mail, Device: Other (Custom name) → e.g. RailsApp
+      * Copy the 16-character password shown
+      * Use this as your `gmail.password` above
 
 -----
 
