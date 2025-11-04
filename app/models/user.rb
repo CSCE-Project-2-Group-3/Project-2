@@ -5,7 +5,7 @@ class User < ApplicationRecord
   def self.from_omniauth(auth)
     # Try to find user by provider & uid
     user = where(provider: auth.provider, uid: auth.uid).first
-    # If not found, try by email
+    # If not found try by email
     user ||= find_by(email: auth.info.email)
     # If still not found, create new user
     if user.nil?
