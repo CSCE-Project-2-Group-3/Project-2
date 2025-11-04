@@ -10,7 +10,13 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 # Database
-gem "sqlite3", ">= 2.1"
+# FIX: Lock sqlite3 to development and test environments
+gem "sqlite3", ">= 2.1", group: [:development, :test]
+
+# FIX: Add pg gem for production (Heroku)
+group :production do
+  gem "pg"
+end
 
 # Web server
 gem "puma", ">= 5.0"
