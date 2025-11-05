@@ -22,18 +22,18 @@ class Expense < ApplicationRecord
     table = arel_table
   
     if sqlite_adapter?
-      # SQLite stores participant_ids as JSON string, use pattern matching
-      patterns = [ "[#{id}]", "[#{id},%", "%,#{id},%", "%,#{id}]" ]
+      # SQLite JSON handling
+      patterns = ["[#{id}]", "[#{id},%", "%,#{id},%", "%,#{id}]"]
       participant_clause = patterns.map { |pattern| table[:participant_ids].matches(pattern) }
                                    .reduce { |memo, node| memo.or(node) }
       participant_clause ||= table[:participant_ids].matches("[#{id}]")
       where(table[:user_id].eq(id)).or(where(participant_clause))
     else
-      # PostgreSQL uses native array operators
+      # PostgreSQL array handling
       where(table[:user_id].eq(id))
         .or(where(Arel.sql("#{id} = ANY(participant_ids)")))
     end
-  }
+  }  
 
   def participants
     return User.none if participant_ids.blank?
