@@ -1184,32 +1184,13 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/widget_summaries_controller.rb": {
+      "/home/qacer6973/projects/project2/Project2/app/models/comment.rb": {
         "lines": [
           1,
-          null,
-          null,
-          null,
           1,
           1,
           null,
           1,
-          1,
-          null,
-          null,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
           null
         ]
       },
@@ -1217,16 +1198,6 @@
         "lines": [
           1,
           1,
-          1,
-          null
-        ]
-      },
-      "/home/qacer6973/projects/project2/Project2/app/models/comment.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null,
           1,
           null
         ]
@@ -1258,9 +1229,38 @@
           null,
           null
         ]
+      },
+      "/home/qacer6973/projects/project2/Project2/app/controllers/widget_summaries_controller.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null
+        ]
       }
     },
-    "timestamp": 1762309160
+    "timestamp": 1762306767
   },
   "Cucumber Features": {
     "coverage": {
