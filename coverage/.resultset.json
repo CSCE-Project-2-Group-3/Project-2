@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/home/qacer6973/projects/project2/Project2/app/models/user.rb": {
+      "/home/amesh/Project-2/app/models/user.rb": {
         "lines": [
           1,
           1,
@@ -40,26 +40,26 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/application_record.rb": {
+      "/home/amesh/Project-2/app/models/application_record.rb": {
         "lines": [
           1,
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/application_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/application_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/conversations_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/conversations_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/expenses_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/expenses_helper.rb": {
         "lines": [
           1,
           1,
@@ -87,25 +87,57 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/messages_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/messages_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/pages_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/pages_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/widget_summaries_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/widget_summaries_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/backups_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/application_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          5,
+          null,
+          null,
+          null,
+          1,
+          3,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          2,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
+      "/home/amesh/Project-2/app/controllers/backups_controller.rb": {
         "lines": [
           1,
           1,
@@ -287,24 +319,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/application_controller.rb": {
-        "lines": [
-          1,
-          1,
-          null,
-          null,
-          1,
-          4,
-          null,
-          null,
-          null,
-          1,
-          2,
-          null,
-          null
-        ]
-      },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/categories_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/categories_controller.rb": {
         "lines": [
           1,
           1,
@@ -312,23 +327,23 @@
           null,
           null,
           1,
+          3,
+          3,
+          1,
+          null,
           2,
-          2,
-          1,
-          null,
-          1,
           null,
           null,
           null,
           1,
           null,
           1,
-          2,
+          3,
           null,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/conversations_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/conversations_controller.rb": {
         "lines": [
           1,
           1,
@@ -387,7 +402,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/expenses_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/expenses_controller.rb": {
         "lines": [
           1,
           1,
@@ -482,7 +497,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/groups_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/groups_controller.rb": {
         "lines": [
           1,
           1,
@@ -532,7 +547,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/messages_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/messages_controller.rb": {
         "lines": [
           1,
           1,
@@ -587,11 +602,12 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/pages_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/pages_controller.rb": {
         "lines": [
           1,
           1,
           null,
+          1,
           1,
           null,
           1,
@@ -689,7 +705,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/services/imports/expenses_import.rb": {
+      "/home/amesh/Project-2/app/services/imports/expenses_import.rb": {
         "lines": [
           1,
           null,
@@ -756,7 +772,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/conversation.rb": {
+      "/home/amesh/Project-2/app/models/conversation.rb": {
         "lines": [
           1,
           null,
@@ -812,7 +828,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/expense.rb": {
+      "/home/amesh/Project-2/app/models/expense.rb": {
         "lines": [
           1,
           1,
@@ -931,7 +947,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/group_membership.rb": {
+      "/home/amesh/Project-2/app/models/group_membership.rb": {
         "lines": [
           1,
           1,
@@ -941,7 +957,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/group.rb": {
+      "/home/amesh/Project-2/app/models/group.rb": {
         "lines": [
           1,
           1,
@@ -966,7 +982,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/message.rb": {
+      "/home/amesh/Project-2/app/models/message.rb": {
         "lines": [
           1,
           1,
@@ -981,7 +997,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/services/dashboard_ai_analyzer_service.rb": {
+      "/home/amesh/Project-2/app/services/dashboard_ai_analyzer_service.rb": {
         "lines": [
           1,
           1,
@@ -1090,7 +1106,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/services/dashboard_data_service.rb": {
+      "/home/amesh/Project-2/app/services/dashboard_data_service.rb": {
         "lines": [
           1,
           null,
@@ -1141,7 +1157,7 @@
           null,
           null,
           4,
-          97,
+          93,
           null,
           null,
           null,
@@ -1159,24 +1175,16 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/message_expense.rb": {
+      "/home/amesh/Project-2/app/models/category.rb": {
         "lines": [
           1,
           1,
           1,
+          137,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/category.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          136,
-          null
-        ]
-      },
-      "/home/qacer6973/projects/project2/Project2/app/models/comment.rb": {
+      "/home/amesh/Project-2/app/models/comment.rb": {
         "lines": [
           1,
           1,
@@ -1186,7 +1194,44 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/comments_controller.rb": {
+      "/home/amesh/Project-2/app/models/message_expense.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/home/amesh/Project-2/app/controllers/widget_summaries_controller.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/home/amesh/Project-2/app/controllers/comments_controller.rb": {
         "lines": [
           1,
           1,
@@ -1210,49 +1255,21 @@
           null,
           1,
           2,
-          null,
-          null
-        ]
-      },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/widget_summaries_controller.rb": {
-        "lines": [
-          1,
-          null,
-          null,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null,
-          1,
-          null,
-          null,
-          1,
-          1,
           null,
           null
         ]
       }
     },
-    "timestamp": 1762155292
+    "timestamp": 1762313216
   },
   "Cucumber Features": {
     "coverage": {
-      "/home/qacer6973/projects/project2/Project2/app/controllers/pages_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/pages_controller.rb": {
         "lines": [
           1,
           1,
           null,
+          1,
           1,
           null,
           1,
@@ -1350,9 +1367,12 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/application_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/application_controller.rb": {
         "lines": [
           1,
+          1,
+          null,
+          null,
           1,
           null,
           null,
@@ -1364,22 +1384,34 @@
           1,
           1,
           null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          0,
+          0,
+          null,
+          null,
+          0,
+          null,
+          null,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/application_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/application_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/conversations_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/conversations_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/expenses_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/expenses_helper.rb": {
         "lines": [
           1,
           1,
@@ -1407,25 +1439,25 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/messages_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/messages_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/pages_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/pages_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/helpers/widget_summaries_helper.rb": {
+      "/home/amesh/Project-2/app/helpers/widget_summaries_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/users/registrations_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/users/registrations_controller.rb": {
         "lines": [
           null,
           null,
@@ -1491,7 +1523,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/category.rb": {
+      "/home/amesh/Project-2/app/models/category.rb": {
         "lines": [
           1,
           1,
@@ -1500,7 +1532,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/expense.rb": {
+      "/home/amesh/Project-2/app/models/expense.rb": {
         "lines": [
           1,
           1,
@@ -1619,7 +1651,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/group.rb": {
+      "/home/amesh/Project-2/app/models/group.rb": {
         "lines": [
           1,
           1,
@@ -1644,7 +1676,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/users/sessions_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/users/sessions_controller.rb": {
         "lines": [
           null,
           null,
@@ -1682,7 +1714,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/expenses_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/expenses_controller.rb": {
         "lines": [
           1,
           1,
@@ -1777,7 +1809,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/comment.rb": {
+      "/home/amesh/Project-2/app/models/comment.rb": {
         "lines": [
           1,
           1,
@@ -1787,7 +1819,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/conversations_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/conversations_controller.rb": {
         "lines": [
           1,
           1,
@@ -1846,7 +1878,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/conversation.rb": {
+      "/home/amesh/Project-2/app/models/conversation.rb": {
         "lines": [
           1,
           null,
@@ -1902,7 +1934,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/message.rb": {
+      "/home/amesh/Project-2/app/models/message.rb": {
         "lines": [
           1,
           1,
@@ -1917,7 +1949,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/group_membership.rb": {
+      "/home/amesh/Project-2/app/models/group_membership.rb": {
         "lines": [
           1,
           1,
@@ -1927,7 +1959,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/messages_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/messages_controller.rb": {
         "lines": [
           1,
           1,
@@ -1982,7 +2014,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/message_expense.rb": {
+      "/home/amesh/Project-2/app/models/message_expense.rb": {
         "lines": [
           1,
           1,
@@ -1990,7 +2022,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/groups_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/groups_controller.rb": {
         "lines": [
           1,
           1,
@@ -2040,7 +2072,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/comments_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/comments_controller.rb": {
         "lines": [
           1,
           1,
@@ -2068,7 +2100,7 @@
           null
         ]
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/backups_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/backups_controller.rb": {
         "lines": [
           0,
           0,
@@ -2251,7 +2283,7 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/categories_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/categories_controller.rb": {
         "lines": [
           0,
           0,
@@ -2276,136 +2308,7 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/users/confirmations_controller.rb": {
-        "lines": [
-          null,
-          null,
-          0,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          0
-        ],
-        "branches": {}
-      },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/users/omniauth_callbacks_controller.rb": {
-        "lines": [
-          null,
-          null,
-          0,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "branches": {}
-      },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/users/passwords_controller.rb": {
-        "lines": [
-          null,
-          null,
-          0,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          0
-        ],
-        "branches": {}
-      },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/users/unlocks_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/users/confirmations_controller.rb": {
         "lines": [
           null,
           null,
@@ -2440,7 +2343,136 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/controllers/widget_summaries_controller.rb": {
+      "/home/amesh/Project-2/app/controllers/users/omniauth_callbacks_controller.rb": {
+        "lines": [
+          null,
+          null,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/amesh/Project-2/app/controllers/users/passwords_controller.rb": {
+        "lines": [
+          null,
+          null,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/amesh/Project-2/app/controllers/users/unlocks_controller.rb": {
+        "lines": [
+          null,
+          null,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/amesh/Project-2/app/controllers/widget_summaries_controller.rb": {
         "lines": [
           0,
           null,
@@ -2470,7 +2502,7 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/jobs/application_job.rb": {
+      "/home/amesh/Project-2/app/jobs/application_job.rb": {
         "lines": [
           0,
           null,
@@ -2482,7 +2514,7 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/mailers/application_mailer.rb": {
+      "/home/amesh/Project-2/app/mailers/application_mailer.rb": {
         "lines": [
           0,
           0,
@@ -2491,7 +2523,7 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/application_record.rb": {
+      "/home/amesh/Project-2/app/models/application_record.rb": {
         "lines": [
           0,
           0,
@@ -2499,7 +2531,7 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/models/user.rb": {
+      "/home/amesh/Project-2/app/models/user.rb": {
         "lines": [
           0,
           0,
@@ -2530,186 +2562,6 @@
           0,
           0,
           0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "branches": {}
-      },
-      "/home/qacer6973/projects/project2/Project2/app/services/dashboard_ai_analyzer_service.rb": {
-        "lines": [
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0
-        ],
-        "branches": {}
-      },
-      "/home/qacer6973/projects/project2/Project2/app/services/dashboard_data_service.rb": {
-        "lines": [
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
-          null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          null,
-          0,
-          0,
-          0,
-          null,
           0,
           0,
           0,
@@ -2719,7 +2571,187 @@
         ],
         "branches": {}
       },
-      "/home/qacer6973/projects/project2/Project2/app/services/imports/expenses_import.rb": {
+      "/home/amesh/Project-2/app/services/dashboard_ai_analyzer_service.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/amesh/Project-2/app/services/dashboard_data_service.rb": {
+        "lines": [
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/home/amesh/Project-2/app/services/imports/expenses_import.rb": {
         "lines": [
           0,
           null,
@@ -2788,6 +2820,6 @@
         "branches": {}
       }
     },
-    "timestamp": 1762155384
+    "timestamp": 1762313233
   }
 }
