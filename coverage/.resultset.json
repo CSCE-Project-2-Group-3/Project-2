@@ -1184,20 +1184,20 @@
           null
         ]
       },
+      "/home/amesh/Project-2/app/models/message_expense.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
+      },
       "/home/amesh/Project-2/app/models/comment.rb": {
         "lines": [
           1,
           1,
           1,
           null,
-          1,
-          null
-        ]
-      },
-      "/home/amesh/Project-2/app/models/message_expense.rb": {
-        "lines": [
-          1,
-          1,
           1,
           null
         ]
@@ -1260,7 +1260,7 @@
         ]
       }
     },
-    "timestamp": 1762313216
+    "timestamp": 1762314333
   },
   "Cucumber Features": {
     "coverage": {
@@ -2820,6 +2820,6 @@
         "branches": {}
       }
     },
-    "timestamp": 1762313233
+    "timestamp": 1762314292
   }
 }
