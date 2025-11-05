@@ -20,7 +20,7 @@ class Expense < ApplicationRecord
   scope :for_user, lambda { |user_id|
     id = Array(user_id).first.to_i
     table = arel_table
-
+  
     if sqlite_adapter?
       # SQLite stores participant_ids as JSON string, use pattern matching
       patterns = [ "[#{id}]", "[#{id},%", "%,#{id},%", "%,#{id}]" ]
@@ -30,7 +30,8 @@ class Expense < ApplicationRecord
       where(table[:user_id].eq(id)).or(where(participant_clause))
     else
       # PostgreSQL uses native array operators
-      where(table[:user_id].eq(id)).or(where("? = ANY(participant_ids)", id))
+      where(table[:user_id].eq(id))
+        .or(where(Arel.sql("#{id} = ANY(participant_ids)")))
     end
   }
 
