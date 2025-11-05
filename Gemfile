@@ -13,7 +13,7 @@ gem "stimulus-rails"
 # Database
 # Use SQLite for local development and test
 group :development, :test do
-  gem 'sqlite3', '~> 1.7'
+  gem 'sqlite3', '~> 2.7'
 end
 
 # Use PostgreSQL for production (Heroku)
