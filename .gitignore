@@ -34,3 +34,6 @@
 /config/master.key
 
 /config/credentials/development.key
+
+# Windows alternate data streams
+*:Zone.Identifier
